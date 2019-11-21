@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - team1_object
+  - bulletTeam_2
+  - team2_object
+  - bulletTeam_1
   layers:
   - Default
   - TransparentFX
@@ -13,10 +17,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - team_1
+  - team_2
+  - bullet_t1
+  - bullet_t2
   - 
   - 
   - 
