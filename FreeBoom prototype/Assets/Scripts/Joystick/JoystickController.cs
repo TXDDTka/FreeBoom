@@ -48,7 +48,7 @@ public abstract class JoystickController : MonoBehaviour, IPointerDownHandler, I
 
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        direction = Vector2.zero;
+            direction = Vector2.zero;
         moveableJoytick.anchoredPosition = direction;
 
         if (smoothEnabled)

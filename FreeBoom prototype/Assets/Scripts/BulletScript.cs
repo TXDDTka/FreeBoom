@@ -50,7 +50,7 @@ public class BulletScript : MonoBehaviour {
 			}
 	 
 		}
-	void OnCollisionEnter2D(Collider2D any){
+	void OnCollisionEnter2D(Collision2D any){
 		Destroy (bullet);
 	}
 }
