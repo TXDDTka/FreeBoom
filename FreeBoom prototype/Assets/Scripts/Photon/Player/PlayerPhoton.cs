@@ -72,21 +72,21 @@ public class PlayerPhoton : MonoBehaviour/*, IPunObservable*/
         // if(GameSetup.gameSetup.currentTeam != 0 && !teamSelected)
         if (photonview.IsMine)
         {
-           // if (PlayerInfoPhoton.playerInfo.mySelectedTeam != 0 && !teamSelected)
-            //    if (team != 0 && !teamSelected)
+            //if (PlayerInfoPhoton.playerInfo.mySelectedTeam != 0 && !teamSelected)
+            ////    if (team != 0 && !teamSelected)
             //    {
                 
             
             //    photonview.RPC("RPC_GetTeam", RpcTarget.MasterClient);//Отправляем RPC функцию мастер клиенту(хосту)
-            //    //RPC_GetTeam();
-            //    teamSelected = true;
+            ////    //RPC_GetTeam();
+            ////    teamSelected = true;
             //}
                     
             
 
             if (PlayerInfoPhoton.playerInfo.mySelectedCharacter != 0 && !characterSelected)
             {
-                    photonview.RPC("RPC_AddCharacter", RpcTarget.AllBuffered, PlayerInfoPhoton.playerInfo.mySelectedCharacter);
+                   // photonview.RPC("RPC_AddCharacter", RpcTarget.AllBuffered, PlayerInfoPhoton.playerInfo.mySelectedCharacter);
                     characterSelected = true;
             }
         }
@@ -100,7 +100,7 @@ public class PlayerPhoton : MonoBehaviour/*, IPunObservable*/
                 {
                     if (characterSelected)
                     {
-                        player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", PlayerInfoPhoton.playerInfo.allCharacters[PlayerInfoPhoton.playerInfo.mySelectedCharacter].name),
+                         player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", PlayerInfoPhoton.playerInfo.allCharacters[PlayerInfoPhoton.playerInfo.mySelectedCharacter].name),
                          GameSetup.gameSetup.teamOneSpawnPoints[spawnPosition].position, Quaternion.identity, 0);
                         //photonview.RPC("RPC_SentTeam", RpcTarget.OthersBuffered, myTeam);
                     }
@@ -114,7 +114,7 @@ public class PlayerPhoton : MonoBehaviour/*, IPunObservable*/
                     if (characterSelected)
                     {
                         player = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", PlayerInfoPhoton.playerInfo.allCharacters[PlayerInfoPhoton.playerInfo.mySelectedCharacter].name),
-                    GameSetup.gameSetup.teamTwoSpawnPoints[spawnPosition].position, Quaternion.identity);
+                        GameSetup.gameSetup.teamTwoSpawnPoints[spawnPosition].position, Quaternion.identity);
                         //photonview.RPC("RPC_SentTeam", RpcTarget.OthersBuffered, myTeam);
                     }
                 }
@@ -128,18 +128,19 @@ public class PlayerPhoton : MonoBehaviour/*, IPunObservable*/
     //    GameSetup.gameSetup.CheckTeam();
     //}
 
-    [PunRPC]
-    void RPC_AddCharacter(int whichCharacter)
-    {
-        characterValue = whichCharacter;
-    }
+    //[PunRPC]
+    //void RPC_AddCharacter(int whichCharacter)
+    //{
+    //    characterValue = whichCharacter;
+    //}
 
     [PunRPC]
     void RPC_GetTeam()//Локальный игрок передает значение хосту,о том к какой команде он принадлежит
     {
+       // teamSelected = true;
         //myTeam = PlayerInfoPhoton.playerInfo.mySelectedTeam;
-        //GameSetup.gameSetup.CheckTeam(team);
-        ///myTeam = GameSetup.gameSetup.currentTeam;
+        //GameSetup.gameSetup.CheckTeam(PlayerInfoPhoton.playerInfo.mySelectedTeam);
+      //  myTeam = GameSetup.gameSetup.currentTeam;
         //GameSetup.gameSetup.currentTeam = 0;
         //photonview.RPC("RPC_SentTeam", RpcTarget.OthersBuffered, myTeam);
         myTeam = GameSetup.gameSetup.nextPlayersTeam;

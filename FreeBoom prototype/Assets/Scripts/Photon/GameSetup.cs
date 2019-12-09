@@ -19,9 +19,9 @@ public class GameSetup : MonoBehaviour
     public int currentTeam;
 
     //public bool teamChoosed;
-   // public string team;
+    // public string team;
 
-  //  [SerializeField] private PhotonPlayer photonPlayer;
+    //  [SerializeField] private PhotonPlayer photonPlayer;
 
     //void Start()
     //{
@@ -35,12 +35,12 @@ public class GameSetup : MonoBehaviour
             gameSetup = this;
         }
 
-    }
+        }
 
-    public void DisconnectPlayer()
-    {
+        public void DisconnectPlayer()
+         {
         StartCoroutine(DisconnectAndLoad());
-    }
+          }
 
     IEnumerator DisconnectAndLoad()
     {
@@ -59,18 +59,20 @@ public class GameSetup : MonoBehaviour
         {
             //PlayerInfoPhoton.playerInfo.mySelectedTeam = currentTeam;
             currentTeam = team;
-            playersInTeamOne++;
-            Debug.LogError("4");
+            playersInTeamOne =+ 1;
+            Debug.LogError(currentTeam);
         }
         else if(team == 2 && playersInTeamTwo < playersInTeamMax)
         {
             //PlayerInfoPhoton.playerInfo.mySelectedTeam = currentTeam;
             currentTeam = team;
-            playersInTeamTwo++;
+            playersInTeamTwo =+ 1;
+            Debug.LogError(currentTeam);
         }
         else
         {
             currentTeam = 0;
+            Debug.LogError(currentTeam);
         }
     }
 
