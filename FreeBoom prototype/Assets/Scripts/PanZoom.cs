@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class PanZoom : MonoBehaviour
 {
-    [SerializeField] private float smoothSpeed;
+    [SerializeField, Range(0, 1)] private float smoothSpeed = 1;
 
-    private bool isDragging;
-    private Camera cam;
-    private Vector3 smoothVelocity;
-    private Vector3 startPosition;
-    private Vector3 currentPosition;
-    private Vector3 dir;
-    private Vector3 finalPosition;
+    private bool isDragging = false;
+    private Camera cam = null;
+    private Vector3 smoothVelocity = Vector3.zero;
+    private Vector3 startPosition = Vector3.zero;
+    private Vector3 currentPosition = Vector3.zero;
+    private Vector3 dir = Vector3.zero;
+    private Vector3 finalPosition = Vector3.zero;
 
     private void Start()
     {
@@ -37,8 +37,11 @@ public class PanZoom : MonoBehaviour
             currentPosition = cam.ScreenToWorldPoint(Input.mousePosition);
             dir = startPosition - currentPosition;
             finalPosition = transform.position + dir;
-        }
+        }        
+    }
 
-        transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref smoothVelocity, smoothSpeed * Time.deltaTime);
+    private void FixedUpdate()
+    {
+        transform.position = Vector3.SmoothDamp(transform.position, finalPosition, ref smoothVelocity, 1 - smoothSpeed);
     }
 }

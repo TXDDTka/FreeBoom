@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    private Transform shootPoint;
-    private GameObject muzzle;
-    private float rotationAngle;
+    [SerializeField] private int bulletCount = 3;
+    [SerializeField] private float shootDelay = 0.2f;
+    [SerializeField] private float randomAngle = 5;
 
-    private SpriteRenderer sr;
-    private ShootJoystick shootJoystick;
+    private Transform shootPoint = null;
+    private GameObject muzzle = null;
+    private float rotationAngle = 0;
 
-    private WeaponSwitching wp;
+    private SpriteRenderer sr = null;
+    private ShootJoystick shootJoystick = null;
+
+    private WeaponSwitching wp = null;
 
     private void Awake()
     {
@@ -23,9 +27,9 @@ public class Weapon : MonoBehaviour
 
     private void OnEnable()
     {
-        if (shootJoystick == null) shootJoystick = FindObjectOfType<ShootJoystick>();
+        if (shootJoystick == null) shootJoystick = ShootJoystick.Instance;// FindObjectOfType<ShootJoystick>();
 
-        shootJoystick.ShootEvent += Fire;
+        shootJoystick.OnUpEvent += Fire;
 
         if (wp == null) wp = FindObjectOfType<WeaponSwitching>();
     }
@@ -35,7 +39,7 @@ public class Weapon : MonoBehaviour
         transform.rotation = Quaternion.identity;
         sr.flipY = false;
 
-        shootJoystick.ShootEvent -= Fire;
+        shootJoystick.OnUpEvent -= Fire;
     }
 
     private void Update()
@@ -46,15 +50,14 @@ public class Weapon : MonoBehaviour
     private void RotateGun()
     {
         rotationAngle = Mathf.Atan2(shootJoystick.Vertical, shootJoystick.Horizontal) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.AngleAxis(rotationAngle, Vector3.forward);
 
         if (rotationAngle < 0) rotationAngle += 360;
         else if (rotationAngle > 360) rotationAngle -= 360;
 
-        if (rotationAngle > 90 && rotationAngle < 270)
-            sr.flipY = true;
-        else
-            sr.flipY = false;
+        bool needFlip = rotationAngle > 90 && rotationAngle < 270;
+        sr.flipY = needFlip;
+
+        transform.rotation = Quaternion.AngleAxis(rotationAngle, Vector3.forward);
     }
 
     private void Fire()
@@ -65,20 +68,33 @@ public class Weapon : MonoBehaviour
     private IEnumerator FireRoutine()
     {
         //Debug.Log($"fired from {transform.name}");
-        muzzle.SetActive(true);
-        yield return new WaitForEndOfFrame();
-        muzzle.SetActive(false);
+        //muzzle.SetActive(true);
+        //yield return new WaitForEndOfFrame();
+        //muzzle.SetActive(false);
 
-        Rigidbody2D bullet = Instantiate(wp.BulletPrefab, shootPoint.position, shootPoint.rotation);
-        if (rotationAngle > 90 && rotationAngle < 270) bullet.GetComponent<SpriteRenderer>().flipY = true;
-        bullet.velocity = transform.right * wp.BulletSpeed;
+        for (int i = 0; i < bulletCount; i++)
+        {
+            float a = Random.Range(-1f, 1f) * randomAngle;
 
-        Destroy(bullet.gameObject, 5);
+            shootPoint.localRotation = Quaternion.AngleAxis(a, Vector3.forward);
+            Bullet bullet = Instantiate(wp.BulletPrefab, shootPoint.position, shootPoint.rotation);
+            bullet.Initialize(wp.BulletSpeed, shootPoint.right, rotationAngle);
+            Destroy(bullet.gameObject, 5);
+
+            shootPoint.localRotation = Quaternion.identity;
+            yield return new WaitForSeconds(shootDelay);
+            
+        }
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
-        //Gizmos.color = Color.red;
-        //Gizmos.DrawLine(transform.position, transform.right * 5);
+        if (shootPoint != null)
+        {
+            Gizmos.color = Color.red;
+            Vector3 a = shootPoint.position;
+            Vector3 b = shootPoint.right * 2;
+            Gizmos.DrawLine(a, a + b);
+        }
     }
 }

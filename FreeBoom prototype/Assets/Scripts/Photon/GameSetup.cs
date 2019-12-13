@@ -49,7 +49,7 @@ public class GameSetup : MonoBehaviour
         /// while (PhotonNetwork.IsConnected)
         while (PhotonNetwork.InRoom)
             yield return null;
-        SceneManager.LoadScene(MultiplayerSetting.multiplayerSetting.menuScene);
+        SceneManager.LoadScene(MultiplayerSettings.multiplayerSettings.menuScene);
     }
 
 

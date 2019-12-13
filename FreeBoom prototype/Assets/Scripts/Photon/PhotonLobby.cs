@@ -24,7 +24,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     public InputField nameInputField;
 
     [Tooltip("Номер версии клиента. Пользователи отделены друг от друга c помощью gameVersion (что позволяет вносить критические изменения)")]
-    string gameVersion = "1";
+    string gameVersion = "1.0";
     [Tooltip("Максимальное количество игроков в комнате")]
     byte maxPlayersPerRoom = 10;
 
@@ -68,6 +68,15 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
+    public override void OnConnected()
+    {
+        print("Игрок " + PhotonNetwork.NickName + " подключился к Server");
+        loginPanel.SetActive(false);
+        lobbyPanel.SetActive(true);
+        // это гарантирует, что мы можем использовать PhotonNetwork.LoadLevel () на главном клиенте, и все клиенты в одной комнате автоматически синхронизируют свой уровень
+        //PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
     //Вызываем метод подключения к комнате Кнопкой "Join 5x5 mode"
     public void JoinRoom()
     {
@@ -87,6 +96,12 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
     {
         //Cнова пытаемся подключиться к существующим комнатам")
         JoinRoom();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        base.OnDisconnected(cause);
+        print("Игрок " + PhotonNetwork.NickName + " отключился от Server");
     }
 
     //Если создана комната

@@ -3,29 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class JoystickController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public abstract class JoystickController : MonoBehaviour, 
+                                           IPointerDownHandler, IPointerUpHandler, IDragHandler,
+                                           IBeginDragHandler, IEndDragHandler
 {
     [SerializeField] private bool smoothEnabled = true;
     [SerializeField] private AnimationCurve smoothCurve;
     [SerializeField, Range(0.1f, 5)] private float transitionDuration = 0.5f;
 
-    [SerializeField] private RectTransform joystickBackground;
-    private RectTransform moveableJoytick;
-    private CanvasGroup canvasGroup;
-    private Vector2 delta;
-    private Vector2 startPosition;
-    private IEnumerator joytickRoutine;
+    [SerializeField] private RectTransform joystickBackground = null;
+    private RectTransform moveableJoytick = null;
+    private CanvasGroup canvasGroup = null;
+    private Vector2 delta = Vector2.zero;
+    private Vector2 startPosition = Vector2.zero;
+    private IEnumerator joytickRoutine = null;
 
-    protected Vector2 direction;
+    protected Vector2 direction = Vector2.zero;
     public virtual float Horizontal => direction.x;
     public virtual float Vertical => direction.y;
     public bool HasInput => direction != Vector2.zero;
 
+    protected virtual void Awake()
+    {
+        //used for singleton
+    }
+
     private void Start()
     {
-        EventSystem.current.pixelDragThreshold = 5;//default 10
-
-        //joystickBackground = transform.GetChild(0).GetComponent<RectTransform>();
         delta = joystickBackground.sizeDelta;
         startPosition = joystickBackground.anchoredPosition;
 
@@ -48,7 +52,7 @@ public abstract class JoystickController : MonoBehaviour, IPointerDownHandler, I
 
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-            direction = Vector2.zero;
+        direction = Vector2.zero;
         moveableJoytick.anchoredPosition = direction;
 
         if (smoothEnabled)
@@ -69,14 +73,24 @@ public abstract class JoystickController : MonoBehaviour, IPointerDownHandler, I
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(joystickBackground, eventData.position, eventData.pressEventCamera, out pos))
         {
             direction = new Vector2(pos.x / delta.x, pos.y / delta.y) * 2;
-            //direction = new Vector2(Mathf.Clamp(direction.x, -1, 1), Mathf.Clamp(direction.y, -1, 1));
             direction.x = Mathf.Clamp(direction.x, -1, 1);
             direction.y = Mathf.Clamp(direction.y, -1, 1);
+
             if (direction.magnitude > 1) direction.Normalize();
 
             Vector2 finalPosition = new Vector2(direction.x * delta.x / 3, direction.y * delta.y / 3);
             moveableJoytick.anchoredPosition = finalPosition;
         }
+    }
+
+    public virtual void OnBeginDrag(PointerEventData eventData)
+    {
+        
+    }
+
+    public virtual void OnEndDrag(PointerEventData eventData)
+    {
+        
     }
 
     private void InvokeJoytickRoutine(bool enable)
