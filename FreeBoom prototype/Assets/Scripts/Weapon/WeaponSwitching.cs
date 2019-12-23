@@ -5,21 +5,17 @@ using UnityEngine.UI;
 
 public class WeaponSwitching : MonoBehaviour
 {
-    [SerializeField] private Bullet bulletPrefab = null;
-    [SerializeField] private float bulletSpeed = 5;
-    private Button changeWeaponButton = null;
-    private Weapon[] weapons = null;
-    private int previousIndex = 0;
-    private int currentIndex = 0;
+    [SerializeField] private Button changeWeaponButton;
+    [SerializeField] private Rigidbody2D bulletPrefab;
+    [SerializeField] private float bulletSpeed;
+    private int previousIndex;
+    private int currentIndex;
 
-    public Bullet BulletPrefab => bulletPrefab;
+    public Rigidbody2D BulletPrefab => bulletPrefab;
     public float BulletSpeed => bulletSpeed;
 
     private void Start()
     {
-        weapons = GetComponentsInChildren<Weapon>();
-
-        changeWeaponButton = GameObject.Find("ChangeWeapon Button").GetComponent<Button>();
         changeWeaponButton.onClick.AddListener(() => ChangeWeapon());
 
         SwitchWeapon();
@@ -36,7 +32,7 @@ public class WeaponSwitching : MonoBehaviour
 
     private void ChangeWeapon()
     {
-        if (currentIndex < weapons.Length - 1) currentIndex++;
+        if (currentIndex < transform.childCount - 1) currentIndex++;
         else currentIndex = 0;
 
         SwitchWeapon();
@@ -44,12 +40,12 @@ public class WeaponSwitching : MonoBehaviour
 
     private void SwitchWeapon()
     {
-        for (int i = 0; i < weapons.Length; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
             if (currentIndex == i)
-                weapons[i].gameObject.SetActive(true);
+                transform.GetChild(i).gameObject.SetActive(true);
             else
-                weapons[i].gameObject.SetActive(false);
+                transform.GetChild(i).gameObject.SetActive(false);
         }
     }
 }

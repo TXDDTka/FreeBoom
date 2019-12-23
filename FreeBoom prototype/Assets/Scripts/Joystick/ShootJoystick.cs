@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 public class ShootJoystick : JoystickController
 {
     public static ShootJoystick Instance { get; private set; }
-
     private void InitializeSingleton()
     {
         if (Instance == null)
@@ -18,31 +17,17 @@ public class ShootJoystick : JoystickController
 
     public override float Horizontal => base.Horizontal;
     public override float Vertical => base.Vertical;
-    public Vector3 Direction => new Vector3(Horizontal, Vertical);
 
-    public event Action OnUpEvent;
-    public event Action<bool> OnBeginDragEvent;
-
-    protected override void Awake()
-    {
-        InitializeSingleton();
-    }
+    public event Action ShootEvent;
 
     public override void OnPointerUp(PointerEventData eventData)
     {
-        OnBeginDragEvent?.Invoke(false);
-        OnUpEvent?.Invoke();
         base.OnPointerUp(eventData);
+        ShootEvent?.Invoke();
     }
 
-    public override void OnBeginDrag(PointerEventData eventData)
+    void Awake()
     {
-        OnBeginDragEvent?.Invoke(true);
+        InitializeSingleton();
     }
-
-    //public override void OnEndDrag(PointerEventData eventData)
-    //{
-    //    //base.OnEndDrag(eventData);
-    //    OnBeginDragEvent?.Invoke(false);
-    //}
 }

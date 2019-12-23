@@ -3,9 +3,8 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -17,14 +16,14 @@ MonoBehaviour:
     AppIdChat: 
     AppIdVoice: 
     AppVersion: 
-    UseNameServer: 0
+    UseNameServer: 1
     FixedRegion: 
-    Server: 185.237.96.48
-    Port: 5055
+    Server: 
+    Port: 0
     Protocol: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  PunLogging: 0
+  PunLogging: 2
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
@@ -36,5 +35,12 @@ MonoBehaviour:
   - RespawnSpaceship
   - RPC_GetTeam
   - RPC_SentTeam
+  - FireRoutine
+  - RPC_Fire
+  - RPC_BasicMovement
+  - RPC_AddCharacter
+  - RotateGun
+  - Shoot
+  - CheckTeam
   DisableAutoOpenWizard: 1
-  ShowSettings: 1
+  ShowSettings: 0

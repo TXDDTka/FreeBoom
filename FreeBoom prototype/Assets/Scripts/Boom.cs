@@ -18,6 +18,7 @@ public class Boom : MonoBehaviour
     private float smoothPercent;
     private IEnumerator boomRoutine;
 
+
     private void Start()
     {
         launchButton.onClick.AddListener(() => OnClickLaunchBoom());

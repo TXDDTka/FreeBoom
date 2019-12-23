@@ -14,7 +14,7 @@ public class WeaponPhoton : MonoBehaviour, IPunObservable
     public ShootJoystick shootJoystick;
     private MoveJoystick moveJoystick;
 
-    private WeaponSwitching wp = null;
+   // public WeaponSwitchingPhoton wp;
     private PhotonView photonview;
 
     public int bulletDamage;
@@ -29,7 +29,7 @@ public class WeaponPhoton : MonoBehaviour, IPunObservable
         muzzle = transform.GetChild(1).gameObject;
         muzzle.SetActive(false);
         photonview = GetComponent<PhotonView>();
-       // shootJoystick = ShootJoystick.Instance;
+        shootJoystick = ShootJoystick.Instance;
        // wp = FindObjectOfType<WeaponSwitchingPhoton>();
     }
 
@@ -38,31 +38,30 @@ public class WeaponPhoton : MonoBehaviour, IPunObservable
 
 
         if (!photonview.IsMine) return;
-        if (shootJoystick == null) shootJoystick = ShootJoystick.Instance;// FindObjectOfType<ShootJoystick>();
-
-        shootJoystick.OnUpEvent += Fire;
-
-        if (wp == null) wp = FindObjectOfType<WeaponSwitching>();
+        //if (shootJoystick == null)
+        //shootJoystick = FindObjectOfType<ShootJoystick>();
+        shootJoystick.ShootEvent += Fire;
 
 
 
 
 
-        // if (wp == null) wp = WeaponSwitchingPhoton.Instance;// FindObjectOfType<WeaponSwitchingPhoton>();
+       // if (wp == null) wp = WeaponSwitchingPhoton.Instance;// FindObjectOfType<WeaponSwitchingPhoton>();
 
-        //    if (moveJoystick == null)
-        //moveJoystick = FindObjectOfType<MoveJoystick>();
+    //    if (moveJoystick == null)
+            //moveJoystick = FindObjectOfType<MoveJoystick>();
     }
 
     private void OnDisable()
     {
         if (!photonview.IsMine) return;
         transform.rotation = Quaternion.identity;
-        sr.flipY = false;
-
-        shootJoystick.OnUpEvent -= Fire;
-
-    }
+            sr.flipY = false;
+        
+       
+            shootJoystick.ShootEvent -= Fire;
+    
+}
 
     private void Update()
     {

@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class TouchZone : MonoBehaviour
 {
-    [SerializeField] private bool editInScene = false;
-    [SerializeField] private RectTransform leftZone = null;
-    [SerializeField] private RectTransform rightZone = null;
-
+    [SerializeField] private bool editInScene;
+    [SerializeField] private RectTransform leftZone, rightZone;
     [Header("Sides")]
-    [SerializeField, Range(0, 0.2f)] private float hOffet = 0;
-    [SerializeField, Range(0, 0.2f)] private float vOffset = 0;
-
+    [SerializeField, Range(0, 0.2f)] private float hOffet;
+    [SerializeField, Range(0, 0.2f)] private float vOffset;
     [Header("Middle")]
-    [SerializeField, Range(0, 0.2f)] private float hOffset1 = 0;
-    [SerializeField, Range(0, 0.2f)] private float vOffset1 = 0;
+    [SerializeField, Range(0, 0.2f)] private float hOffset1;
+    [SerializeField, Range(0, 0.2f)] private float vOffset1;
 
     private void OnValidate()
     {

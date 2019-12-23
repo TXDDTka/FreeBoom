@@ -463,6 +463,7 @@ MonoBehaviour:
   team: 
   PlayerUiPrefab: {fileID: 1840082342445082, guid: 4b61da3ff3ffc9d40b669d979da6358a,
     type: 2}
+  _uiGo: {fileID: 1840082342445082, guid: 4b61da3ff3ffc9d40b669d979da6358a, type: 2}
 --- !u!114 &114233028448233820
 MonoBehaviour:
   m_ObjectHideFlags: 1
