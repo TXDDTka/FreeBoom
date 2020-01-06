@@ -42,7 +42,7 @@ public class PlayerControllerPhoton : MonoBehaviourPunCallbacks, IPunObservable 
 
     [Tooltip("UI c именем игрока")]
     public GameObject PlayerUiPrefab;
-    private GameObject _uiGo;
+    public GameObject _uiGo;
 
     void Awake()
     {
@@ -53,12 +53,8 @@ public class PlayerControllerPhoton : MonoBehaviourPunCallbacks, IPunObservable 
         animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         photonview = GetComponent<PhotonView>();
-        if(photonView.IsMine)
-        {
-            moveJoystick = MoveJoystick.Instance;
-            shootJoystick = ShootJoystick.Instance;
-        }
-        
+        moveJoystick = MoveJoystick.Instance;
+        shootJoystick = ShootJoystick.Instance;
 
        // InitializeSingleton();
     }
@@ -90,7 +86,6 @@ public class PlayerControllerPhoton : MonoBehaviourPunCallbacks, IPunObservable 
 
     private void FixedUpdate()
     {
-        if (!photonview.IsMine) return;
         rb.velocity = Vector2.right * horizontal * speed;
     }
 
