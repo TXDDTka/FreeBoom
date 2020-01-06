@@ -53,12 +53,8 @@ public class PlayerControllerPhoton : MonoBehaviourPunCallbacks, IPunObservable 
         animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
         photonview = GetComponent<PhotonView>();
-        if(photonView.IsMine)
-        {
-            moveJoystick = MoveJoystick.Instance;
-            shootJoystick = ShootJoystick.Instance;
-        }
-        
+        moveJoystick = MoveJoystick.Instance;
+        shootJoystick = ShootJoystick.Instance;
 
        // InitializeSingleton();
     }
@@ -109,9 +105,10 @@ public class PlayerControllerPhoton : MonoBehaviourPunCallbacks, IPunObservable 
     public void Die (){
         //player dies
         // GameManagerPhoton.Instance.LeaveRoom(); //покидаем комнату
-        print(PhotonNetwork.LocalPlayer.NickName + " умер");
-        PhotonNetwork.Destroy(gameObject);
+        //print(PhotonNetwork.LocalPlayer.NickName + " умер");
         _uiGo.GetComponent<PlayerUIPhoton>().Destroy();
+        PhotonNetwork.Destroy(gameObject);
+        
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
