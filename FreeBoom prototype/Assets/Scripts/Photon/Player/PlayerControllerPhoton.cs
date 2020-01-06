@@ -42,7 +42,7 @@ public class PlayerControllerPhoton : MonoBehaviourPunCallbacks, IPunObservable 
 
     [Tooltip("UI c именем игрока")]
     public GameObject PlayerUiPrefab;
-    public GameObject _uiGo;
+    private GameObject _uiGo;
 
     void Awake()
     {
@@ -86,6 +86,7 @@ public class PlayerControllerPhoton : MonoBehaviourPunCallbacks, IPunObservable 
 
     private void FixedUpdate()
     {
+        if (!photonview.IsMine) return;
         rb.velocity = Vector2.right * horizontal * speed;
     }
 
@@ -104,9 +105,10 @@ public class PlayerControllerPhoton : MonoBehaviourPunCallbacks, IPunObservable 
     public void Die (){
         //player dies
         // GameManagerPhoton.Instance.LeaveRoom(); //покидаем комнату
-        print(PhotonNetwork.LocalPlayer.NickName + " умер");
-        PhotonNetwork.Destroy(gameObject);
+        //print(PhotonNetwork.LocalPlayer.NickName + " умер");
         _uiGo.GetComponent<PlayerUIPhoton>().Destroy();
+        PhotonNetwork.Destroy(gameObject);
+        
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
