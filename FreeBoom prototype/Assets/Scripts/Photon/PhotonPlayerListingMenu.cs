@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PhotonPlayerListingMenu : MonoBehaviourPunCallbacks
 {
@@ -19,16 +20,26 @@ public class PhotonPlayerListingMenu : MonoBehaviourPunCallbacks
 	[SerializeField]
 	private List<PlayerListing> _listings = new List<PlayerListing>();
 
-	public void AddPlayerListing(Player player, byte teamNumber)
+	public void AddPlayerListing(Player player)//, byte teamNumber)
 	{
 		int index = _listings.FindIndex(x => x.Player == player);
 		if (index != -1)
 		{
 			_listings[index].SetPlayerInfo(player);
 		}
-		if (teamNumber == 1)
+		//if (teamNumber == 1)
+
+		//int teamNumber = (byte)player.CustomProperties["Team"];
+		//Debug.Log(player.CustomProperties["Team"]);
+		if ((byte)player.CustomProperties["Team"] == 1)
 		{
+
+			//}
+
+
+			//{
 			PlayerListing playerListing = Instantiate(_playerListingRedTeam, _contentTeamRed);
+			//playerListing.gameObject.GetComponent<RawImage>().color = new Color(144f, 207f, 219f, 255f);
 			if (playerListing != null)
 			{
 				playerListing.SetPlayerInfo(player);
@@ -37,7 +48,9 @@ public class PhotonPlayerListingMenu : MonoBehaviourPunCallbacks
 		}
 		else
 		{
+			//PlayerListing playerListing = Instantiate(_playerListingBlueTeam, _contentTeamBlue);
 			PlayerListing playerListing = Instantiate(_playerListingBlueTeam, _contentTeamBlue);
+			//playerListing.gameObject.GetComponent<RawImage>().color = new Color(144f, 207f, 219f, 255f);
 			if (playerListing != null)
 			{
 				playerListing.SetPlayerInfo(player);

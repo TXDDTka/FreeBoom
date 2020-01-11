@@ -11,6 +11,8 @@ using UnityEngine.UI;
 
 public class PhotonTeams : MonoBehaviourPunCallbacks
 {
+
+
     public enum Team : byte { none, red, blue };
     public static Dictionary<Team, List<Player>> PlayersPerTeam;
     public const string TeamPlayerProp = "Team";

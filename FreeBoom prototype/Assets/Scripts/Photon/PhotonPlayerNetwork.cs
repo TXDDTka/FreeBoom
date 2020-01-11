@@ -1,6 +1,6 @@
 using Photon.Pun;
 using Photon.Realtime;
-using System;
+//using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,6 +36,7 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 	private PhotonGame photonGame;
 	private PhotonPlayerListingMenu photonPlayerListingMenu;
 
+	private bool addedPlayerToList = false;
 	private void Awake()
 	{
 		PV = GetComponent<PhotonView>();
@@ -51,6 +52,12 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		player = PhotonNetwork.LocalPlayer;
 		name = player.NickName;
 
+		OnButtonClick();
+	}
+
+	private void OnButtonClick()
+	{
+
 		photonGame.buttons[0].onClick.AddListener(delegate { TeamChoose("red"); });
 		photonGame.buttons[1].onClick.AddListener(delegate { TeamChoose("blue"); });
 		photonGame.buttons[2].onClick.AddListener(delegate { TeamChoose("random"); });
@@ -60,15 +67,11 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		photonGame.buttons[5].onClick.AddListener(delegate { CharacterChoose("soldier"); });
 		photonGame.buttons[6].onClick.AddListener(delegate { CharacterChoose("random"); });
 
-		//photonGame.buttons[3].onClick.AddListener(() => CharacterChoose(0));
-		//photonGame.buttons[4].onClick.AddListener(() => CharacterChoose(1));
-		//photonGame.buttons[5].onClick.AddListener(() => CharacterChoose(2));
-		//photonGame.buttons[6].onClick.AddListener(() => CharacterChoose(3));
 
 		photonGame.buttons[7].onClick.AddListener(() => LeaveGame());
-		//photonGame.buttons[8].onClick.AddListener(() => LeaveGame());
-
+		photonGame.buttons[8].onClick.AddListener(() => LeaveGame());
 	}
+
 
 	private void TeamChoose(string team)
 	{
@@ -92,26 +95,6 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 
 	private void CharacterChoose(string character)
 	{
-		//if (!PV.IsMine) return;
-		//switch (character)
-		//{
-		//case "demoman":
-		//	photonGame.ChooseCharacter(0, player);
-		//	SelectCharacter();
-		//		break;
-		//	case "engineer":
-		//	photonGame.ChooseCharacter(1, player);
-		//	SelectCharacter();
-		//		break;
-		//	case 2:
-		//	photonGame.ChooseCharacter(2, player);
-		//	SelectCharacter();
-		//		break;
-		//	case 3:
-		//		photonGame.ChooseCharacter(3, player);
-		//		SelectCharacter();
-		//		break;
-		//}
 			photonGame.ChooseCharacter(character, player);
 			SelectCharacter();
 	}
@@ -141,30 +124,43 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		if (team == Team.Red)
 		{
 			int characterNumber = (byte)player.CustomProperties["Character"];
-			int random = UnityEngine.Random.Range(0, photonGame.teamOneSpawnPoints.Length);
-			//GameObject playerInstantiate = 
+			int random = Random.Range(0, photonGame.teamOneSpawnPoints.Length);
+			GameObject playerInstantiate =
 				PhotonNetwork.Instantiate(photonGame.redTeamCharacters[characterNumber].name, photonGame.teamOneSpawnPoints[random].position,
 				photonGame.redTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-			//	Instantiate(photonGame.redTeamCharacters[characterNumber], photonGame.teamOneSpawnPoints[random].position, photonGame.redTeamCharacters[characterNumber].transform.rotation, gameObject.transform);
+			if (addedPlayerToList == false)
+			{
+				//playerInstantiate.GetComponent<PhotonDemoman>().AddPlayerToList();
 
-			//playerInstantiate.transform.parent = gameObject.transform;
+				playerInstantiate.GetComponent<PhotonDemoman>().AddPlayerToList();
+				//playerInstantiate.GetComponent<PhotonView>().RPC("AddPlayerListing", RpcTarget.AllBuffered);
+
+				addedPlayerToList = true;
+			}
+
 		}
 		if (team == Team.Blue)
 		{
 			byte characterNumber = (byte)player.CustomProperties["Character"];
 			int random = UnityEngine.Random.Range(0, photonGame.teamTwoSpawnPoints.Length);
-			//GameObject playerInstantiate =  
+			GameObject playerInstantiate =  
 				PhotonNetwork.Instantiate(photonGame.blueTeamCharacters[characterNumber].name, photonGame.teamTwoSpawnPoints[random].position, 
 				photonGame.blueTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-			//playerInstantiate.transform.parent = gameObject.transform;
+			if (addedPlayerToList == false)
+			{
+				playerInstantiate.GetComponent<PhotonDemoman>().AddPlayerToList();
+				addedPlayerToList = true;
+			}
 		}
 	}
 
-	public override void OnDisconnected(DisconnectCause cause)
-	{
-		base.OnDisconnected(cause);
-		photonGame.OnPlayerDisconnected(player);
-	}
+	//[PunRPC]
+	//public void AddPlayerListing()
+	//{
+	//	Debug.Log(2);
+	//	//photonPlayerListingMenu.AddPlayerListing(player);
+	//}
+
 }
