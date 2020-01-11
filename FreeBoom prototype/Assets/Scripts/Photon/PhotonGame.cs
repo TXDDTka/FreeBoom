@@ -139,17 +139,24 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	public override void OnLeftRoom()
 	{
-		Debug.Log(PhotonNetwork.LocalPlayer.NickName + "локальный игрок покинул игру");
+		Debug.Log(PhotonNetwork.LocalPlayer.NickName + " локальный игрок покинул игру");
 	}
 
 	public override void OnPlayerLeftRoom(Player otherPlayer)
 	{
-		Debug.Log(otherPlayer.NickName + "покинул игру");
+		Debug.Log(otherPlayer.NickName + " покинул игру");
 	}
 
-	public void OnPlayerDisconnected(Player player)
+	//public void OnPlayerDisconnected(Player player)
+	//{
+	//	Debug.Log(player.NickName + "дисконектнулся с сервера 1");
+	//	PhotonLoading.Load(LoadingScene.Login);
+	//}
+
+	public override void OnDisconnected(DisconnectCause cause)
 	{
-		Debug.Log(player.NickName + "дисконектнулся с сервера 1");
+		base.OnDisconnected(cause);
+		PhotonLoading.Load(LoadingScene.Login);
 	}
 
 }

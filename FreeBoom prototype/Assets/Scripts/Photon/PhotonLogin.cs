@@ -1,6 +1,4 @@
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +27,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 		PhotonNetwork.AutomaticallySyncScene = true;
 		PhotonLoading.Load(LoadingScene.Lobby);
 	}
+
 
 	public override void OnCustomAuthenticationFailed(string debugMessage)
 	{

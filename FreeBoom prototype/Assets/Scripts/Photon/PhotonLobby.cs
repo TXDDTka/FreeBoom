@@ -15,15 +15,12 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 	public override void OnJoinRandomFailed(short returnCode, string message)
 	{
 		PhotonLoading.Load(LoadingScene.Game);
-		PhotonNetwork.CreateRoom(null, new RoomOptions
-		{
-			MaxPlayers = 10
-		}, null, null);
+		PhotonNetwork.CreateRoom(null, new RoomOptions{MaxPlayers = 10});
 	}
 
 	public override void OnJoinedRoom()
 	{
-		MonoBehaviour.print("Локальный игрок " + PhotonNetwork.LocalPlayer.NickName + " подключился к комнате");
+		//MonoBehaviour.print("Локальный игрок " + PhotonNetwork.LocalPlayer.NickName + " подключился к комнате");
 		StartGame();
 	}
 

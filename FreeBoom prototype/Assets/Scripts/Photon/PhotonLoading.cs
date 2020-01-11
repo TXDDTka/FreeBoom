@@ -37,7 +37,7 @@ public class PhotonLoading : MonoBehaviourPunCallbacks
 		else 
 		{
 			PhotonNetwork.LoadLevel(PhotonConfig.SceneLogin);
-			StartCoroutine(LoadingProgress());
+			//StartCoroutine(LoadingProgress());
 		}
 	}
 
