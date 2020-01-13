@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PhotonLobby : MonoBehaviourPunCallbacks
 {
-	private bool exitGame;
+	private bool exitGame = false;
 
 	public void JoinRandomRoom()
 	{

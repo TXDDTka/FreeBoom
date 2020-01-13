@@ -110,7 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf2728b6077d24d4a83fdd50f2d618f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: 0
   nameText: {fileID: 3886433508992396417}
   classText: {fileID: 8402858239082754994}
   killsText: {fileID: 3837939965466601333}
@@ -347,7 +346,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Demoman
+  m_Text: None
 --- !u!1 &4929423495067434099
 GameObject:
   m_ObjectHideFlags: 0

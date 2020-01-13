@@ -13,6 +13,8 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks
     public float speed = 0f;
     private bool grounded = false;
 
+    public float health = 100f;
+
     //private bool isGrounded = false;
 
     private MoveJoystick moveJoystick = null;
@@ -52,6 +54,7 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks
 
         //  PV.RPC("AddPlayerListing", RpcTarget.All);//, PhotonNetwork.LocalPlayer);
     }
+
 
     //private void Awake()
     //{

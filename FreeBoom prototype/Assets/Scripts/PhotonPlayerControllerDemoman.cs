@@ -110,7 +110,7 @@ public class PhotonPlayerControllerDemoman : MonoBehaviourPunCallbacks, IPunObse
 	[PunRPC]
 	private void AddPlayerListing(Player player)//, byte teamNumber)
 	{
-		photonPlayerListingMenu.AddPlayerListing(player);//, teamNumber);
+	//	photonPlayerListingMenu.AddPlayerListing(player);//, teamNumber);
 
 
 	}

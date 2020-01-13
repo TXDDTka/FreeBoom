@@ -13,7 +13,7 @@ public class PhotonTeams : MonoBehaviourPunCallbacks
 {
 
 
-    public enum Team : byte { none, red, blue };
+    public enum Team : byte { None, Red, Blue };
     public static Dictionary<Team, List<Player>> PlayersPerTeam;
     public const string TeamPlayerProp = "Team";
 
@@ -91,9 +91,9 @@ public class PhotonTeams : MonoBehaviourPunCallbacks
 
     public void UpdateStatisticsPanel()
     {
-        playersInReadTeam.text = "Players in Red Team : " + PlayersPerTeam[Team.red].Count.ToString();
-        playersInBlueTeam.text = "Players in Blue Team : " + PlayersPerTeam[Team.blue].Count.ToString();
-        spectators.text = "Spectators : " + PlayersPerTeam[Team.none].Count.ToString();
+        playersInReadTeam.text = "Players in Red Team : " + PlayersPerTeam[Team.Red].Count.ToString();
+        playersInBlueTeam.text = "Players in Blue Team : " + PlayersPerTeam[Team.Blue].Count.ToString();
+        spectators.text = "Spectators : " + PlayersPerTeam[Team.None].Count.ToString();
         playersInGame.text = "Players in Game : " + PhotonNetwork.PlayerList.Length;
     }
 }
@@ -110,7 +110,7 @@ public static class TeamChange
             return (PhotonTeams.Team)teamId;
         }
 
-        return PhotonTeams.Team.none;
+        return PhotonTeams.Team.None;
     }
 
     /// <summary>Switch that player's team to the one you assign.</summary>

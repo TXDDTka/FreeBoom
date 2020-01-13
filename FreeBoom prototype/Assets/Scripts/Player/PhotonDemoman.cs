@@ -6,25 +6,12 @@ using UnityEngine;
 
 public class PhotonDemoman : PhotonPlayerController
 {
-    //void Start()
+
+    //public void AddPlayerToList()
     //{
-    //    PV.RPC("AddPlayerListing", RpcTarget.All);
+
+    //    //PV.RPC("AddPlayerListing", RpcTarget.AllBufferedViaServer, player);
     //}
-
-    public void AddPlayerToList()
-    {
-        // Instantiate();
-
-        player.SetScore(0);
-        player.SetKills(0);
-        player.SetDeaths(0);
-        player.SetAssists(0);
-
-        // PhotonView ph= PhotonView.Get(this);
-        //photonView.RPC("ChatMessage", RpcTarget.All, "jup", "and jup.");
-
-        PV.RPC("AddPlayerListing", RpcTarget.AllBufferedViaServer, player);
-    }
 
     //  public PhotonView PV;
     // Start is called before the first frame update
@@ -44,9 +31,9 @@ public class PhotonDemoman : PhotonPlayerController
     ////    PV = GetComponent<PhotonView>();
     //}
 
-    [PunRPC]
-    void AddPlayerListing(Player player)
-    {
-        photonPlayerListingMenu.AddPlayerListing(player);
-    }
+    //[PunRPC]
+    //void AddPlayerListing(Player player)
+    //{
+    //    photonPlayerListingMenu.AddPlayerListing(player);
+    //}
 }
