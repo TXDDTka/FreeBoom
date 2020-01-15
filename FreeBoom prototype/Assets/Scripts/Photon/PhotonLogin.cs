@@ -10,6 +10,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 	[SerializeField]
 	private InputField nameInputField = null;
 
+
 	public void Connect()
 	{
 		if (string.IsNullOrEmpty(nameInputField.text))

@@ -6,9 +6,17 @@ using UnityEngine;
 
 public class PhotonPlayerController : MonoBehaviourPunCallbacks
 {
-   // [Header("General Properties")]
+    // [Header("General Properties")]
     // [SerializeField] private float speed = 5;
 
+    //public enum Team
+    //{
+    //    None,
+    //    Red,
+    //    Blue
+    //}
+
+    //public Team team;
     private float horizontal = 0;
     public float speed = 0f;
     private bool grounded = false;
@@ -23,20 +31,23 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks
     private Rigidbody rb = null;
     private Animator animator = null;
 
-    public PhotonPlayerListingMenu photonPlayerListingMenu;// { get; set; }
+    //private PhotonPlayerListingMenu photonPlayerListingMenu;// { get; set; }
     private PhotonGame photonGame;
 
     private PhotonView PV;// { get; set; }
     private Player player;// { get; set; }
-    private CameraWork cameraWork;
+    //private CameraWork cameraWork;
+
+    [SerializeField]
+    private GameObject playerUiPrefab = null;
     // private PhotonView PV;
 
-        private void Awake()
+    private void Awake()
     {
         PV = GetComponent<PhotonView>();
         player = PhotonNetwork.LocalPlayer;
 
-        photonPlayerListingMenu = FindObjectOfType<PhotonPlayerListingMenu>();
+        //photonPlayerListingMenu = FindObjectOfType<PhotonPlayerListingMenu>();
         photonGame = FindObjectOfType<PhotonGame>();
 
 
@@ -46,7 +57,7 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
 
-        cameraWork = gameObject.GetComponent<CameraWork>();
+        //cameraWork = gameObject.GetComponent<CameraWork>();
         //player.SetScore(0);
         //player.SetKills(0);
         //player.SetDeaths(0);
@@ -55,16 +66,22 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks
         //  PV.RPC("AddPlayerListing", RpcTarget.All);//, PhotonNetwork.LocalPlayer);
     }
 
+
     private void Start()
     {
-        if (cameraWork != null)
-        {
-            if (PV.IsMine)
-            {
-                cameraWork.OnStartFollowing();
-            }
-        }
+        //if (cameraWork != null)
+        //{
+        //    if (PV.IsMine)
+        //    {
+        //        cameraWork.OnStartFollowing();
+        //    }
+        //}
+        //team = (Team)player.GetTeam();
+        GameObject _uiGo = Instantiate(playerUiPrefab);
+        _uiGo.SendMessage("SetPlayer", this, SendMessageOptions.RequireReceiver);
+
     }
+
     //private void Awake()
     //{
 

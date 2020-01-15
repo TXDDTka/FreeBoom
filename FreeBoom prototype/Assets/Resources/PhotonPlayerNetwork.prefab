@@ -45,7 +45,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
-  addedPlayerToList: 0
 --- !u!114 &-9060854842213195045
 MonoBehaviour:
   m_ObjectHideFlags: 0

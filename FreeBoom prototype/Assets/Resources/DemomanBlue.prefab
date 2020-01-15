@@ -92,6 +92,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   health: 100
+  playerUiPrefab: {fileID: 1900484803711955721, guid: 4b4d000799e08d24386549b233c9304e,
+    type: 3}
 --- !u!114 &7221140697996052712
 MonoBehaviour:
   m_ObjectHideFlags: 0

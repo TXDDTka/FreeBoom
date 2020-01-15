@@ -36,7 +36,7 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 	private PhotonGame photonGame;
 	private PhotonPlayerListingMenu photonPlayerListingMenu;
 
-	public bool addedPlayerToList = false;
+	private bool addedPlayerToList = false;
 	private void Awake()
 	{
 		PV = GetComponent<PhotonView>();
@@ -57,9 +57,10 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 
 	private void OnButtonClick()
 	{
-		photonGame.buttons[0].onClick.AddListener(delegate { ChooseTeam("Red"); });
-		photonGame.buttons[1].onClick.AddListener(delegate { ChooseTeam("Blue"); });
-		photonGame.buttons[2].onClick.AddListener(delegate { ChooseTeam("Random"); });
+		photonGame.buttons[0].onClick.AddListener(delegate { photonGame.ChooseTeam("Red", player); ChooseTeam(); });
+		photonGame.buttons[1].onClick.AddListener(delegate { photonGame.ChooseTeam("Blue", player); ChooseTeam(); });
+		photonGame.buttons[2].onClick.AddListener(delegate { photonGame.ChooseTeam("Random", player); ChooseTeam(); });
+		photonGame.buttons[9].onClick.AddListener(delegate { photonGame.ChooseTeam("AutoChoose", player); ChooseTeam(); });
 
 		photonGame.buttons[3].onClick.AddListener(delegate { ChooseCharacter("Demoman"); });
 		photonGame.buttons[4].onClick.AddListener(delegate { ChooseCharacter("Engineer"); });
@@ -70,11 +71,12 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		photonGame.buttons[7].onClick.AddListener(() => LeaveGame());
 		photonGame.buttons[8].onClick.AddListener(() => ExitGame());
 
-		//photonGame.buttons[9].onClick.AddListener(() => ÑhangeCharacter());
+
+		
 	}
 
 
-	private void ChooseTeam(string teamName)
+	private void ChooseTeam()//(string teamName)
 	{
 
 		if (addedPlayerToList)
@@ -90,19 +92,52 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 			//Debug.LogWarning("Ïåðñîíàæ óíè÷òîæåí");
 		}
 
-		if (teamName == "Red")
-		{
-			photonGame.ChooseTeam("Red", player);
-		}
-		else if (teamName == "Blue")
-		{
-			photonGame.ChooseTeam("Blue", player);
-		}
-		else if (teamName == "Random")
-		{
-			photonGame.ChooseTeam("Random", player);
-		}
-
+		//switch(teamName)
+		//{
+		//	case "Red":
+		//		photonGame.ChooseTeam("Red", player);
+		//		break;
+		//	case "Blue":
+		//		photonGame.ChooseTeam("Blue", player);
+		//		break;
+		//	case "Random":
+		//		photonGame.ChooseTeam("Random", player);
+		//		break;
+		//	case "AutoChoose":
+		//		if (team == Team.Red)
+		//		{
+		//			photonGame.ChooseTeam("Blue", player);
+		//		}
+		//		else if (team == Team.Blue)
+		//		{
+		//			photonGame.ChooseTeam("Red", player);
+		//		}
+		//		break;
+		//}
+			//if (teamName == "Red")
+			//{
+			//	photonGame.ChooseTeam("Red", player);
+			//}
+			//else if (teamName == "Blue")
+			//{
+			//	photonGame.ChooseTeam("Blue", player);
+			//}
+			//else if (teamName == "Random")
+			//{
+			//	photonGame.ChooseTeam("Random", player);
+			//}
+			//else if(teamName == "AutoChoose")
+			//{
+			//	if (team == Team.Red)
+			//	{
+			//		photonGame.ChooseTeam("Blue", player);
+			//	}
+			//	else if (team == Team.Blue)
+			//	{
+			//		photonGame.ChooseTeam("Red", player);
+			//	}
+			//}
+		
 		//byte currentTeam = (byte)player.CustomProperties["Team"];
 		//team = (Team)currentTeam;
 		//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);
@@ -111,8 +146,8 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		//{
 		//PV.RPC("RPC_GetTeam", RpcTarget.MasterClient, player);
 
-		byte currentTeam = (byte)player.CustomProperties["Team"];
-		team = (Team)currentTeam;
+		//byte currentTeam = (byte)player.CustomProperties["Team"];
+		team = (Team)player.GetTeam();//currentTeam;
 		addedPlayerToList = true;
 
 		//PV.RPC("RPC_GetTeam", RpcTarget.AllBuffered, player);//, addedPlayerToList);
@@ -144,8 +179,8 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 				playerInstantiate =
 					PhotonNetwork.Instantiate(photonGame.redTeamCharacters[characterNumber].name, photonGame.teamOneSpawnPoints[random].position,
 					photonGame.redTeamCharacters[characterNumber].transform.rotation, 0, null);
+			
 
-				
 				//photonGame.ChangeCharacter(player);
 		}
 		else	if (team == Team.Blue)
