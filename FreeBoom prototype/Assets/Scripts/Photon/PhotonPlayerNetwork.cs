@@ -110,9 +110,9 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		{
 			PhotonNetwork.Destroy(playerInstantiate);
 		}
-			CreatePlayer();
+		
+		CreatePlayer();
 	}
-
 
 
 	public void CreatePlayer()
@@ -144,34 +144,37 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 
 	}
 
+
+	
+
 	[PunRPC]
-	void AddPlayerListing(Player player,int number)
+	void AddPlayerListing(Player playerSend,int number)
 	{
 		switch(number)
 		{
 			case 0:
-				photonPlayerListingMenu.AddPlayerListing(player);
+				photonPlayerListingMenu.AddPlayerListing(playerSend);
 				break;
 			case 1:
-				photonPlayerListingMenu.UpdatePlayerListingClass(player);
+				photonPlayerListingMenu.UpdatePlayerListingClass(playerSend);
 				break;
 			case 2:
-				photonPlayerListingMenu.UpdatePlayerListingStatistics(player);
+				photonPlayerListingMenu.UpdatePlayerListingStatistics(playerSend);
 				break;
 		}
 		
 	}
 
 	[PunRPC]
-	void RemovePlayerListing(Player player)
+	void RemovePlayerListing(Player playerSend)
 	{
-		photonPlayerListingMenu.RemovePlayerListing(player);
+		photonPlayerListingMenu.RemovePlayerListing(playerSend);
 
 	}
 
-	public void ClearProperties(Player player)
+	public void ClearProperties(Player playerSend)
 	{
-		player.CustomProperties.Clear();
+		playerSend.CustomProperties.Clear();
 	}
 
 	private void LeaveGame()
