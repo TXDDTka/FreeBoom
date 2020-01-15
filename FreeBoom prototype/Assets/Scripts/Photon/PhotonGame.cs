@@ -45,6 +45,11 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
 	}
 
+	public override void OnPlayerEnteredRoom(Player newPlayer)
+	{
+		//base.OnPlayerEnteredRoom(newPlayer);
+		//PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
+	}
 	public void LeaveGame(Player player)
 	{
 		player.CustomProperties.Clear();
