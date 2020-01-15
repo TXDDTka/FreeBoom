@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4553762316288087217}
   - component: {fileID: 4551225589639892949}
   - component: {fileID: -3103044821142167659}
+  - component: {fileID: -1230917807066084476}
   m_Layer: 8
   m_Name: DemomanRed
   m_TagString: Untagged
@@ -91,6 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   health: 100
+  photonPlayerListingMenu: {fileID: 0}
 --- !u!114 &4553762316288087217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +147,23 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 0
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
+--- !u!114 &-1230917807066084476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455383067276318300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b9fc17c4c051e04e92ad8875d88f17e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 7
+  height: 3
+  heightSmoothLag: 0.3
+  centerOffset: {x: 0, y: 0, z: 0}
+  followOnStart: 0
 --- !u!1 &1569467477247427811
 GameObject:
   m_ObjectHideFlags: 0

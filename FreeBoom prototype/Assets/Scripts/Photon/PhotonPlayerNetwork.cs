@@ -80,8 +80,14 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		if (addedPlayerToList)
 		{
 			//photonPlayerListingMenu.RemovePlayerListing(player);
-			PV.RPC("RemovePlayerListing", RpcTarget.AllBufferedViaServer, player);
+			PV.RPC("RemovePlayerListing", RpcTarget.AllBuffered, player);
 			addedPlayerToList = false;
+		}
+
+		if (playerInstantiate != null)
+		{
+			PhotonNetwork.Destroy(playerInstantiate);
+			//Debug.LogWarning("Персонаж уничтожен");
 		}
 
 		if (teamName == "Red")
@@ -97,10 +103,21 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 			photonGame.ChooseTeam("Random", player);
 		}
 
+		//byte currentTeam = (byte)player.CustomProperties["Team"];
+		//team = (Team)currentTeam;
+		//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);
+		//addedPlayerToList = true;
+		//if (PV.IsMine)
+		//{
+		//PV.RPC("RPC_GetTeam", RpcTarget.MasterClient, player);
+
 		byte currentTeam = (byte)player.CustomProperties["Team"];
 		team = (Team)currentTeam;
-		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);
 		addedPlayerToList = true;
+
+		//PV.RPC("RPC_GetTeam", RpcTarget.AllBuffered, player);//, addedPlayerToList);
+		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);
+		//}
 	}
 
 	private void ChooseCharacter(string character)
@@ -109,8 +126,10 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		if (playerInstantiate != null)
 		{
 			PhotonNetwork.Destroy(playerInstantiate);
+			//Debug.LogWarning("Персонаж уничтожен");
 		}
-		
+
+		//PV.RPC("CreatePlayer", RpcTarget.AllBuffered, player);
 		CreatePlayer();
 	}
 
@@ -126,10 +145,10 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 					PhotonNetwork.Instantiate(photonGame.redTeamCharacters[characterNumber].name, photonGame.teamOneSpawnPoints[random].position,
 					photonGame.redTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-				PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
-				photonGame.ChangeCharacter(player);
+				
+				//photonGame.ChangeCharacter(player);
 		}
-			if (team == Team.Blue)
+		else	if (team == Team.Blue)
 			{
 				int characterNumber = (byte)player.CustomProperties["Character"];
 				characterNumber--;
@@ -138,14 +157,32 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 					PhotonNetwork.Instantiate(photonGame.blueTeamCharacters[characterNumber].name, photonGame.teamTwoSpawnPoints[random].position,
 					photonGame.blueTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-				PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
-				photonGame.ChangeCharacter(player);
+				//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
+				//photonGame.ChangeCharacter(player);
 		}
 
+		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
+		photonGame.ChangeCharacter(player);
 	}
 
+	/// <summary>
+	/// Если чето сломается то значит что я закоментил RPC_GetTeam()
+	/// </summary>
+	/// <param name="playerSend"></param>
+	/// <param name="number"></param>
 
-	
+	//[PunRPC]
+	//void RPC_GetTeam(Player playerSend)
+	//{
+	//	byte currentTeam = (byte)playerSend.CustomProperties["Team"];
+	//	team = (Team)currentTeam;
+	//	addedPlayerToList = true;
+
+	//	//PV.RPC("RPC_SentTeam", RpcTarget.AllViaServer, player, addedPlayerToList);
+	//	//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);
+	//}
+
+
 
 	[PunRPC]
 	void AddPlayerListing(Player playerSend,int number)
@@ -165,12 +202,21 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		
 	}
 
+	//[PunRPC]
+	//void RemovePlayerListingMasterClient(Player playerSend)
+	//{
+	//	photonPlayerListingMenu.RemovePlayerListing(playerSend);
+
+	//}
+
 	[PunRPC]
 	void RemovePlayerListing(Player playerSend)
 	{
 		photonPlayerListingMenu.RemovePlayerListing(playerSend);
 
 	}
+
+
 
 	public void ClearProperties(Player playerSend)
 	{

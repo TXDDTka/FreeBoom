@@ -23,12 +23,12 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks
     private Rigidbody rb = null;
     private Animator animator = null;
 
-    public PhotonPlayerListingMenu photonPlayerListingMenu { get; set; }
+    public PhotonPlayerListingMenu photonPlayerListingMenu;// { get; set; }
     private PhotonGame photonGame;
-   
-    public PhotonView PV { get; set; }
-    public Player player { get; set; }
 
+    private PhotonView PV;// { get; set; }
+    private Player player;// { get; set; }
+    private CameraWork cameraWork;
     // private PhotonView PV;
 
         private void Awake()
@@ -46,7 +46,7 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
 
-
+        cameraWork = gameObject.GetComponent<CameraWork>();
         //player.SetScore(0);
         //player.SetKills(0);
         //player.SetDeaths(0);
@@ -55,15 +55,24 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks
         //  PV.RPC("AddPlayerListing", RpcTarget.All);//, PhotonNetwork.LocalPlayer);
     }
 
-
+    private void Start()
+    {
+        if (cameraWork != null)
+        {
+            if (PV.IsMine)
+            {
+                cameraWork.OnStartFollowing();
+            }
+        }
+    }
     //private void Awake()
     //{
-        
+
 
     //    //rb = GetComponent<Rigidbody2D>();
 
-        
-        
+
+
 
     //    //player = PhotonNetwork.LocalPlayer;
 
@@ -98,7 +107,7 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks
     //}
 
     // Update is called once per frame
-      void Update()
+    void Update()
     {
         if (!PV.IsMine) return;
         //движение с фиксированной скоростью незавизимо от расстояния между стиком и центром джойстика

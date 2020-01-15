@@ -65,10 +65,12 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 			player.SetTeam(PhotonTeams.Team.Red);
 			photonTeams.UpdateTeams();
 
-			buttons[0].interactable = false;
-			if (!buttons[1].interactable)
-				buttons[1].interactable = true;
-				buttons[2].interactable = false;
+			//buttons[0].interactable = false;
+			//if (!buttons[1].interactable)
+			//	buttons[1].interactable = true;
+			//	buttons[2].interactable = false;
+
+			ButtonsActive("Red");
 
 			if (player.GetCharacter() != PhotonCharacters.Character.None)
 			{
@@ -81,10 +83,12 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 			player.SetTeam(PhotonTeams.Team.Blue);
 			photonTeams.UpdateTeams();
 
-			buttons[1].interactable = false;
-			if (!buttons[0].interactable)
-				buttons[0].interactable = true;
-				buttons[2].interactable = false;
+			//buttons[1].interactable = false;
+			//if (!buttons[0].interactable)
+			//	buttons[0].interactable = true;
+			//	buttons[2].interactable = false;
+
+			ButtonsActive("Blue");
 
 			if (player.GetCharacter() != PhotonCharacters.Character.None)
 			{
@@ -102,12 +106,28 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					{
 						player.SetTeam(PhotonTeams.Team.Red);
 						photonTeams.UpdateTeams();
-					}
+
+					//buttons[0].interactable = false;
+					//if (!buttons[1].interactable)
+					//	buttons[1].interactable = true;
+					//buttons[2].interactable = false;
+
+					ButtonsActive("Red");
+				}
 					else
 					{
 						player.SetTeam(PhotonTeams.Team.Blue);
 						photonTeams.UpdateTeams();
-					}
+
+					//buttons[1].interactable = false;
+					//if (!buttons[0].interactable)
+					//	buttons[0].interactable = true;
+					//buttons[2].interactable = false;
+
+					ButtonsActive("Blue");
+
+
+				}
 
 				}
 				else
@@ -116,13 +136,25 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					{
 						player.SetTeam(PhotonTeams.Team.Red);
 						photonTeams.UpdateTeams();
-						return;
-					}
+
+					//buttons[0].interactable = false;
+					//if (!buttons[1].interactable)
+					//	buttons[1].interactable = true;
+					//buttons[2].interactable = false;
+
+					ButtonsActive("Red");
+
+				}
 					if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count > PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count)
 					{
 						player.SetTeam(PhotonTeams.Team.Blue);
 						photonTeams.UpdateTeams();
-					}
+
+					buttons[1].interactable = false;
+					if (!buttons[0].interactable)
+						buttons[0].interactable = true;
+					buttons[2].interactable = false;
+				}
 				}
 
 			if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == maxPlayersInTeam)
@@ -131,6 +163,25 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 				buttons[1].interactable = false;
 		}
 		
+	}
+
+	public void ButtonsActive(string currentTeam)
+	{
+		switch (currentTeam)
+		{
+			case "Red":
+				buttons[0].interactable = false;
+				if (!buttons[1].interactable)
+					buttons[1].interactable = true;
+				buttons[2].interactable = false;
+				break;
+			case "Blue":
+				buttons[1].interactable = false;
+				if (!buttons[0].interactable)
+					buttons[0].interactable = true;
+				buttons[2].interactable = false;
+				break;
+		}
 	}
 
 	public void ChangeCharacter(Player player)
