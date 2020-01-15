@@ -14,10 +14,10 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 	{
 		if (string.IsNullOrEmpty(nameInputField.text))
 		{
-			nameInputField.text = "Player" + UnityEngine.Random.Range(1000, 9999);
+			nameInputField.text = "Player" + Random.Range(1000, 9999);
 		}
-		PhotonNetwork.NickName = this.nameInputField.text;
-		PhotonNetwork.GameVersion = PhotonLogin.gameVersion;
+		PhotonNetwork.NickName = nameInputField.text;
+		PhotonNetwork.GameVersion = gameVersion;
 		PhotonNetwork.ConnectUsingSettings();
 	}
 

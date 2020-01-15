@@ -20,7 +20,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 
 	public override void OnJoinedRoom()
 	{
-		//MonoBehaviour.print("Локальный игрок " + PhotonNetwork.LocalPlayer.NickName + " подключился к комнате");
+		print("Локальный игрок " + PhotonNetwork.LocalPlayer.NickName + " подключился к комнате");
 		StartGame();
 	}
 

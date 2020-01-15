@@ -47,9 +47,9 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 
 	 void Start()
 	{
+		if (!PV.IsMine) return;
 		
 		player = PhotonNetwork.LocalPlayer;
-		if (!PV.IsMine) return;
 		OnButtonClick();
 	}
 
@@ -99,7 +99,7 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 
 		byte currentTeam = (byte)player.CustomProperties["Team"];
 		team = (Team)currentTeam;
-		PV.RPC("AddPlayerListing", RpcTarget.AllBufferedViaServer, player, 0);
+		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);
 		addedPlayerToList = true;
 	}
 
@@ -126,7 +126,7 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 					PhotonNetwork.Instantiate(photonGame.redTeamCharacters[characterNumber].name, photonGame.teamOneSpawnPoints[random].position,
 					photonGame.redTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-				PV.RPC("AddPlayerListing", RpcTarget.AllBufferedViaServer, player, 1);
+				PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
 				photonGame.ChangeCharacter(player);
 		}
 			if (team == Team.Blue)
@@ -138,7 +138,7 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 					PhotonNetwork.Instantiate(photonGame.blueTeamCharacters[characterNumber].name, photonGame.teamTwoSpawnPoints[random].position,
 					photonGame.blueTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-				PV.RPC("AddPlayerListing", RpcTarget.AllBufferedViaServer, player, 1);
+				PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
 				photonGame.ChangeCharacter(player);
 		}
 
