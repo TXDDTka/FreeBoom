@@ -70,19 +70,18 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		photonGame.buttons[7].onClick.AddListener(() => LeaveGame());
 		photonGame.buttons[8].onClick.AddListener(() => ExitGame());
 
-		photonGame.buttons[10].onClick.AddListener(() => PauseGame(true));
-		photonGame.buttons[11].onClick.AddListener(() => PauseGame(false));
+		//photonGame.buttons[10].onClick.AddListener(() => PauseGame(true));
+		//photonGame.buttons[11].onClick.AddListener(() => PauseGame(false));
 
 	}
 
 
-	private void PauseGame(bool pause)
-	{
-		Debug.Log(pause);
-		if (pause)
-			Time.timeScale = 0;
-		else Time.timeScale = 1;
-	}
+	//private void PauseGame(bool pause)
+	//{
+	//	if (pause)
+	//		Time.timeScale = 0;
+	//	else Time.timeScale = 1;
+	//}
 	
 
 	private void ChooseTeam()//(string teamName)

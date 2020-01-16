@@ -81,7 +81,7 @@ public class PhotonPlayerController : MonoBehaviourPun
     {
             //if (photonView.IsMine)
             //{
-                CameraFollow.Instance.SetTarget(transform);
+      CameraFollow.Instance.SetTarget(transform);
         // }
         //if (cameraWork != null)
         //{
@@ -159,7 +159,7 @@ public class PhotonPlayerController : MonoBehaviourPun
         anim.SetFloat("Forward", forward, 0.2f, Time.deltaTime);
 
         float a = isFacingRight ? 90 : 270;
-      //  Debug.Log(a);
+        //  Debug.Log(a);
         transform.rotation = Quaternion.AngleAxis(a, Vector3.up);
 
         //if (mirror)
