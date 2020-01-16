@@ -8,6 +8,16 @@ using UnityEngine.UI;
 public class PhotonPlayerListingMenu : MonoBehaviourPunCallbacks
 {
 
+	public static PhotonPlayerListingMenu Instance { get; private set; }
+
+	private void InitializeSingleton()
+	{
+		if (Instance == null)
+			Instance = this;
+		else if (Instance != this)
+			Destroy(this);
+	}
+
 	[SerializeField] private Transform _contentTeamRed = null;
 	[SerializeField] private Transform _contentTeamBlue = null;
 
@@ -19,6 +29,11 @@ public class PhotonPlayerListingMenu : MonoBehaviourPunCallbacks
 
 	[SerializeField]
 	private List<PlayerListing> _listings = new List<PlayerListing>();
+
+	private void Awake()
+	{
+		InitializeSingleton();
+	}
 
 	public void AddPlayerListing(Player player)
 	{

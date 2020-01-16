@@ -40,5 +40,6 @@ MonoBehaviour:
   - RemovePlayerListingMasterClient
   - RPC_GetTeam
   - RPC_SentTeam
+  - InstantiateUIBar
   DisableAutoOpenWizard: 1
   ShowSettings: 1

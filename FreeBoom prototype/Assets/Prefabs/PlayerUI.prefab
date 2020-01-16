@@ -270,9 +270,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bb86b7de585cf7478f26334e168e28b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenOffset: {x: 0, y: 150, z: 0}
+  screenOffset: {x: 0, y: 1.5, z: 0}
   playerNameText: {fileID: 1457364421862692366}
   playerHealthSlider: {fileID: 7759601072855928151}
+  playerRenderer: {fileID: 0}
+  currentCamera: {fileID: 0}
 --- !u!225 &4151183438770093766
 CanvasGroup:
   m_ObjectHideFlags: 0

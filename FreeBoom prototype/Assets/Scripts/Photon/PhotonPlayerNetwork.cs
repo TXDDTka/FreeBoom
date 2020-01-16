@@ -8,14 +8,14 @@ using System.Collections;
 
 public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 {
-	public enum Team
+	private enum Team
 	{
 		None,
 		Red,
 		Blue
 	}
 
-	public Team team;
+	private Team team;
 
 	private GameObject playerInstantiate;
 
@@ -40,9 +40,8 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 	private void Awake()
 	{
 		PV = GetComponent<PhotonView>();
-		photonGame = FindObjectOfType<PhotonGame>();
-		//photonGame.playersList.Add(this);
-		photonPlayerListingMenu = FindObjectOfType<PhotonPlayerListingMenu>();
+		photonGame = PhotonGame.Instance;
+		photonPlayerListingMenu = PhotonPlayerListingMenu.Instance;
 	}
 
 	 void Start()
@@ -71,10 +70,20 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		photonGame.buttons[7].onClick.AddListener(() => LeaveGame());
 		photonGame.buttons[8].onClick.AddListener(() => ExitGame());
 
+		photonGame.buttons[10].onClick.AddListener(() => PauseGame(true));
+		photonGame.buttons[11].onClick.AddListener(() => PauseGame(false));
 
-		
 	}
 
+
+	private void PauseGame(bool pause)
+	{
+		Debug.Log(pause);
+		if (pause)
+			Time.timeScale = 0;
+		else Time.timeScale = 1;
+	}
+	
 
 	private void ChooseTeam()//(string teamName)
 	{
@@ -178,10 +187,11 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 				int random = Random.Range(0, photonGame.teamOneSpawnPoints.Length);
 				playerInstantiate =
 					PhotonNetwork.Instantiate(photonGame.redTeamCharacters[characterNumber].name, photonGame.teamOneSpawnPoints[random].position,
-					photonGame.redTeamCharacters[characterNumber].transform.rotation, 0, null);
-			
+					Quaternion.identity, 0, null);
+			//photonGame.redTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-				//photonGame.ChangeCharacter(player);
+			//photonGame.ChangeCharacter(player);
+			//playerInstantiate.GetComponent<PhotonPlayerController>().isFacingRight = true;
 		}
 		else	if (team == Team.Blue)
 			{
@@ -192,19 +202,16 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 					PhotonNetwork.Instantiate(photonGame.blueTeamCharacters[characterNumber].name, photonGame.teamTwoSpawnPoints[random].position,
 					photonGame.blueTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-				//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
-				//photonGame.ChangeCharacter(player);
+			//playerInstantiate.GetComponent<PhotonPlayerController>().isFacingRight = false;
+			//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
+			//photonGame.ChangeCharacter(player);
 		}
 
 		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
 		photonGame.ChangeCharacter(player);
 	}
 
-	/// <summary>
-	/// ≈сли чето сломаетс€ то значит что € закоментил RPC_GetTeam()
-	/// </summary>
-	/// <param name="playerSend"></param>
-	/// <param name="number"></param>
+
 
 	//[PunRPC]
 	//void RPC_GetTeam(Player playerSend)

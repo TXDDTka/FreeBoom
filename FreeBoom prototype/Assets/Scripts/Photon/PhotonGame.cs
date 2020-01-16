@@ -9,6 +9,17 @@ using UnityEngine.UI;
 
 public class PhotonGame : MonoBehaviourPunCallbacks
 {
+
+	public static PhotonGame Instance { get; private set; }
+
+	private void InitializeSingleton()
+	{
+		if (Instance == null)
+			Instance = this;
+		else if (Instance != this)
+			Destroy(this);
+	}
+
 	[SerializeField]
 	private int maxPlayersInTeam = 5;
 
@@ -38,6 +49,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	public void Awake()
 	{
+		InitializeSingleton();
 		photonTeams = GetComponent<PhotonTeams>();
 		photonCharacters = GetComponent<PhotonCharacters>();
 	}
