@@ -1,54 +1,56 @@
 using Photon.Pun;
 using Photon.Realtime;
-//using System;
-using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
+
 
 public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 {
-	private enum Team
-	{
-		None,
-		Red,
-		Blue
-	}
+	//private enum Team
+	//{
+	//	None,
+	//	Red,
+	//	Blue
+	//}
 
-	private Team team;
+	//private Team team;
+
+	private int team = 0;
 
 	private GameObject playerInstantiate;
 
-
-
-	//[Header("Statistic Player Listing"), SerializeField]
-	//private Text nameText;
-	//[SerializeField] private Text classText;
-	//[SerializeField] private Text killsText;
-	//[SerializeField] private Text deathsText;
-	//[SerializeField] private Text assistsText;
-	//[SerializeField] private Text scoreText;
-	//[SerializeField] private Text pingText;
-
+	//public static PhotonPlayerNetwork Instance { get; private set; }
 
 	private PhotonView PV;
-	private Player player;
+	public Player player;
 	private PhotonGame photonGame;
 	private PhotonPlayerListingMenu photonPlayerListingMenu;
-
+	private PhotonPlayerController photonPlayerController;
 	private bool addedPlayerToList = false;
+	private bool sentBoom = false;
+
+	public Boom boom;
 	private void Awake()
 	{
+		
 		PV = GetComponent<PhotonView>();
+
+		
 		photonGame = PhotonGame.Instance;
 		photonPlayerListingMenu = PhotonPlayerListingMenu.Instance;
+		boom = Boom.Instance;
+		//	boom = Boom.Instance;
+		//if (PV.IsMine)
+		//{
+		//Instance = this;
+		player = PhotonNetwork.LocalPlayer;
+
+		//if (!PV.IsMine) return;
+		
 	}
 
-	 void Start()
+	void Start()
 	{
 		if (!PV.IsMine) return;
-		
-		player = PhotonNetwork.LocalPlayer;
 		OnButtonClick();
 	}
 
@@ -70,97 +72,39 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		photonGame.buttons[7].onClick.AddListener(() => LeaveGame());
 		photonGame.buttons[8].onClick.AddListener(() => ExitGame());
 
-		//photonGame.buttons[10].onClick.AddListener(() => PauseGame(true));
-		//photonGame.buttons[11].onClick.AddListener(() => PauseGame(false));
-
+		boom.jumpButton.onClick.AddListener(() => 
+		{
+			//boom.Activate(false, null, 0);
+			boom.Deactivate();
+			StartCoroutine(photonPlayerController.MakeBoom(boom.finalVelocity));
+			sentBoom = true;
+		});
 	}
 
 
-	//private void PauseGame(bool pause)
-	//{
-	//	if (pause)
-	//		Time.timeScale = 0;
-	//	else Time.timeScale = 1;
-	//}
-	
+
 
 	private void ChooseTeam()//(string teamName)
 	{
 
 		if (addedPlayerToList)
 		{
-			//photonPlayerListingMenu.RemovePlayerListing(player);
 			PV.RPC("RemovePlayerListing", RpcTarget.AllBuffered, player);
 			addedPlayerToList = false;
 		}
 
 		if (playerInstantiate != null)
 		{
+			if (!sentBoom)
+				boom.isGame = false;
 			PhotonNetwork.Destroy(playerInstantiate);
-			//Debug.LogWarning("ѕерсонаж уничтожен");
 		}
 
-		//switch(teamName)
-		//{
-		//	case "Red":
-		//		photonGame.ChooseTeam("Red", player);
-		//		break;
-		//	case "Blue":
-		//		photonGame.ChooseTeam("Blue", player);
-		//		break;
-		//	case "Random":
-		//		photonGame.ChooseTeam("Random", player);
-		//		break;
-		//	case "AutoChoose":
-		//		if (team == Team.Red)
-		//		{
-		//			photonGame.ChooseTeam("Blue", player);
-		//		}
-		//		else if (team == Team.Blue)
-		//		{
-		//			photonGame.ChooseTeam("Red", player);
-		//		}
-		//		break;
-		//}
-			//if (teamName == "Red")
-			//{
-			//	photonGame.ChooseTeam("Red", player);
-			//}
-			//else if (teamName == "Blue")
-			//{
-			//	photonGame.ChooseTeam("Blue", player);
-			//}
-			//else if (teamName == "Random")
-			//{
-			//	photonGame.ChooseTeam("Random", player);
-			//}
-			//else if(teamName == "AutoChoose")
-			//{
-			//	if (team == Team.Red)
-			//	{
-			//		photonGame.ChooseTeam("Blue", player);
-			//	}
-			//	else if (team == Team.Blue)
-			//	{
-			//		photonGame.ChooseTeam("Red", player);
-			//	}
-			//}
-		
-		//byte currentTeam = (byte)player.CustomProperties["Team"];
-		//team = (Team)currentTeam;
-		//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);
-		//addedPlayerToList = true;
-		//if (PV.IsMine)
-		//{
-		//PV.RPC("RPC_GetTeam", RpcTarget.MasterClient, player);
-
-		//byte currentTeam = (byte)player.CustomProperties["Team"];
-		team = (Team)player.GetTeam();//currentTeam;
+		//team = (Team)player.GetTeam();
+		team = (byte)player.GetTeam();
 		addedPlayerToList = true;
 
-		//PV.RPC("RPC_GetTeam", RpcTarget.AllBuffered, player);//, addedPlayerToList);
 		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);
-		//}
 	}
 
 	private void ChooseCharacter(string character)
@@ -169,17 +113,23 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		if (playerInstantiate != null)
 		{
 			PhotonNetwork.Destroy(playerInstantiate);
-			//Debug.LogWarning("ѕерсонаж уничтожен");
+
 		}
 
-		//PV.RPC("CreatePlayer", RpcTarget.AllBuffered, player);
 		CreatePlayer();
+
+
 	}
+
+	//public delegate void TestCreatePlayer();//—охжаем публичный делагат,который будет void и не будет иметь параметров
+	////public TestCreatePlayer testCreatePlayer; //делаем экземл€р этого делегата
+	//public event TestCreatePlayer testCreatePlayer;///что бы превратить делегат в событие,надо добавить event
+
 
 
 	public void CreatePlayer()
 	{
-		if (team == Team.Red)
+		if (team == 1)//(team == Team.Red)
 			{
 				int characterNumber = (byte)player.CustomProperties["Character"];
 				characterNumber--;
@@ -187,13 +137,14 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 				playerInstantiate =
 					PhotonNetwork.Instantiate(photonGame.redTeamCharacters[characterNumber].name, photonGame.teamOneSpawnPoints[random].position,
 					Quaternion.identity, 0, null);
-			//photonGame.redTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-			//photonGame.ChangeCharacter(player);
-			//playerInstantiate.GetComponent<PhotonPlayerController>().isFacingRight = true;
+				photonPlayerController = playerInstantiate.GetComponent<PhotonPlayerController>();
+			//boom.Activate(true, transform, 30);
+			boom.Activate(transform, 30);
+
 		}
-		else	if (team == Team.Blue)
-			{
+		else	if (team == 2)//(team == Team.Blue)
+		{
 				int characterNumber = (byte)player.CustomProperties["Character"];
 				characterNumber--;
 				int random = Random.Range(0, photonGame.teamTwoSpawnPoints.Length);
@@ -201,27 +152,16 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 					PhotonNetwork.Instantiate(photonGame.blueTeamCharacters[characterNumber].name, photonGame.teamTwoSpawnPoints[random].position,
 					photonGame.blueTeamCharacters[characterNumber].transform.rotation, 0, null);
 
-			//playerInstantiate.GetComponent<PhotonPlayerController>().isFacingRight = false;
-			//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
-			//photonGame.ChangeCharacter(player);
+
+			photonPlayerController = playerInstantiate.GetComponent<PhotonPlayerController>();
+			//boom.Activate(true, transform, -30);
+			boom.Activate(transform, -30);
 		}
 
 		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
 		photonGame.ChangeCharacter(player);
 	}
 
-
-
-	//[PunRPC]
-	//void RPC_GetTeam(Player playerSend)
-	//{
-	//	byte currentTeam = (byte)playerSend.CustomProperties["Team"];
-	//	team = (Team)currentTeam;
-	//	addedPlayerToList = true;
-
-	//	//PV.RPC("RPC_SentTeam", RpcTarget.AllViaServer, player, addedPlayerToList);
-	//	//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);
-	//}
 
 
 
@@ -243,12 +183,6 @@ public class PhotonPlayerNetwork : MonoBehaviourPunCallbacks
 		
 	}
 
-	//[PunRPC]
-	//void RemovePlayerListingMasterClient(Player playerSend)
-	//{
-	//	photonPlayerListingMenu.RemovePlayerListing(playerSend);
-
-	//}
 
 	[PunRPC]
 	void RemovePlayerListing(Player playerSend)

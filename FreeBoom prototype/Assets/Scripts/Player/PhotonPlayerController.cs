@@ -4,62 +4,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhotonPlayerController : MonoBehaviourPun
+public class PhotonPlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
-    // [Header("General Properties")]
-    // [SerializeField] private float speed = 5;
 
-    //public enum Team
-    //{
-    //    None,
-    //    Red,
-    //    Blue
-    //}
+    public static PhotonPlayerController Instance { get; private set; }
 
-    //public Team team;
-   
-    public float speed = 0f;
-    private bool grounded = false;
+    [Header("General Properties")]
+    [SerializeField] private float speed = 0f;
+    [SerializeField] private LayerMask groundMask = 0;
+    [SerializeField, Range(0, 1)] private float groundCheck = 1f;
+    [SerializeField] private bool mirror = false;
 
-
-    private float horizontal = 0;
+    private float horizontal = 0f;
     public bool isFacingRight = true;
-    private Vector3 lookPosition = Vector3.zero;
-    //[SerializeField] private bool mirror = false;
+    [SerializeField] private bool isGrounded = false;
+    public float timer = 0f;
+    public bool canMove = false;
 
+    private Vector3 lookPosition = Vector3.zero;
 
     public float health = 100f;
 
-    //private bool isGrounded = false;
 
     private MoveJoystick moveJoystick = null;
     private ShootJoystick shootJoystick = null;
-   
+
     private Rigidbody rb = null;
     private Animator anim = null;
 
-    //private PhotonPlayerListingMenu photonPlayerListingMenu;// { get; set; }
-    //private PhotonGame photonGame;
-
-    private PhotonView PV;// { get; set; }
-    //private Player player;// { get; set; }
-    //private CameraWork cameraWork;
+    private PhotonView PV;
 
     [SerializeField]
     private GameObject playerUiPrefab = null;
-    // private PhotonView PV;
 
-    //public GameObject _uiGo;
+  //  public static bool isFlying = false;
+    public Boom boom;
 
+    public bool send = false;
+
+    public bool jumped = false;
+
+    public bool isFlying = false;
 
     private void Awake()
     {
+        if (photonView.IsMine)
+            Instance = this;
+
+
         PV = GetComponent<PhotonView>();
-      //  player = PhotonNetwork.LocalPlayer;
 
-        //photonPlayerListingMenu = FindObjectOfType<PhotonPlayerListingMenu>();
-        //photonGame = FindObjectOfType<PhotonGame>();
-
+        boom = Boom.Instance;
 
         moveJoystick = MoveJoystick.Instance;
         shootJoystick = ShootJoystick.Instance;
@@ -67,83 +62,39 @@ public class PhotonPlayerController : MonoBehaviourPun
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
 
-        //cameraWork = gameObject.GetComponent<CameraWork>();
-        //player.SetScore(0);
-        //player.SetKills(0);
-        //player.SetDeaths(0);
-        //player.SetAssists(0);
 
-        //  PV.RPC("AddPlayerListing", RpcTarget.All);//, PhotonNetwork.LocalPlayer);
     }
 
 
     private void Start()
     {
-            //if (photonView.IsMine)
-            //{
-      CameraFollow.Instance.SetTarget(transform);
-        // }
-        //if (cameraWork != null)
-        //{
-        //    if (PV.IsMine)
-        //    {
-        //        cameraWork.OnStartFollowing();
-        //    }
-        //}
-        //team = (Team)player.GetTeam();
+        if (photonView.IsMine)
+        {
+        CameraFollow.Instance.SetTarget(transform);
+            //if((byte)PhotonNetwork.LocalPlayer.GetTeam() == 1)
+            //boom.Activate(true, transform,30);
+            //else if ((byte)PhotonNetwork.LocalPlayer.GetTeam() == 2)
+            //boom.Activate(true, transform, -30);
+
+            //boom.jumpButton.onClick.AddListener(() => { boom.Activate(false, null, 0); MakeBoom(boom.finalVelocity, true); timer = 1; });
+
+
+            // distToGround = GetComponent<Collider>().bounds.extents.y;
+        }
+
+              
 
         GameObject _uiGo = Instantiate(playerUiPrefab);
-            _uiGo.SendMessage("SetPlayer", this, SendMessageOptions.RequireReceiver);
+        _uiGo.SendMessage("SetPlayer", this, SendMessageOptions.RequireReceiver);
+
+        
+}
 
 
-    }
-
-
-    //private void Awake()
-    //{
-
-
-    //    //rb = GetComponent<Rigidbody2D>();
-
-
-
-
-    //    //player = PhotonNetwork.LocalPlayer;
-
-
-    //    //if (!PV.IsMine) return;
-    //    //photonGame.buttons[8].onClick.AddListener(() => LeaveGame());
-
-    //  //  transform.position = new Vector3(0.0f, 0.0f, 0.0f);
-    //}
-    //  void Start()
-    //{
-    //    //  moveJoystick = MoveJoystick.Instance;
-    //    //  shootJoystick = ShootJoystick.Instance;
-
-
-    //    //  anim = GetComponent<Animator>();
-    //    //  sr = GetComponent<SpriteRenderer>();
-    //    ////  PV = GetComponent<PhotonView>();
-    //    ///
-
-    //    if (!PV.IsMine) return;
-    //    Debug.Log("Start");
-
-    //   // rb.isKinematic = true;
-    //    //Physics.IgnoreLayerCollision(8,9);
-    //    //Physics.ig
-    //    //player.SetScore(0);
-    //    //player.SetKills(0);
-    //    //player.SetDeaths(0);
-    //    //player.SetAssists(0);
-
-    //}
-
-    // Update is called once per frame
     void Update()
     {
-        if (PV.IsMine == false && PhotonNetwork.IsConnected == true) return;
+        if (!PV.IsMine) return;
+ 
         //движение с фиксированной скоростью незавизимо от расстояния между стиком и центром джойстика
         horizontal = moveJoystick.Horizontal != 0 ? Mathf.Sign(moveJoystick.Horizontal) : 0;
 
@@ -156,29 +107,50 @@ public class PhotonPlayerController : MonoBehaviourPun
         float forward = horizontal;
         if (!isFacingRight)
             forward = -forward;
-        anim.SetFloat("Forward", forward, 0.2f, Time.deltaTime);
+        if (isGrounded && canMove)
+            anim.SetFloat("Forward", forward, 0.2f, Time.deltaTime);
 
         float a = isFacingRight ? 90 : 270;
         //  Debug.Log(a);
         transform.rotation = Quaternion.AngleAxis(a, Vector3.up);
 
-        //if (mirror)
-        //{
-        //    Vector3 scale = Vector3.one;
+        if (mirror)
+        {
+            Vector3 scale = Vector3.one;
 
-        //    scale.x = isFacingRight ? 1 : -1;
-        //    transform.localScale = scale;
-        //}
+            scale.x = isFacingRight ? 1 : -1;
+            transform.localScale = scale;
+        }
+
+
     }
 
-    private Vector3 GetLookPosition()
+    void FixedUpdate()
+    {
+        if (!PV.IsMine) return;
+            isGrounded = Physics.CheckSphere(transform.position, groundCheck, groundMask);
+
+        if (isGrounded & canMove)
+            rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+    }
+
+
+    public IEnumerator MakeBoom(Vector3 velocity)
+    {
+            isGrounded = false;
+            rb.velocity = velocity;
+            yield return new WaitForFixedUpdate();
+            canMove = true;
+    }
+
+    public Vector3 GetLookPosition()
     {
         Vector3 look = Vector3.zero;
 
         Vector3 aimPos = transform.position + Vector3.up * 1.3f;
 
 
-        if (shootJoystick.HasInput)
+        if (shootJoystick.HasInput && canMove)
         {
             look = aimPos + (Vector3)shootJoystick.Direction.normalized * 2;
         }
@@ -193,33 +165,84 @@ public class PhotonPlayerController : MonoBehaviourPun
         return look;
     }
 
-    void FixedUpdate()
-    {
-        if (!PV.IsMine) return;
-        if (grounded)
-        {
-             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-        }
-    }
 
-    private void OnAnimatorIK(int index)
+
+    public void OnAnimatorIK(int index)
     {
+        //if (PV.IsMine)
+        //{
+
         if (!PV.IsMine) return;
+
         anim.SetLookAtWeight(1, 1);
         anim.SetLookAtPosition(lookPosition);
+     //   PV.RPC("Test", RpcTarget.Others, lookPosition);
+      // }
+        //else
+        //{
+        //    anim.SetLookAtWeight(1, 1);
+        //    anim.SetLookAtPosition(lookPosition);
+        //}
     }
 
-    private void OnDrawGizmos()
-    {
-        if (!PV.IsMine) return;
-        Gizmos.DrawSphere(lookPosition, 0.2f);
-    }
+    //[PunRPC]
+    //public void Test(Vector3 vector)
+    //{
+    //    anim.logWarnings = false;
+    //    anim.SetLookAtWeight(1, 1);
+    //    anim.SetLookAtPosition(lookPosition);
+    //}
 
-    void OnCollisionStay(Collision other)
+    //[SyncVar(hook = "hookOnPositionChanged")]
+    //Vector3 targetPos;
+    //void hookOnPositionChanged(Vector3 pos)
+    //{
+    //    //set value on all clients
+    //    targetPos = pos;
+    //    //IK stuff here, it will be executed locally
+
+    //}
+
+    //private void OnDrawGizmos()
+    //{
+    //    if (!PV.IsMine) return;
+    //    Gizmos.DrawSphere(lookPosition, 0.2f);//lookPosition visual debug
+    //    Gizmos.DrawWireSphere(transform.position, groundCheck);//isGrounded visual debug
+    //}
+
+    //void OnCollisionStay(Collision other)
+    //{
+    //    if (!PV.IsMine) return;
+    //    if (other.gameObject.layer == LayerMask.NameToLayer("Ground"));
+    //        isGrounded = true;
+
+    //}
+
+    //void OnCollisionExit(Collision other)
+    //{
+    //    if (other.gameObject.layer == LayerMask.NameToLayer("Ground")) ;
+    //    isGrounded = false;
+    //    //canMove = false;
+    //}
+
+    //void OnCollisionEnter(Collision other)
+    //{
+    //    if (other.gameObject.layer == LayerMask.NameToLayer("Ground")) ;
+    //    isGrounded = true;
+    //    //canMove = true;
+    //}
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (!PV.IsMine) return;
-        if (other.gameObject.tag == "Ground")
-            grounded = true; 
-            
+       // int i, b;
+        if (stream.IsWriting)
+        {
+           // stream.SendNext(lookPosition);
+            //stream.SendNext(anim.SetLookAtPosition(lookPosition));
+        }
+        else
+        {
+           // lookPosition = (Vector3)stream.ReceiveNext();
+            //anim.SetLookAtPosition((Vector3)stream.ReceiveNext());
+        }
     }
 }

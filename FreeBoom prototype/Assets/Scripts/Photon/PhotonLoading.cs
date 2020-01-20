@@ -15,7 +15,7 @@ public enum LoadingScene
 public class PhotonLoading : MonoBehaviourPunCallbacks
 {	
 
-
+	public float timer;
 	private static LoadingScene _nextScene { get; set; }
 
 	public Scrollbar progressBar;
@@ -52,9 +52,11 @@ public class PhotonLoading : MonoBehaviourPunCallbacks
 	{
 		while(PhotonNetwork.LevelLoadingProgress < 1)
 		{
+			timer = Time.deltaTime;
 			float progress = PhotonNetwork.LevelLoadingProgress / 0.9f;
 			progressBar.size = progress;
 			progressText.text = string.Format("{0:0}%", progress * 100f);
+			Debug.Log(timer);
 			yield return null;
 		}
 	}

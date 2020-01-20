@@ -41,5 +41,6 @@ MonoBehaviour:
   - RPC_GetTeam
   - RPC_SentTeam
   - InstantiateUIBar
+  - Test
   DisableAutoOpenWizard: 1
   ShowSettings: 1

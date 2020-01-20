@@ -753,7 +753,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 88
   m_CollisionDetection: 0
 --- !u!114 &4999114778748704585
 MonoBehaviour:
@@ -768,10 +768,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  groundCheck: 0
+  mirror: 0
   isFacingRight: 1
+  isGrounded: 0
+  timer: 0
+  canMove: 0
   health: 100
   playerUiPrefab: {fileID: 1900484803711955721, guid: 4b4d000799e08d24386549b233c9304e,
     type: 3}
+  boom: {fileID: 0}
+  send: 0
+  jumped: 0
+  isFlying: 0
 --- !u!114 &6141615874540425075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -826,7 +838,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 1
+  m_SynchronizeScale: 0
 --- !u!114 &-4400709255005986718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2131,7 +2143,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c9ac4aedc33b93447b8aafe5c836510e, type: 3}
+  - {fileID: 2100000, guid: 0a03e5ba5d1a41341ba6cc000b251599, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

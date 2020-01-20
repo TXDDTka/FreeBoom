@@ -45,25 +45,32 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	private bool exitGame = false;
 
+	//public PhotonPlayerNetwork photonPlayerNetwork;
 
+	//public Player player;
 
 	public void Awake()
 	{
 		InitializeSingleton();
 		photonTeams = GetComponent<PhotonTeams>();
 		photonCharacters = GetComponent<PhotonCharacters>();
+		
+		
 	}
 
 	public override void OnJoinedRoom()
 	{
 		PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
+		//photonPlayerNetwork = PhotonPlayerNetwork.Instance;
+		//player = photonPlayerNetwork.player;
+
 	}
 
-	public override void OnPlayerEnteredRoom(Player newPlayer)
-	{
-		//base.OnPlayerEnteredRoom(newPlayer);
-		//PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
-	}
+	//public override void OnPlayerEnteredRoom(Player newPlayer)
+	//{
+	//	//base.OnPlayerEnteredRoom(newPlayer);
+	//	//PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
+	//}
 	public void LeaveGame(Player player)
 	{
 		player.CustomProperties.Clear();

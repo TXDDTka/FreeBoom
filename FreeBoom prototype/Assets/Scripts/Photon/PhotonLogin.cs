@@ -1,4 +1,5 @@
 using Photon.Pun;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 	{
 		if (string.IsNullOrEmpty(nameInputField.text))
 		{
-			nameInputField.text = "Player" + Random.Range(1000, 9999);
+			nameInputField.text = "Player" + Environment.TickCount % 99;
 		}
 		PhotonNetwork.NickName = nameInputField.text;
 		PhotonNetwork.GameVersion = gameVersion;
