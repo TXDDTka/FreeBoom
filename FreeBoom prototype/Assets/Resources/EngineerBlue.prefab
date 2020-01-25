@@ -1057,7 +1057,7 @@ GameObject:
   - component: {fileID: 3103586171277707176}
   - component: {fileID: 8012151285183674929}
   m_Layer: 9
-  m_Name: DemomanBlue
+  m_Name: EngineerBlue
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2554,7 +2554,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c9ac4aedc33b93447b8aafe5c836510e, type: 3}
+  - {fileID: 2100000, guid: 6fa4e6a619d901f439830cdfac75e7aa, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

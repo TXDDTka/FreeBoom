@@ -54,7 +54,7 @@ GameObject:
   - component: {fileID: 308991478466418560}
   - component: {fileID: 4641808333408332313}
   m_Layer: 8
-  m_Name: DemomanRed
+  m_Name: EngineerRed
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1739,7 +1739,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0a03e5ba5d1a41341ba6cc000b251599, type: 2}
+  - {fileID: 2100000, guid: 484190f3e0178d24da8192f9234d0fa0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

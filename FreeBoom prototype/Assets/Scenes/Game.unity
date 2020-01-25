@@ -3325,12 +3325,12 @@ MonoBehaviour:
     type: 3}
   redTeamCharacters:
   - {fileID: 2454850107092427485, guid: 25a4b204cc85e84408148bb7495852fe, type: 3}
-  - {fileID: 2454850107092427485, guid: 25a4b204cc85e84408148bb7495852fe, type: 3}
-  - {fileID: 2454850107092427485, guid: 25a4b204cc85e84408148bb7495852fe, type: 3}
+  - {fileID: 2454850107092427485, guid: 823458b45b261c34586af259aeca1f78, type: 3}
+  - {fileID: 2454850107092427485, guid: f70ee9d34ac71394fb04b79139df38fb, type: 3}
   blueTeamCharacters:
   - {fileID: 957723125328212725, guid: 0ed44ba896d53e846ae48374c8ab6ddf, type: 3}
-  - {fileID: 957723125328212725, guid: 0ed44ba896d53e846ae48374c8ab6ddf, type: 3}
-  - {fileID: 957723125328212725, guid: 0ed44ba896d53e846ae48374c8ab6ddf, type: 3}
+  - {fileID: 957723125328212725, guid: 57706b0d16b2a074790371e6d768b5eb, type: 3}
+  - {fileID: 957723125328212725, guid: db9fd48ef2d05fc4cb2a073f6fb58ef8, type: 3}
   teamOneSpawnPoints:
   - {fileID: 1317316444}
   - {fileID: 1191381603}
@@ -6134,7 +6134,7 @@ MonoBehaviour:
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
-  m_FillClockwise: 1
+  m_FillClockwise: 0
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1

@@ -25,7 +25,6 @@ public class PhotonPlayerMovement : MonoBehaviour,IPunObservable
     private PhotonView PV;
     private MoveJoystick moveJoystick = null;
     private PhotonPlayerShooting photonPlayerShooting;
-   // private ShootJoystick shootJoystick = null;
 
     private Player player;
     private void Awake()

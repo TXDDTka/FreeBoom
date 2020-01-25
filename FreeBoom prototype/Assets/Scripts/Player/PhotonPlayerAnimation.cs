@@ -27,9 +27,15 @@ public class PhotonPlayerAnimation : MonoBehaviour
 
     public void OnAnimatorIK(int index)
     {
-        if (!PV.IsMine) return;
-
-        anim.SetLookAtWeight(1, 1);
-        anim.SetLookAtPosition(_photonPlayerMovement.lookPosition);
+        if (PV.IsMine)
+        {
+            anim.SetLookAtWeight(1, 1);
+            anim.SetLookAtPosition(_photonPlayerMovement.lookPosition);
+        }
+        else
+        {
+            anim.SetLookAtWeight(1, 1);
+            anim.SetLookAtPosition(_photonPlayerMovement.lookPosition);
+        }
     }
 }

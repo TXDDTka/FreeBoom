@@ -66,7 +66,6 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         InitializeSingleton();
-        //ChangePanel();
          timer = respawnTimer;
     }
 
@@ -146,59 +145,12 @@ public class UIManager : MonoBehaviour
                 }
         }
     }
-            //case CurrentPanel.ChangeTeamPanel:
-            //    {
-            //        foreach (var panel in panelsLists)
-            //        {
-            //            if (panel.panelName == currentPanel.ToString())
-            //            {
-            //                panel.panelObjects[0].SetActive(false);
-            //                panel.panelObjects[1].SetActive(true);
-            //                panel.panelObjects[2].SetActive(true);
-            //                camera.cullingMask = 0;
-            //            }
-            //        }
-
-            //        break;
-            //    }
-            //case CurrentPanel.ChangePanelRespawn:
-            //    {
-            //        foreach (var panel in panelsLists)
-            //        {
-            //            if (panel.panelName == CurrentPanel.MenuPanel.ToString())
-            //            {
-            //                panel.panelObjects[0].SetActive(false);
-            //                panel.panelObjects[1].SetActive(true);
-            //                panel.panelObjects[2].SetActive(true);
-            //                camera.cullingMask = 0;
-            //            }
-                        
-            //            if(panel.panelName == currentPanel.ToString())
-            //            {
-
-            //            }
-            //        }
-            //        break;
-            //    }
-      //  }
-   // }
+            
    private void RespawnPanelOff()
     {
         canRespawn = false;
         StopCoroutine(timerCoroutine);
         timer = respawnTimer;
-        //if (team == "Red")
-        //{
-        //    redRespawnBar.gameObject.SetActive(false);
-        //    redLoadingBar.gameObject.SetActive(false);
-        //    redRespawnText.gameObject.SetActive(false);
-        //}
-        //else
-        //{
-        //    blueRespawnBar.gameObject.SetActive(false);
-        //    blueLoadingBar.gameObject.SetActive(false);
-        //    blueRespawnText.gameObject.SetActive(false);
-        //}
         RespawnStatus(false);
 
     }

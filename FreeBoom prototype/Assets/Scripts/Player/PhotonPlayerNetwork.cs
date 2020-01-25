@@ -6,31 +6,12 @@ using UnityEngine;
 public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 {
 	public static PhotonPlayerNetwork Instance { get; private set; }
-
-	//public enum Team
-	//{
-	//	None,
-	//	Red,
-	//	Blue
-	//}
-
-	//public enum Character  { None, Demoman, Engineer, Soldier };
-
-	//[Tooltip("Наша текущая команда")]
-	//public Team team = Team.None;
-	//[Tooltip("Наша текущий персонаж")]
-	//public Character character = Character.None;
 	[Tooltip("Наш созданный игрок,изначально = null")]
 	private GameObject playerInstantiate = null;
 
-	//[Tooltip("Проверка жив ли игрок")]
-	//public bool alive = false;
 	[Tooltip("Добавлен ли игрок в в статистику")]
 	private bool addedPlayerToList = false;
 
-	//public bool changeCharacter = false;
-	//[Tooltip("Проверка на то что игрок прыгнул")]
-	//private bool sentBoom = false;
 
 	public Player player;
 
@@ -41,14 +22,6 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 	private PhotonPlayerMovement photonPlayerMovement;
 	public UIManager uiManager;
 
-
-	//private void InitializeSingleton()
-	//{
-	//	if (Instance == null)
-	//		Instance = this;
-	//	else if (Instance != this)
-	//		Destroy(this);
-	//}
 	private void Awake()
 	{
 		PV = GetComponent<PhotonView>();
@@ -57,15 +30,13 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 		boom = Boom.Instance;
 		uiManager = UIManager.Instance;
 		player = PhotonNetwork.LocalPlayer;
-
-		if(PV.IsMine)
-		Instance = this;
-		//InitializeSingleton();
+		
 	}
 
 	void Start()
 	{
 		if (!PV.IsMine) return;
+		Instance = this;
 		OnButtonClick(); //Вызываем метод проверки нажатия кнопок игроком
 
 	}
@@ -153,7 +124,6 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 			{
 				boom.Deactivate(); //Отключаем возможность прыжка
 				StartCoroutine(photonPlayerMovement.MakeBoom(boom.finalVelocity)); //Совершаем прыжек
-																				   //sentBoom = true; //Игрок прыгнул
 			});
 
 		
@@ -172,122 +142,55 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 	{
 
 		if (addedPlayerToList) //Если игрок уже выбирал команду 
-		{
 			PV.RPC("RemovePlayerListing", RpcTarget.AllBuffered, player); //Удалеям игрока из статистики
-																		  
-			//character = (Character)player.GetCharacter();
-		}
+		else
+		addedPlayerToList = true; //Игрок добавлен в статистику																  
 
-		//if (playerInstantiate != null) //Если игрок создан нами
-		//{
-		////	if (!sentBoom) //Проверяем если игрок не прыгнул
-		//	//	boom.canJump = false; //Отключаем возможность прыжка
-		//	PhotonNetwork.Destroy(playerInstantiate); //Уничтожаем игрока
-		//}
-
-
-	//team = (Team)player.GetTeam(); //Определяем нашу команду
-
-		//PV.RPC("SetPlayerTeam", RpcTarget.AllBuffered, (byte)player.GetTeam());
-
-		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);//Добавляем игрока в статистику
-		if(!addedPlayerToList)
-		addedPlayerToList = true; //Игрок добавлен в статистику
+		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 0);//Добавляем игрока в статистику	
 	}
 
 	private void ChooseCharacter()
 	{
 		if (addedPlayerToList)
-		//{
-			//character = (Character)player.GetCharacter();
-		//}
-		//character = (Character)player.GetCharacter();
 		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
 	}
-
-	//private void ChangeCharacter()
-	//{
-	//	if (changeCharacter)
-	//	{
-	//		character = (Character)player.GetCharacter();
-	//	}
-	//	PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
-	//}
-	//private void ChooseCharacter()//(string character)
-	//{
-	//	//photonGame.ChooseCharacter(character, player);
-	//	if (playerInstantiate != null)
-	//	{
-	//		PhotonNetwork.Destroy(playerInstantiate);
-
-	//	}
-	//	//uiManager.currentPanel = UIManager.CurrentPanel.GamePanel;
-	//	//uiManager.ChangePanel();
-	//	CreatePlayer();
-
-
-	//}
-
-	//public delegate void TestCreatePlayer();//Сохжаем публичный делагат,который будет void и не будет иметь параметров
-	////public TestCreatePlayer testCreatePlayer; //делаем экземляр этого делегата
-	//public event TestCreatePlayer testCreatePlayer;///что бы превратить делегат в событие,надо добавить event
 
 
 
 	public void CreatePlayer()
 	{
-		Debug.LogWarning("Creater");
-		//if (team == Team.Red)
 		if(player.GetTeam() == PhotonTeams.Team.Red)
 		{
-			Debug.Log("Red");
-			//character = (Character)player.GetCharacter();
-			//int characterNumber = (byte)player.GetCharacter();//(byte)player.CustomProperties["Character"];
-			//characterNumber--;
 			int random = Random.Range(0, photonGame.teamOneSpawnPoints.Length);
 			playerInstantiate =
 				PhotonNetwork.Instantiate(photonGame.redTeamCharacters[(byte)player.GetCharacter() - 1].name, photonGame.teamOneSpawnPoints[random].position,
 				Quaternion.identity, 0, null);
-			//playerInstantiate.GetComponent<PhotonPlayerHealth>().photonPlayerNetwork = this;
 
 			photonPlayerMovement = playerInstantiate.GetComponent<PhotonPlayerMovement>();
-			//playerInstantiate.GetComponent<PhotonPlayerController>().GetPhotonPlayerNetwork(this);
+
 			CameraFollow.Instance.SetTarget(playerInstantiate.transform);
-			//alive = true;
+
 
 			boom.Activate(transform, 30);
 
 		}
 		else if (player.GetTeam() == PhotonTeams.Team.Blue)
-		//if (team == Team.Blue)
 		{
-			Debug.Log("Red");
-			//character = (Character)player.GetCharacter();
-			//int characterNumber = (byte)player.GetCharacter();//(byte)player.CustomProperties["Character"];
-			//characterNumber--;
-			//Debug.LogWarning((byte)character - 1);
+
 			int random = Random.Range(0, photonGame.teamTwoSpawnPoints.Length);
 			playerInstantiate =
 				PhotonNetwork.Instantiate(photonGame.blueTeamCharacters[(byte)player.GetCharacter() - 1].name, photonGame.teamTwoSpawnPoints[random].position,
 				Quaternion.identity, 0, null);
-			//playerInstantiate.GetComponent<PhotonPlayerHealth>().photonPlayerNetwork = this;
-			//playerInstantiate.transform.parent = gameObject.transform;
+
 
 			photonPlayerMovement = playerInstantiate.GetComponent<PhotonPlayerMovement>();
-			//playerInstantiate.GetComponent<PhotonPlayerController>().GetPhotonPlayerNetwork(this);
+
 			CameraFollow.Instance.SetTarget(playerInstantiate.transform);
-			//alive = true;
 
 			boom.Activate(transform, -30);
 		}
-		else
-		{
-			Debug.Log("None");
-		}
 
-		//PV.RPC("SetPlayerCharacter", RpcTarget.OthersBuffered, (byte)player.GetCharacter());
 		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
-		//photonGame.ChangeCharacterButtonActive(player);
 	}
 
 
@@ -308,17 +211,7 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 		if (uiManager.canRespawn)
 			CreatePlayer();
 	}
-	//[PunRPC]
-	//public void SetPlayerCharacter(byte curentCharacter)
-	//{
-	//	character = (Character)curentCharacter;
-	//}
 
-	//[PunRPC]
-	//public void SetPlayerTeam(byte curentTeam)
-	//{
-	//	team = (Team)curentTeam;
-	//}
 
 	[PunRPC]
 	public void AddPlayerListing(Player playerSend, int number)

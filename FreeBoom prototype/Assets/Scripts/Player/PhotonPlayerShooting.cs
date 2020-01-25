@@ -16,19 +16,17 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks//PlayerController
 
     [SerializeField] private Transform shootPoint = null;
 
+    private PhotonView PV = null;
+
     public WeaponSettingsDatabase weaponSettingsDatabase;
     private PhotonPlayerMovement photonPlayerMovement;
-    private PhotonView PV = null;
-    private Boom boom;
-
-    public ShootJoystick shootJoystick = null;
+    [HideInInspector]public ShootJoystick shootJoystick = null;
 
 
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         photonPlayerMovement = GetComponent<PhotonPlayerMovement>();
-        boom = Boom.Instance;
         shootJoystick = ShootJoystick.Instance;
 
         if (PV.IsMine)
