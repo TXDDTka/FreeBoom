@@ -4,36 +4,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhotonDemoman : PhotonPlayerController
+[CreateAssetMenu(menuName = "Database/Characters", fileName = "CharacterData")]
+public class CharacterDatabase : ScriptableObject
 {
-
-    //public void AddPlayerToList()
+    //[SerializeField] private string name;
+    //public string Name
     //{
-
-    //    //PV.RPC("AddPlayerListing", RpcTarget.AllBufferedViaServer, player);
+    //    get { return name; }
+    //    protected set { }
     //}
 
-    //  public PhotonView PV;
-    // Start is called before the first frame update
-    //void Start()
+    //[SerializeField] private float speed;
+    //public float Speed
     //{
-
+    //    get { return speed; }
+    //    protected set { }
     //}
 
-    //// Update is called once per frame
-    //void Update()
+    //[SerializeField] private float health;
+    //public float Health
     //{
-
+    //    get { return health; }
+    //    protected set { }
     //}
 
-    //private void Awake()
-    //{
-    ////    PV = GetComponent<PhotonView>();
-    //}
-
-    //[PunRPC]
-    //void AddPlayerListing(Player player)
-    //{
-    //    photonPlayerListingMenu.AddPlayerListing(player);
-    //}
+  //  [SerializeField] public class
 }

@@ -42,5 +42,14 @@ MonoBehaviour:
   - RPC_SentTeam
   - InstantiateUIBar
   - Test
+  - destroy
+  - ShowHp
+  - GetDamage
+  - SetTeam
+  - SetData
+  - SetPlayerTeam
+  - SetPlayerCharacter
+  - CreatePlayerBar
+  - CheckCharacterHealth
   DisableAutoOpenWizard: 1
   ShowSettings: 1

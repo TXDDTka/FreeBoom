@@ -17,9 +17,4 @@ public class MainCameraCullingMask : MonoBehaviour
         mainCamera.cullingMask = mask;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

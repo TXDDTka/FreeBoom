@@ -6,20 +6,20 @@ using UnityEngine.UI;
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
 
-	private static string gameVersion = "1.0";
-
 	[SerializeField]
 	private InputField nameInputField = null;
 
+	[SerializeField]
+	private GameSettings gameSettings = null;
 
-	public void Connect()
+public void Connect()
 	{
 		if (string.IsNullOrEmpty(nameInputField.text))
 		{
-			nameInputField.text = "Player" + Environment.TickCount % 99;
+			nameInputField.text = gameSettings.NickName;
 		}
 		PhotonNetwork.NickName = nameInputField.text;
-		PhotonNetwork.GameVersion = gameVersion;
+		PhotonNetwork.GameVersion = gameSettings.GameVersion;
 		PhotonNetwork.ConnectUsingSettings();
 	}
 

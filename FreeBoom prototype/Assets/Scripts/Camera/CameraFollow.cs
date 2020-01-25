@@ -14,6 +14,8 @@ public class CameraFollow : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(this);
+
+        //Instance = this;
     }
 
     #endregion
@@ -62,6 +64,7 @@ public class CameraFollow : MonoBehaviour
 
     public void SetTarget(Transform newTarget)
     {
+        Debug.Log("Персонаж");
         target = newTarget;
        // transform.position = target.position;
     }
