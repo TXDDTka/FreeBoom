@@ -42,7 +42,8 @@ public class UIManager : MonoBehaviour
     public Button leaveGameBtn;
     public Button exitGameBtn;
 
-    public bool canRespawn = false;
+    public bool respawn = false;
+    public bool changing = false;
 
     [Serializable]
     public class PanelsList
@@ -123,6 +124,11 @@ public class UIManager : MonoBehaviour
                             panel.panelObjects[1].SetActive(false);
                             panel.panelObjects[2].SetActive(true);
                             camera.cullingMask = -1;
+                            //if(changing)
+                            //{
+                            //    panel.panelObjects[3].SetActive(true);
+                            //    changing = false;
+                            //}
                         }
                     }
 
@@ -134,6 +140,12 @@ public class UIManager : MonoBehaviour
                     {
                         if (panel.panelName == currentPanel.ToString())
                         {
+                            if(respawn)
+                            {
+                                panel.panelButtons[2].gameObject.SetActive(false);
+                            }
+                            else
+                                panel.panelButtons[2].gameObject.SetActive(true);
                             panel.panelObjects[0].SetActive(false);
                             panel.panelObjects[1].SetActive(true);
                             panel.panelObjects[2].SetActive(true);
@@ -148,7 +160,7 @@ public class UIManager : MonoBehaviour
             
    private void RespawnPanelOff()
     {
-        canRespawn = false;
+        respawn = false;
         StopCoroutine(timerCoroutine);
         timer = respawnTimer;
         RespawnStatus(false);
@@ -157,7 +169,7 @@ public class UIManager : MonoBehaviour
 
     public void RespawnPanelOn()
     {
-        canRespawn = true;
+        respawn = true;
         currentPanel = CurrentPanel.MenuPanel;
         ChangePanel();
         RespawnStatus(true);
@@ -195,7 +207,6 @@ public class UIManager : MonoBehaviour
             RespawnStatus(false);
             currentPanel = CurrentPanel.GamePanel;
             ChangePanel();
-
             timer = respawnTimer;
         }
     }

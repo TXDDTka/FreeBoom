@@ -28,21 +28,30 @@ public class ShootJoystick : JoystickController
         InitializeSingleton();
     }
 
+    public void ResetPosition()
+    {
+        direction = Vector2.zero;
+        joystickBackground.anchoredPosition = direction;
+    }
+
     public override void OnPointerUp(PointerEventData eventData)
     {
         OnBeginDragEvent?.Invoke(false);
         OnUpEvent?.Invoke();
-        base.OnPointerUp(eventData);
+        //base.OnPointerUp(eventData);
+        if (smoothEnabled)
+        {
+            InvokeJoytickRoutine(false);
+        }
+        else
+        {
+            canvasGroup.alpha = 0;
+            //joystickBackground.anchoredPosition = startPosition;
+        }
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
     {
         OnBeginDragEvent?.Invoke(true);
     }
-
-    //public override void OnEndDrag(PointerEventData eventData)
-    //{
-    //    //base.OnEndDrag(eventData);
-    //    OnBeginDragEvent?.Invoke(false);
-    //}
 }

@@ -32,7 +32,7 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [HideInInspector] public PhotonView PV = null;
     [HideInInspector] public MoveJoystick moveJoystick = null;
     [HideInInspector] public ShootJoystick shootJoystick = null;
-    [HideInInspector] public Boom boom;
+ //   [HideInInspector] public Boom boom;
 
     [HideInInspector] public Rigidbody rb = null;
     [HideInInspector] public Animator anim = null;
@@ -57,7 +57,7 @@ public class PhotonPlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
         moveJoystick = MoveJoystick.Instance;
         shootJoystick = ShootJoystick.Instance;
-        boom = Boom.Instance;
+       // boom = Boom.Instance;
 
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();

@@ -45,7 +45,8 @@ public class CameraFollow : MonoBehaviour
     private void HandleMovement()
     {
 
-        Vector3 pos = target.position + offset;
+       Vector3 pos = target.position + offset;
+        //Vector3 pos = new Vector3(target.position.x, offset.y, offset.z);
         Vector3 smooth = Vector3.SmoothDamp(transform.position, pos, ref smoothVelocity, 1 - followSpeed);
 
 
@@ -64,7 +65,6 @@ public class CameraFollow : MonoBehaviour
 
     public void SetTarget(Transform newTarget)
     {
-        Debug.Log("Персонаж");
         target = newTarget;
        // transform.position = target.position;
     }

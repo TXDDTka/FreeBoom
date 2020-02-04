@@ -51,5 +51,7 @@ MonoBehaviour:
   - SetPlayerCharacter
   - CreatePlayerBar
   - CheckCharacterHealth
+  - CreateBullet
+  - AddToList
   DisableAutoOpenWizard: 1
   ShowSettings: 1

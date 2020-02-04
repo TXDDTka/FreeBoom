@@ -3,7 +3,7 @@ using Photon.Realtime;
 using UnityEngine;
 
 
-public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
+public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 {
 	public static PhotonPlayerNetwork Instance { get; private set; }
 	[Tooltip("Наш созданный игрок,изначально = null")]
@@ -16,10 +16,10 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 	public Player player;
 
 	public PhotonView PV;
-	private Boom boom;
+	//private Boom boom;
 	private PhotonGame photonGame;
 	private PhotonPlayerListingMenu photonPlayerListingMenu;
-	private PhotonPlayerMovement photonPlayerMovement;
+	//private PhotonPlayerMovement photonPlayerMovement;
 	public UIManager uiManager;
 
 	private void Awake()
@@ -27,7 +27,7 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 		PV = GetComponent<PhotonView>();
 		photonGame = PhotonGame.Instance;
 		photonPlayerListingMenu = PhotonPlayerListingMenu.Instance;
-		boom = Boom.Instance;
+		//boom = Boom.Instance;
 		uiManager = UIManager.Instance;
 		player = PhotonNetwork.LocalPlayer;
 		
@@ -75,6 +75,7 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 							uiManager.currentPanel = UIManager.CurrentPanel.GamePanel; // Меняем панель на панель игры в скрипте UIManager
 							uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
 							CreatePlayer(); //Вызываем метод cоздания игрока в этом скрипте
+							
 						});
 					}
 					break;
@@ -120,11 +121,11 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 
 
 
-			boom.jumpButton.onClick.AddListener(() => //Игрок прыгает
-			{
-				boom.Deactivate(); //Отключаем возможность прыжка
-				StartCoroutine(photonPlayerMovement.MakeBoom(boom.finalVelocity)); //Совершаем прыжек
-			});
+			//boom.jumpButton.onClick.AddListener(() => //Игрок прыгает
+			//{
+			//	boom.Deactivate(); //Отключаем возможность прыжка
+			//	StartCoroutine(photonPlayerMovement.MakeBoom(boom.finalVelocity)); //Совершаем прыжек
+			//});
 
 		
 	}
@@ -134,6 +135,8 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 	{
 		if (playerInstantiate != null)
 		{
+			player.AddDeaths(1);
+			PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 2);
 			PhotonNetwork.Destroy(playerInstantiate);
 		}
 	}
@@ -152,7 +155,7 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 	private void ChooseCharacter()
 	{
 		if (addedPlayerToList)
-		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
+			PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
 	}
 
 
@@ -166,13 +169,14 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 				PhotonNetwork.Instantiate(photonGame.redTeamCharacters[(byte)player.GetCharacter() - 1].name, photonGame.teamOneSpawnPoints[random].position,
 				Quaternion.identity, 0, null);
 
-			photonPlayerMovement = playerInstantiate.GetComponent<PhotonPlayerMovement>();
+			//photonPlayerMovement = playerInstantiate.GetComponent<PhotonPlayerMovement>();
 
 			CameraFollow.Instance.SetTarget(playerInstantiate.transform);
+			uiManager.panelsLists[2].panelObjects[3].SetActive(true);
+			//	BoomJump.Instance.SetTarger(photonPlayerMovement);
 
-
-			boom.Activate(transform, 30);
-
+			//Boom.Instance.Activate(transform, 30);
+			BoomJump.Instance.Activate(playerInstantiate.GetComponent<PhotonPlayerMovement>(), 30);
 		}
 		else if (player.GetTeam() == PhotonTeams.Team.Blue)
 		{
@@ -183,11 +187,13 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 				Quaternion.identity, 0, null);
 
 
-			photonPlayerMovement = playerInstantiate.GetComponent<PhotonPlayerMovement>();
+			//photonPlayerMovement = playerInstantiate.GetComponent<PhotonPlayerMovement>();
 
 			CameraFollow.Instance.SetTarget(playerInstantiate.transform);
+			uiManager.panelsLists[2].panelObjects[3].SetActive(true);
+			//BoomJump.Instance.SetTarger(photonPlayerMovement);
 
-			boom.Activate(transform, -30);
+			BoomJump.Instance.Activate(playerInstantiate.GetComponent<PhotonPlayerMovement>(), -30);
 		}
 
 		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
@@ -196,10 +202,11 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 
 	public void PlayerDied(Player killer)
 	{
-		player.AddDeaths(1);
+		//player.AddDeaths(1);
+		//PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 2);
+		RemovePlayer();
 		killer.AddKills(1);
 		killer.AddScore(50);
-		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 2);
 		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, killer, 2);
 		uiManager.team = player.GetTeam().ToString();
 		uiManager.RespawnPanelOn();
@@ -208,8 +215,12 @@ public class PhotonPlayerNetwork : MonoBehaviour//MonoBehaviourPunCallbacks
 
 	private void RespawnPlayer()
 	{
-		if (uiManager.canRespawn)
+		if (uiManager.respawn)
+		{
 			CreatePlayer();
+			uiManager.respawn = false;
+		}
+			
 	}
 
 

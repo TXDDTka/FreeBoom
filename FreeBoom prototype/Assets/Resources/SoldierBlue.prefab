@@ -1127,7 +1127,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 88
   m_CollisionDetection: 0
 --- !u!114 &957723125328212685
 MonoBehaviour:
@@ -1141,15 +1141,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a6ea04bb243e0448d8834540f5c233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: 1
-  bulletPrefab: {fileID: 8418694886965728024, guid: 4da44595f0955e742938b81f220d9519,
-    type: 3}
+  weaponName: 1
+  bulletPrefab: {fileID: 0}
   bulletSpeed: 0
   bulletDamage: 0
+  bulletsInClip: 0
   shootPoint: {fileID: 957723124927986793}
-  weaponSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
-    type: 2}
+  weaponsSettingsDatabase: {fileID: 0}
   shootJoystick: {fileID: 0}
+  bulletsPrefab: {fileID: 0}
+  spawnCount: 0
+  bulletList: []
 --- !u!114 &7154082447285930865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1163,7 +1165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHp: 0
-  playerUiPrefab: {fileID: 7341556939255270993, guid: fc6053341e082ef43a4e6f0593faac7d,
+  playerUiPrefab: {fileID: 635763035191279664, guid: fc6053341e082ef43a4e6f0593faac7d,
     type: 3}
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
 --- !u!114 &-5586687382332817165

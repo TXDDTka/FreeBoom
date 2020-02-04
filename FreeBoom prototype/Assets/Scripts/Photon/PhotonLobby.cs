@@ -7,8 +7,30 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 {
 	private bool exitGame = false;
 
+	//public override void OnEnable()
+	//{
+	//	//PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+	//	//Debug.LogWarning("Cleared");
+	//}
+	//public GameObject photonNetworkPlayer;
+	//public override void OnEnable()
+	//{
+	//	base.OnEnable();
+	//	PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+
+	//	//	//Debug.LogWarning("Cleared");
+	//}
+
+	public override void OnJoinedLobby()
+	{
+		base.OnJoinedLobby();
+		PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+		//PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
+		//Instantiate(photonNetworkPlayer);
+	}
 	public void JoinRandomRoom()
 	{
+		//PhotonNetwork.LocalPlayer.CustomProperties.Clear();
 		PhotonNetwork.JoinRandomRoom();
 	}
 
@@ -19,8 +41,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 	}
 
 	public override void OnJoinedRoom()
-	{
-		print("Локальный игрок " + PhotonNetwork.LocalPlayer.NickName + " подключился к комнате");
+	{	
 		StartGame();
 	}
 

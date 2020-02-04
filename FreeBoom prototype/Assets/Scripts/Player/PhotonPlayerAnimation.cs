@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhotonPlayerAnimation : MonoBehaviour
+public class PhotonPlayerAnimation : MonoBehaviourPun,IPunObservable
 {
     private PhotonPlayerMovement _photonPlayerMovement = null;
 
@@ -27,15 +27,27 @@ public class PhotonPlayerAnimation : MonoBehaviour
 
     public void OnAnimatorIK(int index)
     {
-        if (PV.IsMine)
-        {
+      //  if (PV.IsMine)
+        //{
             anim.SetLookAtWeight(1, 1);
             anim.SetLookAtPosition(_photonPlayerMovement.lookPosition);
+        //}
+       // else
+       // {
+            //anim.SetLookAtWeight(1, 1);
+            //  /anim.SetLookAtPosition(_photonPlayerMovement.lookPosition);
+        //}
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if(stream.IsWriting)
+        {
+           // stream.SendNext((object)anim.SetLookAtWeight(1,1));
         }
         else
         {
-            anim.SetLookAtWeight(1, 1);
-            anim.SetLookAtPosition(_photonPlayerMovement.lookPosition);
+
         }
     }
 }

@@ -64,11 +64,9 @@ public class PhotonPlayerHealth : MonoBehaviourPun
 
         if (currentHp <= 0)
         {
-            if (PV.IsMine)
-            {
+            if (!PV.IsMine) return;
                 photonPlayerNetwork.PlayerDied(killer);
-                PhotonNetwork.Destroy(gameObject);
-            }
+                //PhotonNetwork.Destroy(gameObject);
         }
     }
 }

@@ -19,10 +19,10 @@ MonoBehaviour:
   - name: Soldier
     speed: 3
     health: 160
-  - name: Engiineer
+  - name: Engineer
     speed: 4
     health: 120
   currentCharacter:
-    name: Engiineer
-    speed: 4
-    health: 120
+    name: Demoman
+    speed: 2
+    health: 200

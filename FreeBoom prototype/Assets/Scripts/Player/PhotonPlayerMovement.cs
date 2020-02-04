@@ -4,18 +4,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
-
-public class PhotonPlayerMovement : MonoBehaviour,IPunObservable
+using UnityEngine.EventSystems;
+public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
 {
 
     [SerializeField] private float speed = 0;
     
     [SerializeField] private LayerMask groundMask = 0;
     private float horizontal = 0f;
-    [HideInInspector] public bool isGrounded = false;
-    [HideInInspector] public bool canMove = false;
+    /*[HideInInspector]*/ public bool isGrounded = false;
+    /*[HideInInspector]*/ public bool canMove = false;
     public Vector3 lookPosition = Vector3.zero;
-    [HideInInspector]public float forward = 0f;
+    /*[HideInInspector]*/public float forward = 0f;
     [SerializeField] private bool isFacingRight = false;
 
     [SerializeField] private CharactersSettingsDatabase charactersSettings = null;
@@ -25,6 +25,8 @@ public class PhotonPlayerMovement : MonoBehaviour,IPunObservable
     private PhotonView PV;
     private MoveJoystick moveJoystick = null;
     private PhotonPlayerShooting photonPlayerShooting;
+    // private Boom boom;
+   // public int direction = 0f;
 
     private Player player;
     private void Awake()
@@ -32,7 +34,7 @@ public class PhotonPlayerMovement : MonoBehaviour,IPunObservable
         PV = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody>();
         photonPlayerShooting = GetComponent<PhotonPlayerShooting>();
-
+     //   boom = Boom.Instance;
         moveJoystick = MoveJoystick.Instance;
       //  shootJoystick = ShootJoystick.Instance;
 
@@ -43,8 +45,8 @@ public class PhotonPlayerMovement : MonoBehaviour,IPunObservable
     private void Start()
     {
         if (!PV.IsMine) return;
-
         CheckCharacterSpeed();
+        //Boom.Instance.Activate(this, direction); 
     }
     void Update()
     {
@@ -98,27 +100,42 @@ public class PhotonPlayerMovement : MonoBehaviour,IPunObservable
         return look;
     }
 
-    public IEnumerator MakeBoom(Vector3 velocity)
+
+    public void MakeBoom(Vector3 velocity)
     {
         isGrounded = false;
         rb.velocity = velocity;
+        StartCoroutine(StartMoving());
+        //yield return new WaitForFixedUpdate();
+        //Debug.Log(1);
+        //canMove = true;
+    }
+
+    public IEnumerator StartMoving()
+    {
         yield return new WaitForFixedUpdate();
         canMove = true;
     }
 
     private void CheckCharacterSpeed()
     {
-        switch (player.GetCharacter())
+        //switch (player.GetCharacter())
+        //{
+        //    case PhotonCharacters.Character.Demoman:
+        //        speed = charactersSettings[0].Speed;
+        //        break;
+        //    case PhotonCharacters.Character.Soldier:
+        //        speed = charactersSettings[1].Speed;
+        //        break;
+        //    case PhotonCharacters.Character.Engineer:
+        //        speed = charactersSettings[2].Speed;
+        //        break;
+        //}
+
+        foreach(var character in charactersSettings.charactersList)
         {
-            case PhotonCharacters.Character.Demoman:
-                speed = charactersSettings[0].Speed;
-                break;
-            case PhotonCharacters.Character.Soldier:
-                speed = charactersSettings[1].Speed;
-                break;
-            case PhotonCharacters.Character.Engineer:
-                speed = charactersSettings[2].Speed;
-                break;
+            if (character.CharacterName == player.GetCharacter().ToString())
+                speed = character.Speed;
         }
     }
 
@@ -133,4 +150,5 @@ public class PhotonPlayerMovement : MonoBehaviour,IPunObservable
             lookPosition = (Vector3)stream.ReceiveNext();
         }
     }
+
 }

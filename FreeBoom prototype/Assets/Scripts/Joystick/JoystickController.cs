@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class JoystickController : MonoBehaviour, 
+public abstract class JoystickController : MonoBehaviour,
                                            IPointerDownHandler, IPointerUpHandler, IDragHandler,
                                            IBeginDragHandler, IEndDragHandler
 {
-    [SerializeField] private bool smoothEnabled = true;
+    public bool smoothEnabled = true;
     [SerializeField] private AnimationCurve smoothCurve = null;
     [SerializeField, Range(0.1f, 5)] private float transitionDuration = 0.5f;
 
-    [SerializeField] private RectTransform joystickBackground = null;
+    public RectTransform joystickBackground = null;
     private RectTransform moveableJoytick = null;
-    private CanvasGroup canvasGroup = null;
+    public CanvasGroup canvasGroup = null;
     private Vector2 delta = Vector2.zero;
-    private Vector2 startPosition = Vector2.zero;
+    public Vector2 startPosition = Vector2.zero;
     private IEnumerator joytickRoutine = null;
 
     protected Vector2 direction = Vector2.zero;
@@ -85,22 +85,22 @@ public abstract class JoystickController : MonoBehaviour,
 
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
-        
+
     }
 
     public virtual void OnEndDrag(PointerEventData eventData)
     {
-        
+
     }
 
-    private void InvokeJoytickRoutine(bool enable)
+    public void InvokeJoytickRoutine(bool enable)
     {
         if (joytickRoutine != null) StopCoroutine(joytickRoutine);
         joytickRoutine = JoystickRoutine(enable);
         StartCoroutine(joytickRoutine);
     }
 
-    private IEnumerator JoystickRoutine(bool enable)
+    public IEnumerator JoystickRoutine(bool enable)
     {
         float percent = 0;
         float smoothPercent = 0;

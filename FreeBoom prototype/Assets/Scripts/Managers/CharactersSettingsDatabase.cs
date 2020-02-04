@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Database/Characters", fileName = "Characters")]
 public class CharactersSettingsDatabase : ScriptableObject
 {
-    [SerializeField, HideInInspector] private List<CharacterData> charactersList; //Лист где хранятся данны, SerializeField сохраняет данные после выхода из редактора, HideInInspector что бы не отображало List в Editor
+    [/*SerializeField, */HideInInspector] public List<CharacterData> charactersList; //Лист где хранятся данны, SerializeField сохраняет данные после выхода из редактора, HideInInspector что бы не отображало List в Editor
 
     [SerializeField] private CharacterData currentCharacter; //Текущий отображаемый элемент
 

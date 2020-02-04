@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,7 @@ public void Connect()
 	{
 		Debug.Log("Локальный игрок " + PhotonNetwork.NickName + " подключился к Master Server");
 		PhotonNetwork.AutomaticallySyncScene = true;
+		PhotonNetwork.JoinLobby();
 		PhotonLoading.Load(LoadingScene.Lobby);
 	}
 

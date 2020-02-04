@@ -231,58 +231,16 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		}
 	}
 
-	//public void ChangeCharacterButtonActive(Player player)
-	//{
-	//	switch (player.GetCharacter())
-	//	{
-	//		case PhotonCharacters.Character.Demoman:
-	//			uiManager.panelsLists[1].panelButtons[0].interactable = false;
-	//			if (!uiManager.panelsLists[1].panelButtons[1].interactable)
-	//				uiManager.panelsLists[1].panelButtons[1].interactable = true;
-	//			if (uiManager.panelsLists[1].panelButtons[2].interactable)
-	//				uiManager.panelsLists[1].panelButtons[2].interactable = true;
-	//			break;
-	//		case PhotonCharacters.Character.Engineer:
-	//			uiManager.panelsLists[1].panelButtons[1].interactable = false;
-	//			if (!uiManager.panelsLists[1].panelButtons[0].interactable)
-	//				uiManager.panelsLists[1].panelButtons[0].interactable = true;
-	//			if (uiManager.panelsLists[1].panelButtons[2].interactable)
-	//				uiManager.panelsLists[1].panelButtons[2].interactable = true;
-	//			break;
-	//		case PhotonCharacters.Character.Soldier:
-	//			uiManager.panelsLists[1].panelButtons[2].interactable = false;
-	//			if (!uiManager.panelsLists[1].panelButtons[0].interactable)
-	//				uiManager.panelsLists[1].panelButtons[0].interactable = true;
-	//			if (uiManager.panelsLists[1].panelButtons[1].interactable)
-	//				uiManager.panelsLists[1].panelButtons[1].interactable = true;
-	//			break;
-	//		case PhotonCharacters.Character.None:
-	//			if (!uiManager.panelsLists[1].panelButtons[0].interactable)
-	//				uiManager.panelsLists[1].panelButtons[0].interactable = true;
-	//			if (!uiManager.panelsLists[1].panelButtons[1].interactable)
-	//				uiManager.panelsLists[1].panelButtons[1].interactable = true;
-	//			if (uiManager.panelsLists[1].panelButtons[2].interactable)
-	//				uiManager.panelsLists[1].panelButtons[2].interactable = true;
-	//			break;
-	//	}
-	//}
 
-	public override void OnLeftRoom()
-	{
-		//Debug.Log(PhotonNetwork.LocalPlayer.NickName + " локальный игрок покинул игру");
-	}
 
-	public override void OnPlayerLeftRoom(Player otherPlayer)
-	{
-		//Debug.Log(otherPlayer.NickName + " покинул игру");
-	}
 
 
 	public void LeaveGame(Player player)
 	{
-		player.CustomProperties.Clear();
+		//player.CustomProperties.Clear();
 
 		PhotonNetwork.LeaveRoom();
+		PhotonNetwork.JoinLobby();
 		PhotonLoading.Load(LoadingScene.Lobby);
 	}
 
@@ -292,6 +250,20 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		PhotonNetwork.Disconnect();
 
 	}
+
+	public override void OnLeftRoom()
+	{
+		//Debug.Log(PhotonNetwork.LocalPlayer.NickName + " локальный игрок покинул игру");
+		//PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+
+	}
+
+	public override void OnPlayerLeftRoom(Player otherPlayer)
+	{
+		//Debug.Log(otherPlayer.NickName + " покинул игру");
+		//otherPlayer.CustomProperties.Clear();
+	}
+
 
 	public override void OnDisconnected(DisconnectCause cause)
 	{
