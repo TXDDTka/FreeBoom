@@ -9,67 +9,92 @@ using UnityEngine.EventSystems;
 public class PhotonPlayerShooting : MonoBehaviourPunCallbacks//PlayerController
 {
 
-    public enum Weapon {None,Bazuka,Pistol}
-    public Weapon weaponName = Weapon.None;
+    public enum MainWeapon {None,Bazuka}
+    public MainWeapon mainWeapon = MainWeapon.None;
 
-    //[SerializeField] private Bullet bulletPrefab = null;
-    [SerializeField] private GameObject bulletPrefab = null;
-    [SerializeField] private float bulletSpeed = 0f;
-    [SerializeField] private float bulletDamage = 0f;
-    [SerializeField] private int bulletsInClip = 0;
-    [SerializeField] private float bulletDestroyTime = 0f;
+    public enum SecondWeapon { None, Pistol }
+    public SecondWeapon secondWeapon = SecondWeapon.None;
 
-    [SerializeField] private Transform shootPoint = null;
+    public enum CurrentWeapon { MainWeapon, SecondWeapon, Tool}
+    public CurrentWeapon currentWeapon = CurrentWeapon.MainWeapon;
+
+
+
+    public Transform weaponHolder = null;
+
+    [Tooltip("Параметры основного оружия")]
+    [Header("MainWeapon")]
+    [SerializeField] private GameObject mainWeaponBulletPrefab = null;
+    [SerializeField] private float mainWeaponBulletSpeed = 0f;
+    [SerializeField] private float mainWeaponBulletDamage = 0f;
+    [SerializeField] private int mainWeaponBulletsInClip = 0;
+    [SerializeField] private int mainWeaponBulletsMaxCount = 0;
+    [SerializeField] private float mainWeaponBulletDestroyTime = 0f;
+    [SerializeField] private Transform mainWeaponShootPoint = null;
+
+    [Tooltip("Параметры дополнительного оружия")]
+    [Header("SecondWeapon")]
+    [SerializeField] private GameObject secondWeaponBulletPrefab = null;
+    [SerializeField] private float secondWeaponBulletSpeed = 0f;
+    [SerializeField] private float secondWeaponBulletDamage = 0f;
+    [SerializeField] private int secondWeaponBulletsInClip = 0;
+    [SerializeField] private int secondWeaponBulletsMaxCount = 0;
+    [SerializeField] private float secondWeaponBulletDestroyTime = 0f;
+    [SerializeField] private Transform secondWeaponShootPoint = null;
+
+
+
 
     private PhotonView PV = null;
-
-
-
-    public WeaponsSettingsDatabase weaponsSettingsDatabase;
-    private PhotonPlayerMovement photonPlayerMovement;
+    public PhotonChangeWeaponBar photonChangeWeaponBar = null;
+    public WeaponsSettingsDatabase weaponsSettingsDatabase = null;
+    private PhotonPlayerMovement photonPlayerMovement = null;
     [HideInInspector]public ShootJoystick shootJoystick = null;
 
-   // public BulletManager bulletManager;
-    //Пулл объектов
-   // public GameObject bulletsPrefab;
-    public int spawnCount = 0;
 
     public List<GameObject> bulletList;
 
-    //private const byte CustomManualInstantiationEventCode = 0;
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         photonPlayerMovement = GetComponent<PhotonPlayerMovement>();
         shootJoystick = ShootJoystick.Instance;
-       // bulletManager = BulletManager.Instance;
-        //if (PV.IsMine)
-        //{
-        //    CheckWeapon();
-        //    shootJoystick.ResetPosition();
-        //    shootJoystick.OnUpEvent += Shoot;
-        //}
+        photonChangeWeaponBar = PhotonChangeWeaponBar.Instance;
     }
 
     private void Start()
     {
-        ////for (int i = 0; i < spawnCount; i++)
-        ////{
-        ////    GameObject bullet = PhotonNetwork.Instantiate(bulletsPrefab.name, transform.position, Quaternion.identity) as GameObject;
-        ////    bulletList.Add(bullet);
-        ////    bullet.transform.parent = transform;
-        ////    bullet.SetActive(false);
-        ////}
+
         if (!PV.IsMine) return;
         {
-         //   _objectPool.Init();
-            CheckWeapon();
-           // bulletManager.CreateBullets(bulletsInClip, bulletPrefab);
+            ChooseWeapon();
+            CheckMainkWeapon();
+            CheckSecondkWeapon();
             shootJoystick.ResetPosition();
+            photonChangeWeaponBar.mainWeaponButton.onClick.AddListener(() => ChangeWeapon());
+            photonChangeWeaponBar.secondWeaponButton.onClick.AddListener(() => ChangeWeapon());
             shootJoystick.OnUpEvent += Shoot;
         }
     }
 
+    private void ChangeWeapon()
+    {
+        //for(int i = 0; i < weaponHolder.)
+        photonChangeWeaponBar.ChangeWeapon();
+        if(currentWeapon == CurrentWeapon.MainWeapon)
+        {
+            weaponHolder.GetChild(0).gameObject.SetActive(false);
+            weaponHolder.GetChild(1).gameObject.SetActive(true);
+            currentWeapon = CurrentWeapon.SecondWeapon;
+        }
+        else if(currentWeapon == CurrentWeapon.SecondWeapon)
+        {
+            weaponHolder.GetChild(0).gameObject.SetActive(true);
+            weaponHolder.GetChild(1).gameObject.SetActive(false);
+            currentWeapon = CurrentWeapon.MainWeapon;
+        }
+
+    }
 
 
     public override void OnDisable()
@@ -79,127 +104,70 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks//PlayerController
         shootJoystick.OnUpEvent -= Shoot;
     }
 
-    private void CheckWeapon()
+    private void ChooseWeapon()
+    {
+        switch(PhotonNetwork.LocalPlayer.GetCharacter())
+        {
+            case PhotonCharacters.Character.Demoman:
+                mainWeapon = MainWeapon.Bazuka;
+                break;
+        }
+
+        secondWeapon = SecondWeapon.Pistol;
+    }
+
+    private void CheckMainkWeapon()
+    {
+        foreach (var weaponInList in weaponsSettingsDatabase.weaponsList)
+        {
+            if (weaponInList.WeaponName.ToString() == mainWeapon.ToString())
+            {
+                mainWeaponBulletPrefab = weaponInList.BulletPrefab;
+                mainWeaponBulletSpeed = weaponInList.BulletSpeed;
+                mainWeaponBulletDamage = weaponInList.Damage;
+                mainWeaponBulletsInClip = weaponInList.BulletsCountInClip;
+                mainWeaponBulletsMaxCount = weaponInList.BulletsMaxCount;
+                mainWeaponBulletDestroyTime = weaponInList.LifeTime;
+                photonChangeWeaponBar.mainWeaponImage.sprite = weaponInList.WeaponSprite;
+                photonChangeWeaponBar.mainWeaponBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
+            }
+        }
+    }
+
+    private void CheckSecondkWeapon()
     {
 
         foreach (var weaponInList in weaponsSettingsDatabase.weaponsList)
         {
-            if (weaponInList.WeaponName.ToString() == weaponName.ToString())
+            if (weaponInList.WeaponName.ToString() == secondWeapon.ToString())
             {
-                bulletSpeed = weaponInList.BulletSpeed;
-                bulletDamage = weaponInList.Damage;
-                bulletsInClip = weaponInList.BulletsCountInClip;
-                bulletPrefab = weaponInList.BulletPrefab;
-                bulletDestroyTime = weaponInList.LifeTime;
+                secondWeaponBulletPrefab =  weaponInList.BulletPrefab;
+                secondWeaponBulletSpeed = weaponInList.BulletSpeed; 
+                secondWeaponBulletDamage = weaponInList.Damage; 
+                secondWeaponBulletsInClip = weaponInList.BulletsCountInClip;
+                secondWeaponBulletsMaxCount = weaponInList.BulletsMaxCount;
+                secondWeaponBulletDestroyTime = weaponInList.LifeTime;
+                photonChangeWeaponBar.secondWeaponImage.sprite = weaponInList.WeaponSprite;
+                photonChangeWeaponBar.secondWeaponCurrentBulletCountText.text = $"{secondWeaponBulletsInClip} / {secondWeaponBulletsMaxCount}";
             }
         }
-
-        //switch (weapon)
-        //{
-        //    case Weapon.Bazuka:
-        //        bulletSpeed = weaponSettingsDatabase[0].Speed;
-        //        bulletDamage = weaponSettingsDatabase[0].Damage;
-        //        break;
-        //}
     }
 
     private void Shoot()
     {
         if (photonPlayerMovement.canMove)
         {
-            //    //Debug.LogWarning("Shoot");
-
-            //    //Bullet bulletGameobject = PhotonNetwork.Instantiate(bulletPrefab.name, shootPoint.position, Quaternion.identity).GetComponent<Bullet>();//Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
-            //    //                                                                                                                                        //bulletGameobject.GetComponent<Bullet>().Set(shootPoint.forward * bulletSpeed, bulletDamage);
-            //    //bulletGameobject.Set(shootPoint.forward * bulletSpeed, bulletDamage);
-
-            //for(int i = 0; i < bulletManager.bulletList.Count; i++)
-            //    {
-            //        if(bulletManager.bulletList[i].activeInHierarchy == false)
-            //        {
-            //            bulletManager.bulletList[i].SetActive(true);
-            //            bulletManager.bulletList[i].transform.position = shootPoint.position;
-            //            bulletManager.bulletList[i].GetComponent<Bullet>().Set(shootPoint.forward * bulletSpeed, bulletDamage);
-            //            break;
-            //        }
-            //        else
-            //        {
-            //            if(i == bulletList.Count - 1)
-            //            {
-            //                //GameObject newBullet = PhotonNetwork.Instantiate(bulletsPrefab.name, transform.position, Quaternion.identity) as GameObject;
-            //                //newBullet.transform.parent = transform;
-            //                //newBullet.SetActive(false);
-            //                //bulletList.Add(newBullet);
-            //               // bulletManager.AddBullet();
-            //            }
-            //        }
-            //    }
-            Bullet bulletGameobject = PhotonNetwork.Instantiate(bulletPrefab.name, shootPoint.position, Quaternion.identity).GetComponent<Bullet>();//Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
-                                                                                                                                                    //bulletGameobject.GetComponent<Bullet>().Set(shootPoint.forward * bulletSpeed, bulletDamage);
-            bulletGameobject.Set(shootPoint.forward * bulletSpeed, bulletDamage, bulletDestroyTime);
+            //if (currentWeapon == CurrentWeapon.MainWeapon)
+            //{
+            //    Bullet bulletGameobject = PhotonNetwork.Instantiate(mainWeaponBulletPrefab.name, mainWeaponShootPoint.position, Quaternion.identity).GetComponent<Bullet>();
+            //    bulletGameobject.Set(mainWeaponShootPoint.forward * mainWeaponBulletSpeed, mainWeaponBulletDamage, mainWeaponBulletDestroyTime);
+            //}
+            //else if(currentWeapon == CurrentWeapon.SecondWeapon)
+            //{
+            //    Bullet bulletGameobject = PhotonNetwork.Instantiate(secondWeaponBulletPrefab.name, secondWeaponShootPoint.position, Quaternion.identity).GetComponent<Bullet>();
+            //    bulletGameobject.Set(secondWeaponShootPoint.forward * secondWeaponBulletSpeed, secondWeaponBulletDamage, secondWeaponBulletDestroyTime);
+            //}
         }
-
-        //private void CreateBulletPool()
-        //{
-        //    for (int i = 0; i < 3; i++)
-        //    {
-        //        GameObject bullet = Instantiate(bulletsPrefab, transform); //Инициализируем объект
-        //        bulletList.Add(bullet);
-        //        //bullet.transform.parent = transform;
-        //        bullet.SetActive(false);
-        //        PhotonView photonpv = bullet.GetComponent<PhotonView>(); //Обращаемся к его компоненту PhotonView(получаем ссылку)
-        //                                                                 //ViewID является ключом к маршрутизации сетевых сообщений в нужный GameObject / Script
-        //        if (PhotonNetwork.AllocateViewID(photonpv))//Выделяем новый ViewID для Инициализированного объекта
-        //        {
-        //            object[] data = new object[] //создаем массив объектов
-        //            {
-        //        bullet.transform.position, bullet.transform.rotation, /*bullet.transform.parent,*/ /*bullet.activeInHierarchy,*/photonpv.ViewID , bullet.activeInHierarchy
-        //                //Положение,вращение объекта, родительский объект, состояние активности объекта, и выделенный ViewID
-        //                //помещаем в массив и храним там данные, которые хотим отправить другим клиентам
-        //            };
-
-
-        //            //С помощью RaiseEventOptions мы удостоверяемся, что это событие добавляется в кэш комнаты и отправляется только другим клиентам,
-        //            //потому что мы уже создали экземпляр нашего объекта локально.
-        //            RaiseEventOptions raiseEventOptions = new RaiseEventOptions //Создаем параметры события
-        //            {
-        //                Receivers = ReceiverGroup.Others,
-        //                CachingOption = EventCaching.AddToRoomCache
-        //            };
-
-        //            //С помощью SendOptions мы просто определяем, что это событие передается надежно.
-        //            SendOptions sendOptions = new SendOptions //Создаем отправку параметров
-        //            {
-        //                Reliability = true
-        //            };
-
-        //            PhotonNetwork.RaiseEvent(CustomManualInstantiationEventCode, data, raiseEventOptions, sendOptions);//Отправляем наше пользовательнское событие на сервер
-        //                                                                                                               //В этом случае используем ,который является просто байтовым значением,предсталвяющим это определенное событие
-        //        }
-
-        //        else //Если выделение идентификатора для PhotonView не удается, мы регистрируем сообщение об ошибке и уничтожаем ранее созданный объект.
-        //        {
-        //            Debug.LogError("Failed to allocate a ViewId.");
-
-        //            Destroy(bullet);
-        //        }
-        //    }
-        //}
-
-        //public void OnEvent(EventData photonEvent)
-        //{
-        //    if (photonEvent.Code == CustomManualInstantiationEventCode)
-        //    {
-        //        object[] data = (object[])photonEvent.CustomData;
-
-        //        GameObject bullet = (GameObject)Instantiate(bulletsPrefab, (Vector3)data[0], (Quaternion)data[1]);
-        //        PhotonView photonView = bullet.GetComponent<PhotonView>();
-
-        //        photonView.ViewID = (int)data[2];
-        //        bullet.SetActive((bool)data[3]);
-        //    }
-        //}
-
 
 
     }

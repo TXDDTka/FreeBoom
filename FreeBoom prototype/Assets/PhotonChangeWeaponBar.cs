@@ -3,62 +3,75 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
 public class PhotonChangeWeaponBar : MonoBehaviour
 {
+    public enum CurrentBuff
+    {
+        None,
+        FirstAid,
+        Shield,
+        Potions
+    }
 
+    [System.Serializable]
+    public class BuffsList
+    {
+        public Sprite buffSprite;
+        public int buffCount;
+        public CurrentBuff currentBuff;
+    }
+
+    private List<BuffsList> buffsList = new List<BuffsList>();
+
+    public CurrentBuff currentBuff = CurrentBuff.None;
+    private CurrentBuff addedBuff = CurrentBuff.None;
     public static PhotonChangeWeaponBar Instance { get; private set; }
 
-    public int yPosition = 0;
+    [SerializeField]private int yPosition = 0;
 
+    [Tooltip("Ячейка с бафами")]
+    [Header("MainWeapon")]
     public Button mainWeaponButton;
     public Image mainWeaponImage;
     public Text mainWeaponBulletCountText;
-    public int mainWeaponCurrentBulletCount = 0;
-    public int mainWeaponMaxBulletCount = 0;
-    public bool mainWeaponActive = true;
+    private int mainWeaponCurrentBulletCount = 0;
+    private int mainWeaponMaxBulletCount = 0;
+    private bool mainWeaponActive = true;
 
+    [Tooltip("Ячейка с бафами")]
+    [Header("SeconWeapon")]
     public Button secondWeaponButton;
     public Image secondWeaponImage;
     public Text secondWeaponCurrentBulletCountText;
-    public int secondWeaponCurrentBulletCount = 0;
-    public int secondWeaponMaxBulletCount = 0;
-    public bool secondWeaponActive = false;
+    private int secondWeaponCurrentBulletCount = 0;
+    private int secondWeaponMaxBulletCount = 0;
+    private bool secondWeaponActive = false;
 
-    [Tooltip("Настройки ScrollBar")]
-    //public Scrollbar scrollBar;
-    //public Transform content;
-    //float scroll_pos = 0;
-    //float[] pos;
+    [Tooltip("Ячейка с бафами")]
+    [Header("Buffs")]
+    public bool firstAid = false;
+    public bool shield = false;
+    public bool potions = false;
+    private bool firstElementExitst = false;
 
-    [Range(1,5)]
-    [Header ("Controllers")]
-    public int panCount;
+    public Button chooseButton;
+    public Button changeButton;
+    [SerializeField] private Image buffSprite;
+    [SerializeField] private Text buffCountText;
 
-    [Range(1, 250)]
-    public int panOffset;
-    [Header("Other Objects")]
-    public GameObject panPrefab;
-    public Transform content;
+    private int buffIndex = 0;
 
-    public GameObject[] instPans;
-    public Vector2[] pansPos;
-    public RectTransform contentRect;
-    public int selectedPanId;
-    public bool isScrolling;
+    public BuffsSettingsDatabase buffsSettingsDatabase;
+
     
-    public Scrollbar scrollBar;
-    public float[] pos;
-    public float scroll_pos = 0;
-
-    public Sprite[] baffsSprites;
     private void InitializeSingleton()
     {
         if (Instance == null)
             Instance = this;
         else if (Instance != this)
             Destroy(this);
-
-        //Instance = this;
     }
 
     void Awake()
@@ -66,127 +79,193 @@ public class PhotonChangeWeaponBar : MonoBehaviour
         InitializeSingleton();
     }
 
-
-
-     void Start()
+    void Start()
     {
-        //contentRect = content.GetComponent<RectTransform>();
-        instPans = new GameObject[panCount];
-        pansPos = new Vector2[panCount];
-        for (int i = 0; i < panCount; i ++)
-        {
-            //Создаем объект в content, используем локальные координаты для этих объектов
-            instPans[i] = Instantiate(panPrefab, content,false);
-            instPans[i].GetComponent<Image>().sprite = baffsSprites[i];
-            //  if (i == 0) continue; //Пропускаем позицию первого объекта
-            // instPans[i].transform.localScale = new Vector2(instPans[i].transform.localScale.x, //позиция по x
-            // instPans[i - 1].transform.localPosition.y + panPrefab.GetComponent<RectTransform>().sizeDelta.y + panOffset);//позиция по y + отступ
-            //  pansPos[i] = -instPans[i].transform.localPosition;
-        }
-        if(mainWeaponActive)
-        {
-            mainWeaponButton.interactable = false;
-            mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
-            mainWeaponBulletCountText.text = $"{mainWeaponCurrentBulletCount} / {mainWeaponMaxBulletCount}";
-            mainWeaponBulletCountText.gameObject.SetActive(true);
-        }
-    }
-
-    //private void FixedUpdate()
-    //{
-    //    float nearestPos = float.MaxValue;
-
-    //    for (int i = 0; i < panCount; i++)
-    //    {
-    //        float distance = Mathf.Abs(contentRect.anchoredPosition.y - pansPos[i].y);
-    //        if (distance < nearestPos)
-    //        {
-    //            Debug.Log("distance < nearestPos");
-    //            nearestPos = distance;
-    //            selectedPanId = i;
-    //        }
-    //    }
-       // pos = new float[content.childCount];
-        //if (isScrolling)
-        //{
-        //    scrollBar.value = Mathf.Lerp(scrollBar.value, pos[2], 0.1f);
-        //}
-   // }
-
-
-    public void Scrolling(bool scroll)
-    {
-        isScrolling = scroll;
-    }
-    private void Update()
-    {
-        //pos = new float[content.childCount];
-        ////Debug.Log("content.childCount" + content.childCount);
-        //float distanse = 1f / (pos.Length - 1);
-        //for (int i = 0; i < pos.Length; i++)
-        //{
-        //    pos[i] = distanse * i;
-        //}
-        //if (Input.GetMouseButton(0))
-        //{
-        //    scroll_pos = scrollBar.value;
-        //}
-        //else
-        //{
-        //    for (int i = 0; i < pos.Length; i++)
-        //    {
-        //        if (scroll_pos < pos[i] + (distanse / 2) && scroll_pos > pos[i] - (distanse / 2))
-        //        {
-        //            scrollBar.value = Mathf.Lerp(scrollBar.value, pos[i], 0.1f);
-        //        }
-        //    }
-        //}
-
-        //for (int i = 0; i < pos.Length; i++)
-        //{
-        //    if (scroll_pos < pos[i] + (distanse / 2) && scroll_pos > pos[i] - (distanse / 2))
-        //    {
-        //        //  transform.GetChild(i).localScale = Vector2.Lerp(transform.GetChild(i).localScale, new Vector2(1f, 1f), 0.1f);
-        //        for (int a = 0; a < pos.Length; a++)
-        //        {
-        //            if (a != i)
-        //            {
-        //                transform.GetChild(a).localScale = Vector2.Lerp(transform.GetChild(a).localScale, new Vector2(0.8f, 0.8f), 0.1f);
-        //            }
-        //        }
-        //    }
-        //}
+        mainWeaponButton.interactable = false;
+        mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
     }
 
     public void ChangeWeapon()
     {
-        if(mainWeaponActive)
+        if (mainWeaponActive)
         {
             mainWeaponButton.interactable = true;
             mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y - yPosition);
-            //mainWeaponbulletCountText.text = $"{mainWeaponbulletCount} / {mainWeaponbulletCount}";
             mainWeaponBulletCountText.gameObject.SetActive(false);
             mainWeaponActive = false;
 
             secondWeaponButton.interactable = false;
             secondWeaponImage.transform.position = new Vector2(secondWeaponImage.transform.position.x, secondWeaponImage.transform.position.y + yPosition);
-            secondWeaponCurrentBulletCountText.text = $"{secondWeaponCurrentBulletCount} / {secondWeaponMaxBulletCount}";
             secondWeaponCurrentBulletCountText.gameObject.SetActive(true);
             secondWeaponActive = true;
         }
-        else if(secondWeaponActive)
+        else if (secondWeaponActive)
         {
             secondWeaponButton.interactable = true;
             secondWeaponImage.transform.position = new Vector2(secondWeaponImage.transform.position.x, secondWeaponImage.transform.position.y - yPosition);
-            //secondWeaponCurrentBulletCountText.text = $"{secondWeaponCurrentBulletCount} / {secondWeaponMaxBulletCount}";
             secondWeaponCurrentBulletCountText.gameObject.SetActive(false);
             secondWeaponActive = false;
 
             mainWeaponButton.interactable = false;
             mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
-            mainWeaponBulletCountText.text = $"{mainWeaponCurrentBulletCount} / {mainWeaponMaxBulletCount}";
             mainWeaponBulletCountText.gameObject.SetActive(true);
             mainWeaponActive = true;
         }
     }
+
+
+
+    public void AddBuffsToListFirstTime(CurrentBuff buff,int buffCount)
+    {
+        addedBuff = buff;
+        switch (addedBuff)
+        {
+          case  CurrentBuff.FirstAid:
+                firstAid = true;
+            break;
+            case CurrentBuff.Shield:
+                shield = true;
+                break;
+            case CurrentBuff.Potions:
+                potions = true;
+                break;
+        }
+
+        for (int i = buffsSettingsDatabase.buffsList.Count - 1; i >= 0; i--)
+        {
+            var buffInDatabase = buffsSettingsDatabase.buffsList[i];
+            if (buffInDatabase.BuffName.ToString() == addedBuff.ToString())
+            {
+                buffsList.Add(new BuffsList() { currentBuff = addedBuff, buffSprite = buffInDatabase.BuffSprite, buffCount = buffCount });
+                ShowBuff();
+                return;
+            }
+        }
+    }
+
+    public void AddBuffsToList(CurrentBuff buff, int buffCount)
+    {
+        addedBuff = buff;
+        for (int i = buffsList.Count - 1; i >= 0; i--)
+        {
+            var buffInList = buffsList[i];
+            if (addedBuff == buffInList.currentBuff)
+            {
+                buffInList.buffCount = buffCount;
+                buffCountText.text = buffInList.buffCount.ToString();
+
+                return;
+            }
+        }
+    }
+
+
+
+    private void ShowBuff()
+    {
+        if (!firstElementExitst)
+        {
+            buffSprite.gameObject.SetActive(true);
+            buffCountText.gameObject.SetActive(true);
+            chooseButton.interactable = true;
+            buffSprite.sprite = buffsList[buffIndex].buffSprite;
+            buffCountText.text = buffsList[buffIndex].buffCount.ToString();
+            firstElementExitst = true;
+            currentBuff = addedBuff;
+        }
+        else
+        {
+            if (changeButton.gameObject.activeInHierarchy == false)
+                changeButton.gameObject.SetActive(true);
+        }
+    }
+
+
+    public void UseBuff(int buffCount)
+    {
+        for (int i = buffsList.Count - 1; i >= 0; i--)
+        {
+            var buffInList = buffsList[i];
+            if (currentBuff == buffInList.currentBuff)
+            {
+                buffInList.buffCount = buffCount;
+                if (buffInList.buffCount == 0)
+                {
+                    buffsList.RemoveAt(buffsList.IndexOf(buffInList));
+                    
+                    switch (currentBuff)
+                    {
+                        case CurrentBuff.FirstAid:
+                            firstAid = false;
+                            break;
+                        case CurrentBuff.Shield:
+                            shield = false;
+                            break;
+                        case CurrentBuff.Potions:
+                            potions = false;
+                            break;
+                    }
+
+                    ChangeBuff();
+                }
+                else
+                {
+                    buffCountText.text = buffInList.buffCount.ToString();
+                }
+                return;
+
+            }
+        }
+    }
+
+
+    public void ChangeBuff()
+    {
+        if (buffsList.Count > 0)
+        {
+            if (buffIndex < buffsList.Count - 1)
+            {
+                buffIndex++;
+
+                buffSprite.sprite = buffsList[buffIndex].buffSprite;
+                buffCountText.text = buffsList[buffIndex].buffCount.ToString();
+                currentBuff = buffsList[buffIndex].currentBuff;
+
+                if (buffsList.Count == 1)
+                {
+                    changeButton.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                buffIndex = 0;
+
+                buffSprite.sprite = buffsList[buffIndex].buffSprite;
+                buffCountText.text = buffsList[buffIndex].buffCount.ToString();
+                currentBuff = buffsList[buffIndex].currentBuff;
+
+                if (buffsList.Count == 1)
+                {
+                    changeButton.gameObject.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            HideBuff();
+        }
+    }
+
+
+    private void HideBuff()
+    {
+
+            buffSprite.gameObject.SetActive(false);
+            buffCountText.gameObject.SetActive(false);
+            chooseButton.interactable = false;   
+            firstElementExitst = false;
+            currentBuff = CurrentBuff.None;
+            changeButton.gameObject.SetActive(false);
+    }
 }
+

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AppSettings:
     AppIdRealtime: 080596a0-836b-476a-b684-247ed2164916
-    AppIdChat: 4021ad6d-8d3d-49f8-94c2-005b7c5138bd
+    AppIdChat: 
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
@@ -24,34 +24,18 @@ MonoBehaviour:
     Protocol: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  PunLogging: 2
+  PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
   - AddPlayerListing
-  - ClickRpc
-  - DestroyRpc
-  - RemovePlayerListing
-  - CreatePlayer
-  - ShowTeamToOthers
-  - ShowTeamToAll
-  - ShowTeamToMaster
-  - RemovePlayerListingMasterClient
-  - RPC_GetTeam
-  - RPC_SentTeam
-  - InstantiateUIBar
-  - Test
-  - destroy
-  - ShowHp
-  - GetDamage
-  - SetTeam
-  - SetData
-  - SetPlayerTeam
-  - SetPlayerCharacter
-  - CreatePlayerBar
   - CheckCharacterHealth
-  - CreateBullet
-  - AddToList
+  - ClickRpc
+  - CreatePlayerBar
+  - DestroyRpc
+  - GetDamage
+  - RemovePlayerListing
+  - GetBuffs
   DisableAutoOpenWizard: 1
   ShowSettings: 1

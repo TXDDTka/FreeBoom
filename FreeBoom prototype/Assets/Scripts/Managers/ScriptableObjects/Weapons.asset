@@ -14,36 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponsList:
   - weaponName: 1
-    characterClass: 0
-    damageType: 0
-    bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
-      type: 3}
-    damage: 50
-    lifeTime: 5
-    bulletSpeed: 8
-    bulletsCountInClip: 1
-    bulletsMaxCount: 12
-    shootDelay: 0
-    reloadTime: 0
-    weaponWeight: 0
-    weaponSprite: {fileID: 0}
-  - weaponName: 0
-    characterClass: 0
-    damageType: 0
-    bulletPrefab: {fileID: 0}
-    damage: 0
-    lifeTime: 0
-    bulletSpeed: 0
-    bulletsCountInClip: 0
-    bulletsMaxCount: 0
-    shootDelay: 0
-    reloadTime: 0
-    weaponWeight: 0
-    weaponSprite: {fileID: 0}
-  currentWeapon:
-    weaponName: 1
-    characterClass: 0
-    damageType: 0
+    characterClass: 1
+    damageType: 1
     bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
       type: 3}
     damage: 50
@@ -55,3 +27,32 @@ MonoBehaviour:
     reloadTime: 0
     weaponWeight: 0
     weaponSprite: {fileID: 21300000, guid: 621946783fc060b4db88f13637e543eb, type: 3}
+  - weaponName: 2
+    characterClass: 0
+    damageType: 0
+    bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
+      type: 3}
+    damage: 25
+    lifeTime: 5
+    bulletSpeed: 12
+    bulletsCountInClip: 20
+    bulletsMaxCount: 100
+    shootDelay: 0
+    reloadTime: 0
+    weaponWeight: 0
+    weaponSprite: {fileID: 21300000, guid: a947536f74054cc4293456ae1ed31d29, type: 3}
+  currentWeapon:
+    weaponName: 2
+    characterClass: 0
+    damageType: 0
+    bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
+      type: 3}
+    damage: 25
+    lifeTime: 5
+    bulletSpeed: 12
+    bulletsCountInClip: 20
+    bulletsMaxCount: 100
+    shootDelay: 0
+    reloadTime: 0
+    weaponWeight: 0
+    weaponSprite: {fileID: 21300000, guid: a947536f74054cc4293456ae1ed31d29, type: 3}
