@@ -1956,20 +1956,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buffsList: []
   currentBuff: 0
-  addedBuff: 0
-  yPosition: 25
   mainWeaponButton: {fileID: 676559392}
   mainWeaponImage: {fileID: 1907107295}
   mainWeaponBulletCountText: {fileID: 188855514}
-  mainWeaponCurrentBulletCount: 0
-  mainWeaponMaxBulletCount: 0
-  mainWeaponActive: 1
   secondWeaponButton: {fileID: 1895971467}
   secondWeaponImage: {fileID: 1537564151}
   secondWeaponCurrentBulletCountText: {fileID: 1897202951}
-  secondWeaponCurrentBulletCount: 0
-  secondWeaponMaxBulletCount: 0
-  secondWeaponActive: 0
+  firstChoose: 0
+  yPosition: 25
   firstAid: 0
   shield: 0
   potions: 0
@@ -1979,8 +1973,6 @@ MonoBehaviour:
   buffCountText: {fileID: 1409232335}
   buffsSettingsDatabase: {fileID: 11400000, guid: d8e581ae3f75bdd479b2da277e4eb16e,
     type: 2}
-  firstElementExitst: 0
-  buffIndex: 0
 --- !u!4 &172191615
 Transform:
   m_ObjectHideFlags: 0
@@ -3544,7 +3536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11042707d6a907a41bb121243e9e0ad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstAid: {fileID: 4777789319465749658, guid: 571349bff3e09c04fbc266b12bca1ded,
+  firstAid: {fileID: 8541385231882100116, guid: c4f91044df0c2b84bb4192fda429ddfb,
     type: 3}
   shield: {fileID: 1720451672188121496, guid: 4787519964f089a419f822803e4c7f78, type: 3}
   potions: {fileID: 3261844880491013346, guid: 2950374790e41bf48be3e96286f1538f, type: 3}

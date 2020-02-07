@@ -97,28 +97,36 @@ public class WeaponsSettingsDatabase : ScriptableObject
 [System.Serializable] //Отображает объекты этого класса в Editor
 public class WeaponData
 {
-    //private enum CharacterClass {All,Demoman, Engineer,Soldier};
 
-    //[SerializeField] private string name = null;
-    //public string WeaponName
-    //{
-    //    get { return name; }
-    //    protected set { }
-    //}
-
-
-    public enum Weapon {None, Bazuka, Pistol }
-    [SerializeField] private Weapon weaponName = Weapon.None;
-    public Weapon WeaponName
+    public enum _WeaponGroup { None, MainWeapon, SecondWeapon, Tool }
+    [SerializeField] private _WeaponGroup weaponGroup = _WeaponGroup.None;
+    public _WeaponGroup WeaponGroup
     {
-        get { return weaponName; }
+        get { return weaponGroup; }
         protected set { }
     }
 
-    public enum Character { All, Demoman, Engineer, Soldier }
-    [SerializeField] private Character characterClass = Character.All;
-    public Character CharacterClass
-    { get { return characterClass; }
+    public enum _MainWeaponName { None, Bazuka , Rifle, Lazer }
+    [SerializeField] private _MainWeaponName mainWeaponName = _MainWeaponName.None;
+    public _MainWeaponName MainWeaponName
+    {
+        get { return mainWeaponName; }
+        protected set { }
+    }
+
+    public enum _SecondWeaponName { None, Pistol }
+    [SerializeField] private _SecondWeaponName secondWeaponName = _SecondWeaponName.None;
+    public _SecondWeaponName SecondWeaponName
+    {
+        get { return secondWeaponName; }
+        protected set { }
+    }
+
+    public enum _CharacterClass { None, All, Demoman, Engineer, Soldier }
+    [SerializeField] private _CharacterClass characterClass = _CharacterClass.None;
+    public _CharacterClass CharacterClass
+    {
+        get { return characterClass; }
         protected set { }
     }
 

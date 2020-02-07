@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class PhotonChangeWeaponBar : MonoBehaviour
 {
-    public enum CurrentBuff
+    public enum Buff
     {
         None,
         FirstAid,
@@ -20,34 +20,38 @@ public class PhotonChangeWeaponBar : MonoBehaviour
     {
         public Sprite buffSprite;
         public int buffCount;
-        public CurrentBuff currentBuff;
+        public Buff currentBuff;
     }
 
-    private List<BuffsList> buffsList = new List<BuffsList>();
+    public List<BuffsList> buffsList = new List<BuffsList>();
 
-    public CurrentBuff currentBuff = CurrentBuff.None;
-    private CurrentBuff addedBuff = CurrentBuff.None;
+    public Buff currentBuff = Buff.None;
+    private Buff addedBuff = Buff.None;
     public static PhotonChangeWeaponBar Instance { get; private set; }
 
-    [SerializeField]private int yPosition = 0;
-
-    [Tooltip("Ячейка с бафами")]
+    [Tooltip("Ячейка с основным оружием")]
     [Header("MainWeapon")]
     public Button mainWeaponButton;
     public Image mainWeaponImage;
     public Text mainWeaponBulletCountText;
-    private int mainWeaponCurrentBulletCount = 0;
-    private int mainWeaponMaxBulletCount = 0;
+   // private int mainWeaponCurrentBulletCount = 0;
+   // private int mainWeaponMaxBulletCount = 0;
     private bool mainWeaponActive = true;
 
-    [Tooltip("Ячейка с бафами")]
+
+    [Tooltip("Ячейка со вторым оружием")]
     [Header("SeconWeapon")]
     public Button secondWeaponButton;
     public Image secondWeaponImage;
     public Text secondWeaponCurrentBulletCountText;
-    private int secondWeaponCurrentBulletCount = 0;
-    private int secondWeaponMaxBulletCount = 0;
+    //private int secondWeaponCurrentBulletCount = 0;
+    //private int secondWeaponMaxBulletCount = 0;
     private bool secondWeaponActive = false;
+
+    [Tooltip("Доп параметры оружия")]
+    [Header("WeaponParametrs")]
+    [SerializeField] private bool firstChoose = false;
+    [SerializeField] private int yPosition = 0;
 
     [Tooltip("Ячейка с бафами")]
     [Header("Buffs")]
@@ -81,10 +85,29 @@ public class PhotonChangeWeaponBar : MonoBehaviour
 
     void Start()
     {
-        mainWeaponButton.interactable = false;
-        mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
+      //  mainWeaponButton.interactable = false;
+      //  mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
     }
 
+    public void ChooseMainWeapon(Sprite mainWeaponSprite,int mainWeaponBulletsInClip, int mainWeaponBulletsMaxCount)
+    {
+        if (!firstChoose)
+        {
+            mainWeaponButton.interactable = false;
+            mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
+            firstChoose = true;
+        }
+
+        mainWeaponImage.sprite = mainWeaponSprite;
+        mainWeaponBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
+
+
+    }
+    public void ChooseSecondWeapon(Sprite secondWeaponSprite, int secondWeaponBulletsInClip, int secondWeaponBulletsMaxCount)
+    {
+        secondWeaponImage.sprite = secondWeaponSprite;
+        secondWeaponCurrentBulletCountText.text = $"{secondWeaponBulletsInClip} / {secondWeaponBulletsMaxCount}";
+    }
     public void ChangeWeapon()
     {
         if (mainWeaponActive)
@@ -115,18 +138,18 @@ public class PhotonChangeWeaponBar : MonoBehaviour
 
 
 
-    public void AddBuffsToListFirstTime(CurrentBuff buff,int buffCount)
+    public void AddBuffsToListFirstTime(Buff buff,int buffCount)
     {
         addedBuff = buff;
         switch (addedBuff)
         {
-          case  CurrentBuff.FirstAid:
+          case Buff.FirstAid:
                 firstAid = true;
             break;
-            case CurrentBuff.Shield:
+            case Buff.Shield:
                 shield = true;
                 break;
-            case CurrentBuff.Potions:
+            case Buff.Potions:
                 potions = true;
                 break;
         }
@@ -143,7 +166,7 @@ public class PhotonChangeWeaponBar : MonoBehaviour
         }
     }
 
-    public void AddBuffsToList(CurrentBuff buff, int buffCount)
+    public void AddBuffsToList(Buff buff, int buffCount)
     {
         addedBuff = buff;
         for (int i = buffsList.Count - 1; i >= 0; i--)
@@ -159,8 +182,6 @@ public class PhotonChangeWeaponBar : MonoBehaviour
         }
     }
 
-
-
     private void ShowBuff()
     {
         if (!firstElementExitst)
@@ -175,11 +196,26 @@ public class PhotonChangeWeaponBar : MonoBehaviour
         }
         else
         {
-            if (changeButton.gameObject.activeInHierarchy == false)
                 changeButton.gameObject.SetActive(true);
         }
     }
 
+    public void HideBuff()
+    {
+        firstAid = false;
+        potions = false;
+        shield = false;
+
+        buffSprite.gameObject.SetActive(false);
+        buffCountText.gameObject.SetActive(false);
+        chooseButton.interactable = false;
+        firstElementExitst = false;
+        currentBuff = Buff.None;
+        addedBuff = Buff.None;
+        changeButton.gameObject.SetActive(false);
+        if (buffsList.Count > 0)
+            buffsList.Clear();
+    }
 
     public void UseBuff(int buffCount)
     {
@@ -195,13 +231,13 @@ public class PhotonChangeWeaponBar : MonoBehaviour
                     
                     switch (currentBuff)
                     {
-                        case CurrentBuff.FirstAid:
+                        case Buff.FirstAid:
                             firstAid = false;
                             break;
-                        case CurrentBuff.Shield:
+                        case Buff.Shield:
                             shield = false;
                             break;
-                        case CurrentBuff.Potions:
+                        case Buff.Potions:
                             potions = false;
                             break;
                     }
@@ -217,7 +253,6 @@ public class PhotonChangeWeaponBar : MonoBehaviour
             }
         }
     }
-
 
     public void ChangeBuff()
     {
@@ -256,16 +291,21 @@ public class PhotonChangeWeaponBar : MonoBehaviour
         }
     }
 
+    //public void RemoveBuffs()
+    //{
+    //    firstAid = false;
+    //    potions = false;
+    //    shield = false;
+    //    currentBuff = Buff.None;
+    //    addedBuff = Buff.None;
 
-    private void HideBuff()
-    {
+    //    buffSprite.gameObject.SetActive(false);
+    //    buffCountText.gameObject.SetActive(false);
+    //    chooseButton.interactable = false;
+    //    firstElementExitst = false;
+    //    currentBuff = Buff.None;
+    //    changeButton.gameObject.SetActive(false);
+    //}
 
-            buffSprite.gameObject.SetActive(false);
-            buffCountText.gameObject.SetActive(false);
-            chooseButton.interactable = false;   
-            firstElementExitst = false;
-            currentBuff = CurrentBuff.None;
-            changeButton.gameObject.SetActive(false);
-    }
 }
 

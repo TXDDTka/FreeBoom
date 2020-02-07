@@ -9,7 +9,9 @@ public class PhotonPlayerBuffs : MonoBehaviour
 
     [Tooltip("Параметры бафов")]
     [Header("Buffs")]
+    public Buff addedBuff = Buff.None;
     public Buff currentBuff = Buff.None;
+    public bool firstBuffAdded = false;
 
     public int firstAidCount = 0;
     public int shieldCount = 0;
@@ -28,7 +30,14 @@ public class PhotonPlayerBuffs : MonoBehaviour
     private void Start()
     {
         if (!PV.IsMine) return;
-        photonChangeWeaponBar.changeButton.onClick.AddListener(() => photonChangeWeaponBar.ChangeBuff());
+
+        photonChangeWeaponBar.changeButton.onClick.AddListener(delegate 
+        {
+            photonChangeWeaponBar.ChangeBuff();
+            currentBuff = (Buff)(byte)photonChangeWeaponBar.currentBuff;
+        });
+            //photonChangeWeaponBar.changeButton.onClick.AddListener(() => photonChangeWeaponBar.ChangeBuff()
+       // );
         photonChangeWeaponBar.chooseButton.onClick.AddListener(() => UseBuffs());
     }
 
@@ -36,47 +45,57 @@ public class PhotonPlayerBuffs : MonoBehaviour
     public void GetBuffs(Buff buff)
     {
         if (!PV.IsMine) return;
-        currentBuff = buff;
-        switch (currentBuff)
+        addedBuff = buff;
+        switch (addedBuff)
         {
             case Buff.FirstAid:
                     firstAidCount += 1;
                 if (!photonChangeWeaponBar.firstAid)
-                    photonChangeWeaponBar.AddBuffsToListFirstTime(PhotonChangeWeaponBar.CurrentBuff.FirstAid, firstAidCount);
+                    photonChangeWeaponBar.AddBuffsToListFirstTime(PhotonChangeWeaponBar.Buff.FirstAid, firstAidCount);
                 else
-                    photonChangeWeaponBar.AddBuffsToList(PhotonChangeWeaponBar.CurrentBuff.FirstAid, firstAidCount);
+                    photonChangeWeaponBar.AddBuffsToList(PhotonChangeWeaponBar.Buff.FirstAid, firstAidCount);
                 break;
             case Buff.Shield:
                 shieldCount += 1;
                 if (!photonChangeWeaponBar.shield)
-                    photonChangeWeaponBar.AddBuffsToListFirstTime(PhotonChangeWeaponBar.CurrentBuff.Shield, shieldCount);
+                    photonChangeWeaponBar.AddBuffsToListFirstTime(PhotonChangeWeaponBar.Buff.Shield, shieldCount);
                 else
-                    photonChangeWeaponBar.AddBuffsToList(PhotonChangeWeaponBar.CurrentBuff.Shield, shieldCount);
+                    photonChangeWeaponBar.AddBuffsToList(PhotonChangeWeaponBar.Buff.Shield, shieldCount);
                 break;
             case Buff.Potions:
                 potionsCount += 1;
 
                 if (!photonChangeWeaponBar.potions)
-                    photonChangeWeaponBar.AddBuffsToListFirstTime(PhotonChangeWeaponBar.CurrentBuff.Potions, potionsCount);
+                    photonChangeWeaponBar.AddBuffsToListFirstTime(PhotonChangeWeaponBar.Buff.Potions, potionsCount);
                 else
-                    photonChangeWeaponBar.AddBuffsToList(PhotonChangeWeaponBar.CurrentBuff.Potions, potionsCount);
+                    photonChangeWeaponBar.AddBuffsToList(PhotonChangeWeaponBar.Buff.Potions, potionsCount);
                 break;
         }
+        if (!firstBuffAdded)
+        {
+            currentBuff = buff;
+            firstBuffAdded = true;
+        }
+    }
+
+    public void ChangeBuff()
+    {
+        currentBuff = (Buff)(byte)photonChangeWeaponBar.currentBuff;
     }
 
     public void UseBuffs()
     {     
         switch(photonChangeWeaponBar.currentBuff)
         {
-            case PhotonChangeWeaponBar.CurrentBuff.FirstAid:
+            case PhotonChangeWeaponBar.Buff.FirstAid:
                 firstAidCount -= 1;
                 photonChangeWeaponBar.UseBuff(firstAidCount);
                 break;
-            case PhotonChangeWeaponBar.CurrentBuff.Shield:
+            case PhotonChangeWeaponBar.Buff.Shield:
                 shieldCount -= 1;
                 photonChangeWeaponBar.UseBuff(shieldCount);
                 break;
-            case PhotonChangeWeaponBar.CurrentBuff.Potions:
+            case PhotonChangeWeaponBar.Buff.Potions:
                 potionsCount -= 1;
                 photonChangeWeaponBar.UseBuff(potionsCount);
                 break;

@@ -9,18 +9,17 @@ using UnityEngine.EventSystems;
 public class PhotonPlayerShooting : MonoBehaviourPunCallbacks//PlayerController
 {
 
-    public enum MainWeapon {None,Bazuka}
-    public MainWeapon mainWeapon = MainWeapon.None;
+    [Tooltip("Параметры дополнительного оружия")]
+    [Header("WeaponParams")]
+    [SerializeField] private Transform weaponHolder = null;
+    public WeaponsSettingsDatabase weaponsSettingsDatabase = null;
 
     public enum SecondWeapon { None, Pistol }
-    public SecondWeapon secondWeapon = SecondWeapon.None;
-
+    [SerializeField] private SecondWeapon secondWeapon = SecondWeapon.None;
     public enum CurrentWeapon { MainWeapon, SecondWeapon, Tool}
-    public CurrentWeapon currentWeapon = CurrentWeapon.MainWeapon;
-
-
-
-    public Transform weaponHolder = null;
+    [SerializeField] private CurrentWeapon currentWeapon = CurrentWeapon.MainWeapon;
+    [SerializeField] private enum MainWeapon { None, Bazuka, Rifle, Lazer }
+    [SerializeField] private MainWeapon mainWeapon = MainWeapon.None;
 
     [Tooltip("Параметры основного оружия")]
     [Header("MainWeapon")]
@@ -32,6 +31,7 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks//PlayerController
     [SerializeField] private float mainWeaponBulletDestroyTime = 0f;
     [SerializeField] private Transform mainWeaponShootPoint = null;
 
+
     [Tooltip("Параметры дополнительного оружия")]
     [Header("SecondWeapon")]
     [SerializeField] private GameObject secondWeaponBulletPrefab = null;
@@ -42,17 +42,16 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks//PlayerController
     [SerializeField] private float secondWeaponBulletDestroyTime = 0f;
     [SerializeField] private Transform secondWeaponShootPoint = null;
 
-
-
+    
 
     private PhotonView PV = null;
-    public PhotonChangeWeaponBar photonChangeWeaponBar = null;
-    public WeaponsSettingsDatabase weaponsSettingsDatabase = null;
+    private PhotonChangeWeaponBar photonChangeWeaponBar = null;
+    
     private PhotonPlayerMovement photonPlayerMovement = null;
     [HideInInspector]public ShootJoystick shootJoystick = null;
 
 
-    public List<GameObject> bulletList;
+    //public List<GameObject> bulletList;
 
     private void Awake()
     {
@@ -68,8 +67,8 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks//PlayerController
         if (!PV.IsMine) return;
         {
             ChooseWeapon();
-            CheckMainkWeapon();
-            CheckSecondkWeapon();
+          //  CheckMainkWeapon();
+           // CheckSecondkWeapon();
             shootJoystick.ResetPosition();
             photonChangeWeaponBar.mainWeaponButton.onClick.AddListener(() => ChangeWeapon());
             photonChangeWeaponBar.secondWeaponButton.onClick.AddListener(() => ChangeWeapon());
@@ -106,52 +105,94 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks//PlayerController
 
     private void ChooseWeapon()
     {
-        switch(PhotonNetwork.LocalPlayer.GetCharacter())
-        {
-            case PhotonCharacters.Character.Demoman:
-                mainWeapon = MainWeapon.Bazuka;
-                break;
-        }
 
-        secondWeapon = SecondWeapon.Pistol;
-    }
-
-    private void CheckMainkWeapon()
-    {
-        foreach (var weaponInList in weaponsSettingsDatabase.weaponsList)
+        for(int i = 0; i < weaponsSettingsDatabase.weaponsList.Count; i++)
         {
-            if (weaponInList.WeaponName.ToString() == mainWeapon.ToString())
+            var weapon = weaponsSettingsDatabase.weaponsList[i];
+            if (weapon.WeaponGroup == WeaponData._WeaponGroup.MainWeapon && weapon.CharacterClass.ToString() == PhotonNetwork.LocalPlayer.GetCharacter().ToString())
             {
-                mainWeaponBulletPrefab = weaponInList.BulletPrefab;
-                mainWeaponBulletSpeed = weaponInList.BulletSpeed;
-                mainWeaponBulletDamage = weaponInList.Damage;
-                mainWeaponBulletsInClip = weaponInList.BulletsCountInClip;
-                mainWeaponBulletsMaxCount = weaponInList.BulletsMaxCount;
-                mainWeaponBulletDestroyTime = weaponInList.LifeTime;
-                photonChangeWeaponBar.mainWeaponImage.sprite = weaponInList.WeaponSprite;
-                photonChangeWeaponBar.mainWeaponBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
+               // if (weapon.CharacterClass.ToString() == PhotonNetwork.LocalPlayer.GetCharacter().ToString()  ) ; // || weapon.CharacterClass == WeaponData._CharacterClass.All)
+               // {
+                    Debug.Log(1);
+                    Debug.Log(weapon.CharacterClass.ToString());
+                    Debug.Log(PhotonNetwork.LocalPlayer.GetCharacter().ToString());
+                    mainWeapon = (MainWeapon)(byte)weapon.MainWeaponName;
+                    mainWeaponBulletPrefab = weapon.BulletPrefab;
+                    mainWeaponBulletSpeed = weapon.BulletSpeed;
+                    mainWeaponBulletDamage = weapon.Damage;
+                    mainWeaponBulletsInClip = weapon.BulletsCountInClip;
+                    mainWeaponBulletsMaxCount = weapon.BulletsMaxCount;
+                    mainWeaponBulletDestroyTime = weapon.LifeTime;
+                    photonChangeWeaponBar.ChooseMainWeapon(weapon.WeaponSprite, mainWeaponBulletsInClip, mainWeaponBulletsMaxCount);
+               // }
             }
-        }
-    }
-
-    private void CheckSecondkWeapon()
-    {
-
-        foreach (var weaponInList in weaponsSettingsDatabase.weaponsList)
-        {
-            if (weaponInList.WeaponName.ToString() == secondWeapon.ToString())
+            else if (weapon.WeaponGroup == WeaponData._WeaponGroup.SecondWeapon)
             {
-                secondWeaponBulletPrefab =  weaponInList.BulletPrefab;
-                secondWeaponBulletSpeed = weaponInList.BulletSpeed; 
-                secondWeaponBulletDamage = weaponInList.Damage; 
-                secondWeaponBulletsInClip = weaponInList.BulletsCountInClip;
-                secondWeaponBulletsMaxCount = weaponInList.BulletsMaxCount;
-                secondWeaponBulletDestroyTime = weaponInList.LifeTime;
-                photonChangeWeaponBar.secondWeaponImage.sprite = weaponInList.WeaponSprite;
-                photonChangeWeaponBar.secondWeaponCurrentBulletCountText.text = $"{secondWeaponBulletsInClip} / {secondWeaponBulletsMaxCount}";
+                Debug.Log(2);
+                secondWeapon = (SecondWeapon)(byte)weapon.SecondWeaponName;
+                secondWeaponBulletPrefab = weapon.BulletPrefab;
+                secondWeaponBulletSpeed = weapon.BulletSpeed;
+                secondWeaponBulletDamage = weapon.Damage;
+                secondWeaponBulletsInClip = weapon.BulletsCountInClip;
+                secondWeaponBulletsMaxCount = weapon.BulletsMaxCount;
+                secondWeaponBulletDestroyTime = weapon.LifeTime;
+                photonChangeWeaponBar.ChooseSecondWeapon(weapon.WeaponSprite, secondWeaponBulletsInClip, secondWeaponBulletsMaxCount);
             }
+
+            if(mainWeapon != MainWeapon.None && secondWeapon != SecondWeapon.None)
+            {
+                Debug.Log(3);
+                return;
+            }
+                
         }
+
+        //switch(PhotonNetwork.LocalPlayer.GetCharacter())
+        //{
+        //    case PhotonCharacters.Character.Demoman:
+        //        mainWeapon = MainWeapon.Bazuka;
+        //        break;
+        //}
+
+        //secondWeapon = SecondWeapon.Pistol;
     }
+
+    //private void CheckMainkWeapon()
+    //{
+    //    foreach (var weaponInList in weaponsSettingsDatabase.weaponsList)
+    //    {
+    //        if (weaponInList.MainWeaponName.ToString() == mainWeapon.ToString())
+    //        {
+    //            mainWeaponBulletPrefab = weaponInList.BulletPrefab;
+    //            mainWeaponBulletSpeed = weaponInList.BulletSpeed;
+    //            mainWeaponBulletDamage = weaponInList.Damage;
+    //            mainWeaponBulletsInClip = weaponInList.BulletsCountInClip;
+    //            mainWeaponBulletsMaxCount = weaponInList.BulletsMaxCount;
+    //            mainWeaponBulletDestroyTime = weaponInList.LifeTime;
+    //            photonChangeWeaponBar.mainWeaponImage.sprite = weaponInList.WeaponSprite;
+    //            photonChangeWeaponBar.mainWeaponBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
+    //        }
+    //    }
+    //}
+
+    //private void CheckSecondkWeapon()
+    //{
+
+    //    foreach (var weaponInList in weaponsSettingsDatabase.weaponsList)
+    //    {
+    //        if (weaponInList.SecondWeaponName.ToString() == secondWeapon.ToString())
+    //        {
+    //            secondWeaponBulletPrefab =  weaponInList.BulletPrefab;
+    //            secondWeaponBulletSpeed = weaponInList.BulletSpeed; 
+    //            secondWeaponBulletDamage = weaponInList.Damage; 
+    //            secondWeaponBulletsInClip = weaponInList.BulletsCountInClip;
+    //            secondWeaponBulletsMaxCount = weaponInList.BulletsMaxCount;
+    //            secondWeaponBulletDestroyTime = weaponInList.LifeTime;
+    //            photonChangeWeaponBar.secondWeaponImage.sprite = weaponInList.WeaponSprite;
+    //            photonChangeWeaponBar.secondWeaponCurrentBulletCountText.text = $"{secondWeaponBulletsInClip} / {secondWeaponBulletsMaxCount}";
+    //        }
+    //    }
+    //}
 
     private void Shoot()
     {

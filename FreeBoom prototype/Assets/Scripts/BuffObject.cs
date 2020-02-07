@@ -31,20 +31,24 @@ public class BuffObject : MonoBehaviour
 
     //}
 
-     void OnCollisionEnter(Collision other)
+    void OnTriggerEnter(Collider other)
+    // void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Player")
         {
             switch (buffType)
             {
                 case BuffType.FirstAid:
-                    other.gameObject.GetComponent<PhotonView>().RPC("GetBuffs", RpcTarget.AllViaServer, PhotonPlayerBuffs.Buff.FirstAid);
+                      other.gameObject.GetComponent<PhotonView>().RPC("GetBuffs", RpcTarget.AllViaServer, PhotonPlayerBuffs.Buff.FirstAid);
+                    //other.gameObject.SendMessage("GetBuffs", PhotonPlayerBuffs.Buff.FirstAid);
                     break;
                 case BuffType.Shield:
-                    other.gameObject.GetComponent<PhotonView>().RPC("GetBuffs", RpcTarget.AllViaServer, PhotonPlayerBuffs.Buff.Shield);
+                    //other.gameObject.SendMessage("GetBuffs", PhotonPlayerBuffs.Buff.Shield);
+                      other.gameObject.GetComponent<PhotonView>().RPC("GetBuffs", RpcTarget.AllViaServer, PhotonPlayerBuffs.Buff.Shield);
                     break;
                 case BuffType.Potions:
-                    other.gameObject.GetComponent<PhotonView>().RPC("GetBuffs", RpcTarget.AllViaServer, PhotonPlayerBuffs.Buff.Potions);
+                   // other.gameObject.SendMessage("GetBuffs", PhotonPlayerBuffs.Buff.Potions);
+                       other.gameObject.GetComponent<PhotonView>().RPC("GetBuffs", RpcTarget.AllViaServer, PhotonPlayerBuffs.Buff.Potions);
                     break;
             }
             PhotonNetwork.Destroy(gameObject);
