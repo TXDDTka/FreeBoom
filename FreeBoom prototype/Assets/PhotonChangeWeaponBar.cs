@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ public class PhotonChangeWeaponBar : MonoBehaviour
         Potions
     }
 
-    [System.Serializable]
+    [Serializable]
     public class BuffsList
     {
         public Sprite buffSprite;
@@ -31,26 +32,26 @@ public class PhotonChangeWeaponBar : MonoBehaviour
 
     [Tooltip("Ячейка с основным оружием")]
     [Header("MainWeapon")]
-    public Button mainWeaponButton;
-    public Image mainWeaponImage;
-    public Text mainWeaponBulletCountText;
-   // private int mainWeaponCurrentBulletCount = 0;
-   // private int mainWeaponMaxBulletCount = 0;
-    private bool mainWeaponActive = true;
+    public Button mainWeaponButton = null;
+    public Image mainWeaponImage = null;
+    public Text mainWeaponBulletCountText = null;
+    // private int mainWeaponCurrentBulletCount = 0;
+    // private int mainWeaponMaxBulletCount = 0;
+    [SerializeField] private bool mainWeaponActive = true;
 
 
     [Tooltip("Ячейка со вторым оружием")]
     [Header("SeconWeapon")]
-    public Button secondWeaponButton;
-    public Image secondWeaponImage;
-    public Text secondWeaponCurrentBulletCountText;
+    public Button secondWeaponButton = null;
+    public Image secondWeaponImage = null;
+    public Text secondWeaponCurrentBulletCountText = null;
     //private int secondWeaponCurrentBulletCount = 0;
     //private int secondWeaponMaxBulletCount = 0;
-    private bool secondWeaponActive = false;
+    public bool secondWeaponActive = false;
 
     [Tooltip("Доп параметры оружия")]
     [Header("WeaponParametrs")]
-    [SerializeField] private bool firstChoose = false;
+    // [SerializeField] private bool firstChoose = false;
     [SerializeField] private int yPosition = 0;
 
     [Tooltip("Ячейка с бафами")]
@@ -60,16 +61,16 @@ public class PhotonChangeWeaponBar : MonoBehaviour
     public bool potions = false;
     private bool firstElementExitst = false;
 
-    public Button chooseButton;
-    public Button changeButton;
-    [SerializeField] private Image buffSprite;
-    [SerializeField] private Text buffCountText;
+    public Button chooseButton = null;
+    public Button changeButton = null;
+    [SerializeField] private Image buffSprite = null;
+    [SerializeField] private Text buffCountText = null;
 
     private int buffIndex = 0;
 
     public BuffsSettingsDatabase buffsSettingsDatabase;
 
-    
+
     private void InitializeSingleton()
     {
         if (Instance == null)
@@ -85,19 +86,12 @@ public class PhotonChangeWeaponBar : MonoBehaviour
 
     void Start()
     {
-      //  mainWeaponButton.interactable = false;
-      //  mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
+        mainWeaponButton.interactable = false;
+        mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
     }
 
-    public void ChooseMainWeapon(Sprite mainWeaponSprite,int mainWeaponBulletsInClip, int mainWeaponBulletsMaxCount)
+    public void ChooseMainWeapon(Sprite mainWeaponSprite, int mainWeaponBulletsInClip, int mainWeaponBulletsMaxCount)
     {
-        if (!firstChoose)
-        {
-            mainWeaponButton.interactable = false;
-            mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
-            firstChoose = true;
-        }
-
         mainWeaponImage.sprite = mainWeaponSprite;
         mainWeaponBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
 
@@ -108,6 +102,7 @@ public class PhotonChangeWeaponBar : MonoBehaviour
         secondWeaponImage.sprite = secondWeaponSprite;
         secondWeaponCurrentBulletCountText.text = $"{secondWeaponBulletsInClip} / {secondWeaponBulletsMaxCount}";
     }
+
     public void ChangeWeapon()
     {
         if (mainWeaponActive)
@@ -138,14 +133,14 @@ public class PhotonChangeWeaponBar : MonoBehaviour
 
 
 
-    public void AddBuffsToListFirstTime(Buff buff,int buffCount)
+    public void AddBuffsToListFirstTime(Buff buff, int buffCount)
     {
         addedBuff = buff;
         switch (addedBuff)
         {
-          case Buff.FirstAid:
+            case Buff.FirstAid:
                 firstAid = true;
-            break;
+                break;
             case Buff.Shield:
                 shield = true;
                 break;
@@ -195,9 +190,7 @@ public class PhotonChangeWeaponBar : MonoBehaviour
             currentBuff = addedBuff;
         }
         else
-        {
-                changeButton.gameObject.SetActive(true);
-        }
+            changeButton.gameObject.SetActive(true);
     }
 
     public void HideBuff()
@@ -215,6 +208,16 @@ public class PhotonChangeWeaponBar : MonoBehaviour
         changeButton.gameObject.SetActive(false);
         if (buffsList.Count > 0)
             buffsList.Clear();
+
+    }
+
+    public bool BuffsActive()
+    {
+        firstAid = false;
+        potions = false;
+        shield = false;
+
+        return true;
     }
 
     public void UseBuff(int buffCount)
@@ -228,7 +231,7 @@ public class PhotonChangeWeaponBar : MonoBehaviour
                 if (buffInList.buffCount == 0)
                 {
                     buffsList.RemoveAt(buffsList.IndexOf(buffInList));
-                    
+
                     switch (currentBuff)
                     {
                         case Buff.FirstAid:
@@ -290,22 +293,5 @@ public class PhotonChangeWeaponBar : MonoBehaviour
             HideBuff();
         }
     }
-
-    //public void RemoveBuffs()
-    //{
-    //    firstAid = false;
-    //    potions = false;
-    //    shield = false;
-    //    currentBuff = Buff.None;
-    //    addedBuff = Buff.None;
-
-    //    buffSprite.gameObject.SetActive(false);
-    //    buffCountText.gameObject.SetActive(false);
-    //    chooseButton.interactable = false;
-    //    firstElementExitst = false;
-    //    currentBuff = Buff.None;
-    //    changeButton.gameObject.SetActive(false);
-    //}
-
 }
 

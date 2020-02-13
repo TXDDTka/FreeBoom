@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5933718971337884015}
   m_Layer: 12
   m_Name: HpBuff3d
-  m_TagString: Untagged
+  m_TagString: Buff
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e10497fad1eb31478c20186962d2189, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buffType: 0
+  buffType: 1
 --- !u!54 &2551158427509331809
 Rigidbody:
   m_ObjectHideFlags: 0

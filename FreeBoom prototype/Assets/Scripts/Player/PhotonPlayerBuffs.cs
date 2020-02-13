@@ -36,16 +36,15 @@ public class PhotonPlayerBuffs : MonoBehaviour
             photonChangeWeaponBar.ChangeBuff();
             currentBuff = (Buff)(byte)photonChangeWeaponBar.currentBuff;
         });
-            //photonChangeWeaponBar.changeButton.onClick.AddListener(() => photonChangeWeaponBar.ChangeBuff()
-       // );
+
         photonChangeWeaponBar.chooseButton.onClick.AddListener(() => UseBuffs());
     }
 
     [PunRPC]
-    public void GetBuffs(Buff buff)
+    public void GetBuffs(byte buff)
     {
         if (!PV.IsMine) return;
-        addedBuff = buff;
+        addedBuff = (Buff)buff;
         switch (addedBuff)
         {
             case Buff.FirstAid:
@@ -73,15 +72,11 @@ public class PhotonPlayerBuffs : MonoBehaviour
         }
         if (!firstBuffAdded)
         {
-            currentBuff = buff;
+            currentBuff = addedBuff;
             firstBuffAdded = true;
         }
     }
 
-    public void ChangeBuff()
-    {
-        currentBuff = (Buff)(byte)photonChangeWeaponBar.currentBuff;
-    }
 
     public void UseBuffs()
     {     
@@ -102,6 +97,22 @@ public class PhotonPlayerBuffs : MonoBehaviour
         }
     }
 
+   private void OnTriggerEnter(Collider other)
+    {
+            if (other.GetComponent<BuffObject>() != null)
+            {
 
+            if (PV.IsMine)
+            {
+                PV.RPC("GetBuffs", RpcTarget.AllBufferedViaServer, (byte)other.GetComponent<BuffObject>().buffType);
+            }
+
+            if (PhotonNetwork.IsMasterClient)
+                {
+                    PhotonNetwork.Destroy(other.gameObject);
+                }
+
+            }
+    }
 
 }

@@ -27,6 +27,7 @@ MonoBehaviour:
     bulletsMaxCount: 12
     shootDelay: 0
     reloadTime: 0
+    shootingDistance: 12
     weaponWeight: 0
     weaponSprite: {fileID: 21300000, guid: 621946783fc060b4db88f13637e543eb, type: 3}
   - weaponGroup: 2
@@ -43,6 +44,7 @@ MonoBehaviour:
     bulletsMaxCount: 100
     shootDelay: 0
     reloadTime: 0
+    shootingDistance: 8
     weaponWeight: 0
     weaponSprite: {fileID: 21300000, guid: a947536f74054cc4293456ae1ed31d29, type: 3}
   - weaponGroup: 1
@@ -59,6 +61,7 @@ MonoBehaviour:
     bulletsMaxCount: 50
     shootDelay: 0
     reloadTime: 0
+    shootingDistance: 15
     weaponWeight: 0
     weaponSprite: {fileID: 21300000, guid: 159deeed636b4f74c808fa35ea5d308f, type: 3}
   - weaponGroup: 1
@@ -75,22 +78,24 @@ MonoBehaviour:
     bulletsMaxCount: 50
     shootDelay: 0
     reloadTime: 0
+    shootingDistance: 13
     weaponWeight: 0
     weaponSprite: {fileID: 21300000, guid: db3daa13faf14c54a94a7269863fc39d, type: 3}
   currentWeapon:
     weaponGroup: 1
-    mainWeaponName: 2
+    mainWeaponName: 1
     secondWeaponName: 0
-    characterClass: 3
-    damageType: 0
+    characterClass: 2
+    damageType: 1
     bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
       type: 3}
-    damage: 30
+    damage: 50
     lifeTime: 5
-    bulletSpeed: 9
-    bulletsCountInClip: 10
-    bulletsMaxCount: 50
+    bulletSpeed: 8
+    bulletsCountInClip: 1
+    bulletsMaxCount: 12
     shootDelay: 0
     reloadTime: 0
+    shootingDistance: 12
     weaponWeight: 0
-    weaponSprite: {fileID: 21300000, guid: db3daa13faf14c54a94a7269863fc39d, type: 3}
+    weaponSprite: {fileID: 21300000, guid: 621946783fc060b4db88f13637e543eb, type: 3}

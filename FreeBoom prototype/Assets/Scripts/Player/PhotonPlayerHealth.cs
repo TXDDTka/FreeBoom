@@ -26,7 +26,7 @@ public class PhotonPlayerHealth : MonoBehaviourPun
     private void Start()
     {
         if (!PV.IsMine) return;
-            PV.RPC("CheckCharacterHealth", RpcTarget.AllBuffered,player);
+            CheckCharacterHealth();
             PV.RPC("CreatePlayerBar", RpcTarget.AllBuffered);
 
     }
@@ -38,24 +38,25 @@ public class PhotonPlayerHealth : MonoBehaviourPun
         _uiGo.SendMessage("SetPlayer", this, SendMessageOptions.RequireReceiver);
     }
 
-    [PunRPC]
-    private void CheckCharacterHealth(Player currentPlayer)
+   // [PunRPC]
+    private void CheckCharacterHealth()
     {
-        switch (currentPlayer.GetCharacter())
+        for (int i = 0; i < charactersSettings.charactersList.Count; i++)
         {
-            case PhotonCharacters.Character.Demoman:
-                currentHp = charactersSettings[0].Health;
-                break;
-            case PhotonCharacters.Character.Soldier:
-                currentHp = charactersSettings[1].Health;
-                break;
-            case PhotonCharacters.Character.Engineer:
-                currentHp = charactersSettings[2].Health;
-                break;
+            var character = charactersSettings.charactersList[i];
+            if (character.CharacterName == player.GetCharacter().ToString())
+            {
+                PV.RPC("SetPlayerHealth", RpcTarget.AllBuffered, character.Health);
+                return;
+            }
         }
     }
 
-
+    [PunRPC]
+    public void SetPlayerHealth(float health)
+    {
+        currentHp = health;
+    }
 
     [PunRPC]
     public void GetDamage(float damage, Player killer)
@@ -64,6 +65,7 @@ public class PhotonPlayerHealth : MonoBehaviourPun
 
         if (currentHp <= 0)
         {
+            //currentHp = 0;
             if (!PV.IsMine) return;
                 photonPlayerNetwork.PlayerDied(killer);
                 //PhotonNetwork.Destroy(gameObject);

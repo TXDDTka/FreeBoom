@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1861112447783909493}
-  m_LocalRotation: {x: -0.7071068, y: -0.00000018807565, z: -0.00000018807565, w: -0.7071068}
-  m_LocalPosition: {x: -0, y: -0.525, z: 0}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.609, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4116209258516068152}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!114 &8041494240493160945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,7 +67,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2405734006842089674}
   m_LocalRotation: {x: 0.46600777, y: -0.27594432, z: -0.6064351, w: 0.5821752}
-  m_LocalPosition: {x: 0.119999945, y: -0.039999984, z: 0.020000007}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4116209258516068152}
@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 2454850107092427495}
   - component: {fileID: 2454850107092427494}
   - component: {fileID: 2626810954550310357}
+  - component: {fileID: -5461414493363060784}
   - component: {fileID: 8177671858430915143}
   - component: {fileID: 8189018299167587568}
   - component: {fileID: 9167454096780573260}
@@ -214,27 +215,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a6ea04bb243e0448d8834540f5c233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponHolder: {fileID: 364809174835191085}
+  mainWeapon:
+    mainWeaponBulletPrefab: {fileID: 0}
+    mainWeaponBulletSpeed: 0
+    mainWeaponBulletDamage: 0
+    mainWeaponBulletsInClip: 0
+    mainWeaponBulletsMaxCount: 0
+    mainWeaponBulletDestroyTime: 0
+    mainWeaponShootingDistance: 0
+    mainWeaponGameobject: {fileID: 5340416663903412496}
+    mainWeaponShootPoint: {fileID: 2736642956062860831}
+    mainWeaponChoosen: 0
+  secondWeapon:
+    secondWeaponBulletPrefab: {fileID: 0}
+    secondWeaponBulletSpeed: 0
+    secondWeaponBulletDamage: 0
+    secondWeaponBulletsInClip: 0
+    secondWeaponBulletsMaxCount: 0
+    secondWeaponBulletDestroyTime: 0
+    secondWeaponShootingDistance: 0
+    secondWeaponGameobject: {fileID: 3606025099956800213}
+    secondWeaponShootPoint: {fileID: 4990178217522415393}
+    secondWeaponChoosen: 0
   weaponsSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
     type: 2}
-  secondWeapon: 0
   currentWeapon: 0
-  mainWeapon: 0
-  mainWeaponBulletPrefab: {fileID: 0}
-  mainWeaponBulletSpeed: 0
-  mainWeaponBulletDamage: 0
-  mainWeaponBulletsInClip: 0
-  mainWeaponBulletsMaxCount: 0
-  mainWeaponBulletDestroyTime: 0
-  mainWeaponShootPoint: {fileID: 2736642956062860831}
-  secondWeaponBulletPrefab: {fileID: 0}
-  secondWeaponBulletSpeed: 0
-  secondWeaponBulletDamage: 0
-  secondWeaponBulletsInClip: 0
-  secondWeaponBulletsMaxCount: 0
-  secondWeaponBulletDestroyTime: 0
-  secondWeaponShootPoint: {fileID: 4990178217522415393}
-  shootJoystick: {fileID: 0}
+--- !u!114 &-5461414493363060784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2454850107092427485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d643ac45c30f6b4f915372d6c51d70b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 0
+  crosshairIndex: 0
+  trajectoryVelocity: {x: 5, y: 5}
+  crosshairPrefab: {fileID: 8408340472644753021, guid: 59391f2c2edbb3046b2cd87294d243d8,
+    type: 3}
+  pointPrefab: {fileID: 7027943101153551785, guid: adfb7431783c747438ed36cd6f03c54c,
+    type: 3}
+  points: []
 --- !u!114 &8177671858430915143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2738,7 +2763,7 @@ GameObject:
   - component: {fileID: 4116209258516068152}
   - component: {fileID: 4499760415489484862}
   - component: {fileID: 1725572862333369681}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bazuka
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2937,8 +2962,24 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: f9322f3eb3ee8b246b036528b9fbbcf2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534866581884222612, guid: f9322f3eb3ee8b246b036528b9fbbcf2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9322f3eb3ee8b246b036528b9fbbcf2, type: 3}
+--- !u!1 &3606025099956800213 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: f9322f3eb3ee8b246b036528b9fbbcf2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4695778520463184860}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &310877437544609990 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: f9322f3eb3ee8b246b036528b9fbbcf2,

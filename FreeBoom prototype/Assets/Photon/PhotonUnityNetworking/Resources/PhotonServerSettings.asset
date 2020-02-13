@@ -30,12 +30,14 @@ MonoBehaviour:
   StartInOfflineMode: 0
   RpcList:
   - AddPlayerListing
-  - CheckCharacterHealth
+  - ChangeWeaponForOthers
   - ClickRpc
   - CreatePlayerBar
+  - DestroyBuffObject
   - DestroyRpc
+  - GetBuffs
   - GetDamage
   - RemovePlayerListing
-  - GetBuffs
+  - SetPlayerHealth
   DisableAutoOpenWizard: 1
   ShowSettings: 1
