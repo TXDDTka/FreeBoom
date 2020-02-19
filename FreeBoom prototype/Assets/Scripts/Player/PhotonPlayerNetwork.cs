@@ -1,5 +1,7 @@
 using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -18,6 +20,14 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	private PhotonPlayerListingMenu photonPlayerListingMenu;
 	private PhotonChangeWeaponBar photonChangeWeaponBar = null;
 	private UIManager uiManager;
+
+	[Header("Trajectory")]
+	public GameObject pointsParent = null;
+	public List<GameObject> points = new List<GameObject>();
+	public int distance = 0;
+	public int crosshairIndex = 0;
+	public int crosshairPrefabPosition = 0;
+	public Color teamColor;
 
 	private void Awake()
 	{
@@ -67,7 +77,7 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 					{
 						int index = i;
 						panel.panelButtons[index].onClick.AddListener(delegate //Если нажата кнопка выбора конкретного персоанажа
-						{ 
+						{
 							photonGame.ChooseCharacter(panel.buttonValue[index], player); //Выбираем нужного персонажа в методе ChooseCharacter скрипта PhotonGame
 							uiManager.currentPanel = UIManager.CurrentPanel.GamePanel; // Меняем панель на панель игры в скрипте UIManager
 							uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
@@ -95,7 +105,7 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 					}); 
 
 					panel.panelButtons[1].onClick.AddListener(delegate //Если нажата кнопка сменить персонажа
-					{ 
+					{
 						photonGame.ChooseCharacter(panel.buttonValue[1], player); //Выбираем нужного персонажа в методе ChooseCharacter скрипта PhotonGame
 						ChooseCharacter(); //Вызываем метод выбора персонажа в данном скрипте
 						RemovePlayer(); //Вызываем метод удаления игрока в данном скрипте
@@ -118,25 +128,15 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		
 	}
 
-	void OnApplicationPause(bool pauseStatus)
-	{
-		if (pauseStatus)
-		{
-			// app moved to background
-			photonGame.ExitGame(false);
-		}
-		else
-		{
-			// app is foreground again
-		}
-	}
+
 
 	private void RemovePlayer()
 	{
 		if (playerInstantiate != null)
 		{
 			playerInstantiate.GetComponent<PhotonPlayerShooting>().Disable();
-			playerInstantiate.GetComponent<PlayerShootingTrajectory>().Disable();
+			playerInstantiate.GetComponent<PhotonPlayerHealth>().playerBar.DestroyBar();
+			//playerInstantiate.GetComponent<PlayerShootingTrajectory>().Disable();
 			photonChangeWeaponBar.HideBuff();
 			if (photonChangeWeaponBar.secondWeaponActive)
 				photonChangeWeaponBar.ChangeWeapon();
@@ -144,6 +144,7 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 			PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 2);
 			PhotonNetwork.Destroy(playerInstantiate);
 		}
+		
 	}
 
 	private void ChooseTeam()
@@ -167,14 +168,14 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 
 	public void CreatePlayer()
 	{
-		if(player.GetTeam() == PhotonTeams.Team.Red)
+		if (player.GetTeam() == PhotonTeams.Team.Red)
 		{
 			int random = Random.Range(0, photonGame.teamOneSpawnPoints.Length);
 			playerInstantiate =
 				PhotonNetwork.Instantiate(photonGame.redTeamCharacters[(byte)player.GetCharacter() - 1].name, photonGame.teamOneSpawnPoints[random].position,
 				Quaternion.identity, 0, null);
 
-			CameraFollow.Instance.SetTarget(playerInstantiate.transform);
+			//CameraFollow.Instance.SetTarget(playerInstantiate.transform);
 			uiManager.panelsLists[2].panelObjects[3].SetActive(true);
 
 			BoomJump.Instance.Activate(playerInstantiate.GetComponent<PhotonPlayerMovement>(), 30);
@@ -187,13 +188,22 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 				PhotonNetwork.Instantiate(photonGame.blueTeamCharacters[(byte)player.GetCharacter() - 1].name, photonGame.teamTwoSpawnPoints[random].position,
 				Quaternion.identity, 0, null);
 
-			CameraFollow.Instance.SetTarget(playerInstantiate.transform);
+			//CameraFollow.Instance.SetTarget(playerInstantiate.transform);
 			uiManager.panelsLists[2].panelObjects[3].SetActive(true);
 
 			BoomJump.Instance.Activate(playerInstantiate.GetComponent<PhotonPlayerMovement>(), -30);
 		}
 
+
+
+		CameraFollow.Instance.SetTarget(playerInstantiate.transform);
+
 		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 1);
+
+		//if (pointsParent != null)
+		//{
+		//	//playerInstantiate.GetComponent<PlayerShootingTrajectory>().GetTrajectory(points, pointsParent, crosshairIndex, crosshairPrefabPosition, teamColor);
+		//}
 	}
 
 
@@ -205,11 +215,13 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, killer, 2);
 		uiManager.team = player.GetTeam().ToString();
 		uiManager.RespawnPanelOn();
-		Invoke("RespawnPlayer", uiManager.timer);
+		//Invoke("RespawnPlayer", uiManager.timer);
+		StartCoroutine(RespawnPlayer());
 	}
 
-	private void RespawnPlayer()
+	private IEnumerator RespawnPlayer()
 	{
+		yield return new WaitForSeconds(uiManager.timer);
 		if (uiManager.respawn)
 		{
 			CreatePlayer();
@@ -218,6 +230,19 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 			
 	}
 
+	void OnApplicationPause(bool pauseStatus)
+	{
+		if (pauseStatus)
+		{
+			// app moved to background
+			photonGame.ExitGame(false);
+
+		}
+		else
+		{
+			// app is foreground again
+		}
+	}
 
 	[PunRPC]
 	public void AddPlayerListing(Player playerSend, int number)
@@ -237,6 +262,20 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 
 	}
 
+	//public void GetTrajectory(List<GameObject> savePoints, GameObject saveGameObject, int saveCrosshairIndex, int saveCrosshairPrefabPosition, Color saveTeamColor)
+	//{
+	//	points = savePoints;
+	//	pointsParent = saveGameObject;
+	//	crosshairIndex = saveCrosshairIndex;
+	//	crosshairPrefabPosition = saveCrosshairPrefabPosition;
+	//	teamColor = saveTeamColor;
+	//}
+
+	//public void SetTrajectory(PlayerShootingTrajectory playerShootingTrajectory)
+	//{ 
+	//	//playerInstantiate.GetComponent<PlayerShootingTrajectory>().GetTrajectory(points, pointsParent, crosshairIndex, crosshairPrefabPosition, teamColor);
+	//	playerShootingTrajectory.GetTrajectory(points, pointsParent, crosshairIndex, crosshairPrefabPosition, teamColor);
+	//}
 
 	[PunRPC]
 	public void RemovePlayerListing(Player playerSend)

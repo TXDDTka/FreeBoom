@@ -1013,7 +1013,7 @@ GameObject:
   - component: {fileID: 3103586171277707176}
   - component: {fileID: 8012151285183674929}
   - component: {fileID: 6842955960663665673}
-  - component: {fileID: -5480282785250123835}
+  - component: {fileID: -3132332202980613268}
   m_Layer: 9
   m_Name: EngineerBlue
   m_TagString: Player
@@ -1124,6 +1124,8 @@ MonoBehaviour:
   weaponsSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
     type: 2}
   currentWeapon: 0
+  photonPlayerShootingTrajectory: {fileID: 0}
+  teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &7154082447285930865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1140,6 +1142,7 @@ MonoBehaviour:
   playerUiPrefab: {fileID: 635763035191279664, guid: fc6053341e082ef43a4e6f0593faac7d,
     type: 3}
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
+  playerBar: {fileID: 0}
 --- !u!114 &-5586687382332817165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1162,6 +1165,11 @@ MonoBehaviour:
   forward: 0
   isFacingRight: 0
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
+  rb: {fileID: 0}
+  groundJumpMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  isJumpedGounded: 0
 --- !u!114 &-3308778684563550888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1271,7 +1279,7 @@ MonoBehaviour:
   potionsCount: 0
   buffsSettingsDatabase: {fileID: 11400000, guid: d8e581ae3f75bdd479b2da277e4eb16e,
     type: 2}
---- !u!114 &-5480282785250123835
+--- !u!114 &-3132332202980613268
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1280,17 +1288,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 957723125328212725}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d643ac45c30f6b4f915372d6c51d70b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ab2d30aff4b334418678da928022b27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 0
-  crosshairIndex: 0
   trajectoryVelocity: {x: 5, y: 5}
+  finalVelocity: {x: 0, y: 0}
+  originPosition: {x: 1, y: 1}
   crosshairPrefab: {fileID: 8408340472644753021, guid: 59391f2c2edbb3046b2cd87294d243d8,
     type: 3}
   pointPrefab: {fileID: 7027943101153551785, guid: adfb7431783c747438ed36cd6f03c54c,
     type: 3}
-  points: []
+  teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &957723125328431547
 GameObject:
   m_ObjectHideFlags: 0

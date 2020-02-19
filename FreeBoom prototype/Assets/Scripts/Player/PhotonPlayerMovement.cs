@@ -20,13 +20,17 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
 
     [SerializeField] private CharactersSettingsDatabase charactersSettings = null;
 
-    private Rigidbody rb = null;
+    public Rigidbody rb = null;
 
     private PhotonView PV;
     private MoveJoystick moveJoystick = null;
     private ShootJoystick shootJoystick = null;
 
     private Player player;
+
+    [SerializeField] private LayerMask groundJumpMask = 0;
+    public bool isJumpedGounded = false;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -69,6 +73,8 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
     {
         if (!PV.IsMine) return;
         isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundMask);
+
+        isJumpedGounded = Physics.CheckSphere(transform.position, 0.1f, groundJumpMask);
 
         if (isGrounded & canMove)
             rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);

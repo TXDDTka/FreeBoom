@@ -50,7 +50,7 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
     [Header("WeaponParams")]
     public WeaponsSettingsDatabase weaponsSettingsDatabase = null;
     public enum CurrentWeapon { MainWeapon, SecondWeapon, Tool}
-    [SerializeField] private CurrentWeapon currentWeapon = CurrentWeapon.MainWeapon;
+    public CurrentWeapon currentWeapon = CurrentWeapon.MainWeapon;
 
     //[Tooltip("Параметры основного оружия")]
     //[Header("MainWeapon")]
@@ -81,16 +81,18 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
     private PhotonChangeWeaponBar photonChangeWeaponBar = null;
     private PhotonPlayerMovement photonPlayerMovement = null;
     private ShootJoystick shootJoystick = null;
-    private PlayerShootingTrajectory playerShootingTrajectory = null;
 
-
+    //public CrosshairPointsParent crosshairPointsParent = null;
+    public PhotonPlayerShootingTrajectory photonPlayerShootingTrajectory;
+    public Color teamColor;
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         photonPlayerMovement = GetComponent<PhotonPlayerMovement>();
-        playerShootingTrajectory = GetComponent<PlayerShootingTrajectory>();
         shootJoystick = ShootJoystick.Instance;
         photonChangeWeaponBar = PhotonChangeWeaponBar.Instance;
+        //crosshairPointsParent = CrosshairPointsParent.Instance;
+        photonPlayerShootingTrajectory = GetComponent<PhotonPlayerShootingTrajectory>();
     }
 
 
@@ -103,12 +105,37 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
            // mainWeapon.mainWeaponChoosen = false;///?
            // secondWeapon.secondWeaponChoosen = false;///?
             ChooseWeapon();
+            CheckTeamColor();
+
             shootJoystick.ResetPosition();
+
             photonChangeWeaponBar.mainWeaponButton.onClick.AddListener(() => ChangeWeapon());
             photonChangeWeaponBar.secondWeaponButton.onClick.AddListener(() => ChangeWeapon());
+
+        // crosshairPointsParent.GetData(mainWeapon.mainWeaponShootingDistance, teamColor);
+            photonPlayerShootingTrajectory.PopulatePoints(mainWeapon.mainWeaponShootingDistance, teamColor); 
+
+        
+            shootJoystick.OnBeginDragEvent += photonPlayerShootingTrajectory.EnablePoints;
             shootJoystick.OnUpEvent += Shoot;   
     }
 
+    public void CheckTeamColor()
+    {
+        teamColor = PhotonNetwork.LocalPlayer.GetTeam() == PhotonTeams.Team.Red ? Color.red : Color.blue;//new Color(1, 0, 0, 1) : new Color(0, 0, 1, 1); 
+    }
+
+    //void Update()
+    //{
+    //    if (!PV.IsMine) return;
+
+    //    if (shootJoystick.HasInput)
+    //    {
+    //        crosshairPointsParent.originPosition = currentWeapon == CurrentWeapon.MainWeapon ? mainWeapon.mainWeaponShootPoint.position : secondWeapon.secondWeaponShootPoint.position;
+    //        crosshairPointsParent.finalVelocity = shootJoystick.Direction * new Vector2(crosshairPointsParent.distance - shootJoystick.Direction.x, crosshairPointsParent.distance - shootJoystick.Direction.y)/* * crosshairPointsParent.crosshairCheckCollision.distance*/;// * crosshairPointsParent.trajectoryVelocity;
+    //        crosshairPointsParent.ShowTrajectory();
+    //    }
+    //}
 
     private void ChooseWeapon()
     {
@@ -153,13 +180,15 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
         if(currentWeapon == CurrentWeapon.MainWeapon)
         {
             currentWeapon = CurrentWeapon.SecondWeapon;
-            playerShootingTrajectory.ChangeSecondWeaponTrajectory();
+
+            photonPlayerShootingTrajectory.ChangeWeaponTrajectory(secondWeapon.secondWeaponShootingDistance);
             PV.RPC("ChangeWeaponForOthers", RpcTarget.AllBufferedViaServer, false, true);
         }
         else if(currentWeapon == CurrentWeapon.SecondWeapon)
         {
             currentWeapon = CurrentWeapon.MainWeapon;
-            playerShootingTrajectory.ChangeMainWeaponTrajectory();
+
+            photonPlayerShootingTrajectory.ChangeWeaponTrajectory(mainWeapon.mainWeaponShootingDistance);
             PV.RPC("ChangeWeaponForOthers", RpcTarget.AllBufferedViaServer, true, false);
         }        
 
@@ -200,6 +229,8 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
 
     public void Disable()
     {
-            shootJoystick.OnUpEvent -= Shoot;
+        shootJoystick.OnBeginDragEvent -= photonPlayerShootingTrajectory.EnablePoints;    
+        shootJoystick.OnUpEvent -= Shoot;
+         
     }
 }

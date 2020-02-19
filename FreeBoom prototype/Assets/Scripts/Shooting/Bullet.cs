@@ -43,7 +43,7 @@ public class Bullet : MonoBehaviourPunCallbacks/*,IPunPrefabPool//,IPunInstantia
 
 
         if (other.tag == "Player")
-        {
+        { 
             if (other.GetComponent<PhotonView>().Owner.GetTeam() != PhotonNetwork.LocalPlayer.GetTeam())
             {
             

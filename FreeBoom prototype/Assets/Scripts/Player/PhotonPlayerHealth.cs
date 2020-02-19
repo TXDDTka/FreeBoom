@@ -16,6 +16,7 @@ public class PhotonPlayerHealth : MonoBehaviourPun
     private PhotonPlayerNetwork photonPlayerNetwork;
     private PhotonView PV = null;
     private Player player;
+    public PhotonPlayerUI playerBar;
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -34,8 +35,9 @@ public class PhotonPlayerHealth : MonoBehaviourPun
     [PunRPC]
     public void CreatePlayerBar()
     {
-        GameObject _uiGo = Instantiate(playerUiPrefab);
-        _uiGo.SendMessage("SetPlayer", this, SendMessageOptions.RequireReceiver);
+        playerBar = Instantiate(playerUiPrefab).GetComponent<PhotonPlayerUI>(); ;
+        //playerBar.SendMessage("SetPlayer", this, SendMessageOptions.RequireReceiver);
+        playerBar.SetPlayer(this);
     }
 
    // [PunRPC]
@@ -63,12 +65,18 @@ public class PhotonPlayerHealth : MonoBehaviourPun
     {
         currentHp -= damage;
 
+        //playerBar.SendMessage("SetHealth", SendMessageOptions.RequireReceiver);
+        playerBar.SetHealth(currentHp);
+
         if (currentHp <= 0)
         {
+            //playerBar.DestroyBar();
             //currentHp = 0;
-            if (!PV.IsMine) return;
+            if (!PV.IsMine) return;  
                 photonPlayerNetwork.PlayerDied(killer);
                 //PhotonNetwork.Destroy(gameObject);
         }
     }
+
+    
 }

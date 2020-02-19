@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 2454850107092427495}
   - component: {fileID: 2454850107092427494}
   - component: {fileID: 2626810954550310357}
-  - component: {fileID: -5461414493363060784}
+  - component: {fileID: 8179613204904567071}
   - component: {fileID: 8177671858430915143}
   - component: {fileID: 8189018299167587568}
   - component: {fileID: 9167454096780573260}
@@ -240,7 +240,9 @@ MonoBehaviour:
   weaponsSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
     type: 2}
   currentWeapon: 0
---- !u!114 &-5461414493363060784
+  photonPlayerShootingTrajectory: {fileID: 0}
+  teamColor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &8179613204904567071
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -249,17 +251,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2454850107092427485}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d643ac45c30f6b4f915372d6c51d70b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4ab2d30aff4b334418678da928022b27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 0
-  crosshairIndex: 0
   trajectoryVelocity: {x: 5, y: 5}
+  finalVelocity: {x: 0, y: 0}
+  originPosition: {x: 1, y: 1}
   crosshairPrefab: {fileID: 8408340472644753021, guid: 59391f2c2edbb3046b2cd87294d243d8,
     type: 3}
   pointPrefab: {fileID: 7027943101153551785, guid: adfb7431783c747438ed36cd6f03c54c,
     type: 3}
-  points: []
+  teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &8177671858430915143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,6 +316,11 @@ MonoBehaviour:
   forward: 0
   isFacingRight: 1
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
+  rb: {fileID: 0}
+  groundJumpMask:
+    serializedVersion: 2
+    m_Bits: 8192
+  isJumpedGounded: 0
 --- !u!114 &-802222995305330777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,6 +337,7 @@ MonoBehaviour:
   playerUiPrefab: {fileID: 635763035191279664, guid: fc6053341e082ef43a4e6f0593faac7d,
     type: 3}
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
+  playerBar: {fileID: 0}
 --- !u!114 &34760689179350464
 MonoBehaviour:
   m_ObjectHideFlags: 0
