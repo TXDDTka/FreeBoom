@@ -39,5 +39,6 @@ MonoBehaviour:
   - GetDamage
   - RemovePlayerListing
   - SetPlayerHealth
+  - DestroyPlayerBar
   DisableAutoOpenWizard: 1
   ShowSettings: 1

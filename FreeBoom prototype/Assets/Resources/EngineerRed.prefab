@@ -265,7 +265,8 @@ MonoBehaviour:
   playerUiPrefab: {fileID: 635763035191279664, guid: fc6053341e082ef43a4e6f0593faac7d,
     type: 3}
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
-  playerBar: {fileID: 0}
+  playerBar: {fileID: 5781572023488503030, guid: fc6053341e082ef43a4e6f0593faac7d,
+    type: 3}
 --- !u!114 &-547057004476176858
 MonoBehaviour:
   m_ObjectHideFlags: 0

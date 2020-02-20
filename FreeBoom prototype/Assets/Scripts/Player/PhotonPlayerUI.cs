@@ -42,39 +42,44 @@ public class PhotonPlayerUI : MonoBehaviour
 
 
 
-	//void Update()
+	void Update()
+	{
+		if (player == null || player.currentHp <= 0)
+		{
+			Destroy(gameObject);
+			return;
+		}
+		else
+		{
+			playerHealthSlider.value = player.currentHp;
+			playerHealthText.text = player.currentHp.ToString();
+
+		}
+	}
+
+	//	public void DestroyBar()
 	//{
-	//	if (player == null || player.currentHp <= 0)
+	//	Destroy(gameObject);
+	//	return;
+	//}
+
+	//public void SetHealth(float playerHealth)
+	//{
+	//	playerHealthSlider.value = playerHealth;//player.currentHp;
+	//	playerHealthText.text = playerHealth.ToString();//player.currentHp.ToString();
+
+	//	//if (player.currentHp <= 0)
+	//	if (playerHealth <= 0)
 	//	{
 	//		Destroy(gameObject);
 	//		return;
 	//	}
-	//	else
-	//	{
-	//		playerHealthSlider.value = player.currentHp;
-	//		playerHealthText.text = player.currentHp.ToString();
-
-	//	}
 	//}
 
-
-	public void SetHealth(float playerHealth)
-	{
-		playerHealthSlider.value = playerHealth;//player.currentHp;
-		playerHealthText.text = playerHealth.ToString();//player.currentHp.ToString();
-
-		//if (player.currentHp <= 0)
-		//if (playerHealth <= 0)
-		//{
-		//	Destroy(gameObject);
-		//	return;
-		//}
-	}
-
-	public void DestroyBar()
-	{
-		Destroy(gameObject);
-	}
+	//public void DestroyBar()
+	//{
+	//	Destroy(gameObject);
+	//}
 
 	void LateUpdate()
 	{

@@ -66,12 +66,13 @@ public class PhotonPlayerHealth : MonoBehaviourPun
         currentHp -= damage;
 
         //playerBar.SendMessage("SetHealth", SendMessageOptions.RequireReceiver);
-        playerBar.SetHealth(currentHp);
+     //   playerBar.SetHealth(currentHp);
 
         if (currentHp <= 0)
         {
             //playerBar.DestroyBar();
             //currentHp = 0;
+          //  Destroy(playerBar.gameObject);
             if (!PV.IsMine) return;  
                 photonPlayerNetwork.PlayerDied(killer);
                 //PhotonNetwork.Destroy(gameObject);

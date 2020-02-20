@@ -135,17 +135,29 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		if (playerInstantiate != null)
 		{
 			playerInstantiate.GetComponent<PhotonPlayerShooting>().Disable();
-			playerInstantiate.GetComponent<PhotonPlayerHealth>().playerBar.DestroyBar();
+		//	playerInstantiate.GetComponent<PhotonPlayerHealth>().playerBar.DestroyBar();
+			//
+		//	Destroy(playerInstantiate.GetComponent<PhotonPlayerHealth>().playerBar.gameObject);
+			//	PV.RPC("DestroyPlayerBar", RpcTarget.AllBuffered);
 			//playerInstantiate.GetComponent<PlayerShootingTrajectory>().Disable();
 			photonChangeWeaponBar.HideBuff();
 			if (photonChangeWeaponBar.secondWeaponActive)
 				photonChangeWeaponBar.ChangeWeapon();
 			player.AddDeaths(1);
+			//playerInstantiate.GetComponent<PhotonPlayerHealth>().playerBar.DestroyBar();
+			//PV.RPC("DestroyPlayerBar", RpcTarget.AllBuffered);
 			PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 2);
 			PhotonNetwork.Destroy(playerInstantiate);
+
 		}
 		
 	}
+
+	//[PunRPC]
+	//public void DestroyPlayerBar()
+	//{
+	//	Destroy(playerInstantiate.GetComponent<PhotonPlayerHealth>().playerBar.gameObject);
+	//}
 
 	private void ChooseTeam()
 	{
@@ -229,6 +241,12 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		}
 			
 	}
+
+	//[PunRPC]
+	//public void DestroyPlayerBar()
+	//{
+	//	playerInstantiate.GetComponent<PhotonPlayerHealth>().playerBar.DestroyBar();
+	//}
 
 	void OnApplicationPause(bool pauseStatus)
 	{
