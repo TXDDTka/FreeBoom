@@ -23,6 +23,7 @@ public abstract class JoystickController : MonoBehaviour,
     public virtual float Vertical => direction.y;
     public bool HasInput => direction != Vector2.zero;
 
+    public bool inGame = false;
     protected virtual void Awake()
     {
         //used for singleton
@@ -40,8 +41,12 @@ public abstract class JoystickController : MonoBehaviour,
         moveableJoytick = joystickBackground.GetChild(0).GetComponent<RectTransform>();
     }
 
+    //Вызывается когда нажимаем на стик
     public void OnPointerDown(PointerEventData eventData)
     {
+
+        if (inGame) return;
+
         joystickBackground.position = eventData.position - moveableJoytick.anchoredPosition;
        // joystickBackground.position = eventData.position;
 
@@ -52,14 +57,16 @@ public abstract class JoystickController : MonoBehaviour,
        //     canvasGroup.alpha = 1;
     }
 
+    //Вызывается когда отпускаем стик
     public virtual void OnPointerUp(PointerEventData eventData)
     {
+        
         direction = Vector2.zero;
         moveableJoytick.anchoredPosition = direction;
 
         //if (smoothEnabled)
         //{
-            InvokeJoytickRoutine(false);
+        InvokeJoytickRoutine(false);
         //}
         //else
         //{
@@ -68,8 +75,10 @@ public abstract class JoystickController : MonoBehaviour,
         //}
     }
 
+    //Вызывается когда перемещаем стик
     public void OnDrag(PointerEventData eventData)
     {
+
         Vector2 pos = Vector2.zero;
 
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(joystickBackground, eventData.position, eventData.pressEventCamera, out pos))
@@ -83,6 +92,15 @@ public abstract class JoystickController : MonoBehaviour,
             Vector2 finalPosition = new Vector2(direction.x * delta.x / 3, direction.y * delta.y / 3);
             moveableJoytick.anchoredPosition = finalPosition;
         }
+    }
+
+    public void MoveJoystickPointerUp()
+    {
+        direction = Vector2.zero;
+        moveableJoytick.anchoredPosition = direction;
+
+        //  InvokeJoytickRoutine(false);
+        canvasGroup.alpha = 0;
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData)

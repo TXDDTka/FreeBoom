@@ -124,11 +124,6 @@ public class UIManager : MonoBehaviour
                             panel.panelObjects[1].SetActive(false);
                             panel.panelObjects[2].SetActive(true);
                             camera.cullingMask = -1;
-                            //if(changing)
-                            //{
-                            //    panel.panelObjects[3].SetActive(true);
-                            //    changing = false;
-                            //}
                         }
                     }
 

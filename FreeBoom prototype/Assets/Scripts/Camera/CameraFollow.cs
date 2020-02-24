@@ -14,8 +14,6 @@ public class CameraFollow : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy(this);
-
-        //Instance = this;
     }
 
     #endregion
@@ -26,8 +24,6 @@ public class CameraFollow : MonoBehaviour
     public Transform target = null;
     private Vector3 smoothVelocity = Vector3.zero;
 
-    //public Vector2 min;
-    //public Vector2 max;
     private void Awake()
     {
         InitializeSingleton();
@@ -44,28 +40,14 @@ public class CameraFollow : MonoBehaviour
 
     private void HandleMovement()
     {
-
        Vector3 pos = target.position + offset;
-        //Vector3 pos = new Vector3(target.position.x, offset.y, offset.z);
         Vector3 smooth = Vector3.SmoothDamp(transform.position, pos, ref smoothVelocity, 1 - followSpeed);
 
-
-
         transform.position = smooth;
-
-
-        // Vector3 min, max;
-        //Vector3 pos = target.position + offset;
-        //Vector3 smooth = Vector3.SmoothDamp(transform.position, pos, ref smoothVelocity, 1 - followSpeed);
-        //float newX = Mathf.Clamp(smooth.x, min.x, max.x);
-        //float newY = Mathf.Clamp(smooth.y, min.y, max.y);
-        //smooth = new Vector3(newX, newY, pos.z);
-        //transform.position = smooth;
     }
 
     public void SetTarget(Transform newTarget)
     {
         target = newTarget;
-       // transform.position = target.position;
     }
 }

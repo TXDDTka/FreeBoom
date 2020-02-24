@@ -5,7 +5,10 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
+
+[RequireComponent(typeof(PlayerManager))]
+[RequireComponent(typeof(Rigidbody))]
+public class PlayerMovement : MonoBehaviour, IPunObservable
 {
 
     [SerializeField] private float speed = 0;
@@ -18,42 +21,32 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
     /*[HideInInspector]*/public float forward = 0f;
     public bool isFacingRight = false;
 
-    [SerializeField] private CharactersSettingsDatabase charactersSettings = null;
-
     public Rigidbody rb = null;
 
-    private PhotonView PV;
-    private MoveJoystick moveJoystick = null;
-    private ShootJoystick shootJoystick = null;
+    [SerializeField] private CharactersSettingsDatabase charactersSettings = null;
+    private PlayerManager playerManager = null;
 
-    private Player player;
 
     [SerializeField] private LayerMask groundJumpMask = 0;
     public bool isJumpedGounded = false;
 
     private void Awake()
     {
-        PV = GetComponent<PhotonView>();
+        playerManager = GetComponent<PlayerManager>();
         rb = GetComponent<Rigidbody>();
-        moveJoystick = MoveJoystick.Instance;
-        shootJoystick = ShootJoystick.Instance;
-
-
-        player = PhotonNetwork.LocalPlayer;
     }
 
     private void Start()
     {
-        if (!PV.IsMine) return;
+        if (!playerManager.PV.IsMine) return;
         CheckCharacterSpeed();
-        //Boom.Instance.Activate(this, direction); 
     }
     void Update()
     {
-        if (!PV.IsMine) return;
+        if (!playerManager.PV.IsMine) return;
 
         //движение с фиксированной скоростью незавизимо от расстояния между стиком и центром джойстика
-        horizontal = moveJoystick.Horizontal != 0 ? Mathf.Sign(moveJoystick.Horizontal) : 0;
+        horizontal = playerManager.moveJoystick.Horizontal != 0 ? Mathf.Sign(playerManager.moveJoystick.Horizontal) : 0;
 
         lookPosition = GetLookPosition();
         //скорость движения зависит от расстояния между подвижным стиком и центром джойстика
@@ -71,7 +64,7 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
 
     void FixedUpdate()
     {
-        if (!PV.IsMine) return;
+        if (!playerManager.PV.IsMine) return;
         isGrounded = Physics.CheckSphere(transform.position, 0.1f, groundMask);
 
         isJumpedGounded = Physics.CheckSphere(transform.position, 0.1f, groundJumpMask);
@@ -87,9 +80,9 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
         Vector3 aimPos = transform.position + Vector3.up * 1.3f;
 
 
-        if (shootJoystick.HasInput && canMove)
+        if (playerManager.shootJoystick.HasInput && canMove)
         {
-            look = aimPos + shootJoystick.Direction.normalized * 2;
+            look = aimPos + playerManager.shootJoystick.Direction.normalized * 2;
         }
         else
         {
@@ -122,7 +115,7 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
         for(int i = 0; i < charactersSettings.charactersList.Count; i++)
         {
             var character = charactersSettings.charactersList[i];
-            if(character.CharacterName == player.GetCharacter().ToString())
+            if(character.CharacterName == playerManager.player.GetCharacter().ToString())
             {
                 speed = character.Speed;
                 return;
@@ -141,5 +134,6 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
             lookPosition = (Vector3)stream.ReceiveNext();
         }
     }
+
 
 }

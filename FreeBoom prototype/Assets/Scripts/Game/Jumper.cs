@@ -4,15 +4,7 @@ using UnityEngine;
 
 public class Jumper : MonoBehaviour
 {
-    //public static Jumper Instance { get; private set; }
-   // private PhotonPlayerMovement photonPlayerMovement;
-    //private void InitializeSingleton()
-    //{
-    //    if (Instance == null)
-    //        Instance = this;
-    //    else if (Instance != this)
-    //        Destroy(this);
-    //}
+
 
     [SerializeField] private AnimationCurve curve = null;
     [SerializeField, Range(0, 4)] private float duration = 2;
@@ -22,41 +14,10 @@ public class Jumper : MonoBehaviour
     public Vector3 finalVelocity = Vector3.zero;
     [SerializeField, Range(-90, 90)] private float angle = 45;//-90 = запад, 0 = север, 90 = восток
     [SerializeField, Range(1, 10)] private float launchForce = 5;
-   // public Transform spawnPoint = null;
-    //[Header("Debug")]
-    //  public bool canJump = false;
+
     [SerializeField] private Vector3[] positions = null;
 
-    //  public Button jumpButton;
-
-    // public int team = 0;
-    //private void Awake()
-    //{
-    //    InitializeSingleton();
-    //}
-
-    //private void FixedUpdate()
-    //{
-    //    //
-    //    // if (canJump)
-    //    //  {
-    //    amount += 1 / duration * Time.deltaTime;
-    //    amount %= 1;
-    //    Calculate();
-
-    //    //  }
-
-    //}
-
-    //public void Activate(PhotonPlayerMovement playerMovement, int newAngle)//(Transform playerPosition, int newAngle)
-    //{
-    //    photonPlayerMovement = playerMovement;
-    //    angle = newAngle;
-    //    amount = 0;
-    //    spawnPoint = playerMovement.transform;//playerPosition;
-
-    //}
-
+   
 
 
     private void Calculate()
@@ -88,23 +49,20 @@ public class Jumper : MonoBehaviour
         return new Vector3(x, y);
     }
 
-    //public void SetTarger(PhotonPlayerMovement playerMovement)
-    //{
-    //    photonPlayerMovement = playerMovement;
-    //}
+
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<PhotonPlayerMovement>() != null)
+        if (other.GetComponent<PlayerMovement>() != null)
         {
-            if(other.GetComponent<PhotonPlayerMovement>().isJumpedGounded)
+            if(other.GetComponent<PlayerMovement>().isJumpedGounded)
             {
-                angle = other.GetComponent<PhotonPlayerMovement>().isFacingRight ? 30 : -30;
+                angle = other.GetComponent<PlayerMovement>().isFacingRight ? 30 : -30;
                 amount += 1 / duration * Time.deltaTime;
                 amount %= 1;
                 Calculate();
 
-                other.GetComponent<PhotonPlayerMovement>().rb.velocity = finalVelocity;
+                other.GetComponent<PlayerMovement>().rb.velocity = finalVelocity;
             }
         }
     }

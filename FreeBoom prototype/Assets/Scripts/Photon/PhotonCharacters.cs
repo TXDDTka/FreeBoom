@@ -115,7 +115,7 @@ public static class CharacterChange
             return;
         }
 
-        PhotonCharacters.Character currentCharacter= player.GetCharacter();
+        PhotonCharacters.Character currentCharacter = player.GetCharacter();
         if (currentCharacter != character)
         {
             player.SetCustomProperties(new Hashtable() { { PhotonCharacters.CharacterPlayerProp, (byte)character } });

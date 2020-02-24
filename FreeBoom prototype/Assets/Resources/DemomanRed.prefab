@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 9069589297750630752}
   - component: {fileID: 308991478466418560}
   - component: {fileID: 4641808333408332313}
+  - component: {fileID: -8340496211313182558}
   m_Layer: 8
   m_Name: DemomanRed
   m_TagString: Player
@@ -240,7 +241,6 @@ MonoBehaviour:
   weaponsSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
     type: 2}
   currentWeapon: 0
-  photonPlayerShootingTrajectory: {fileID: 0}
   teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &8179613204904567071
 MonoBehaviour:
@@ -315,8 +315,8 @@ MonoBehaviour:
   lookPosition: {x: 0, y: 0, z: 0}
   forward: 0
   isFacingRight: 1
-  charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
   rb: {fileID: 0}
+  charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
   groundJumpMask:
     serializedVersion: 2
     m_Bits: 8192
@@ -337,6 +337,7 @@ MonoBehaviour:
   playerUiPrefab: {fileID: 635763035191279664, guid: fc6053341e082ef43a4e6f0593faac7d,
     type: 3}
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
+  playerManager: {fileID: 0}
   playerBar: {fileID: 5781572023488503030, guid: fc6053341e082ef43a4e6f0593faac7d,
     type: 3}
 --- !u!114 &34760689179350464
@@ -416,6 +417,25 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &-8340496211313182558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2454850107092427485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c90e0d418967024b982472c43baa132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  PV: {fileID: 0}
+  playerMovement: {fileID: 0}
+  playerShooting: {fileID: 0}
+  playerShootingTrajectory: {fileID: 0}
+  moveJoystick: {fileID: 0}
+  shootJoystick: {fileID: 0}
 --- !u!1 &2454850107094292883
 GameObject:
   m_ObjectHideFlags: 0

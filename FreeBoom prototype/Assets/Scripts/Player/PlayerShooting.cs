@@ -8,7 +8,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
+[RequireComponent(typeof(PlayerManager))]
+public class PlayerShooting : MonoBehaviour
 {
 
     [Serializable]
@@ -52,72 +53,38 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
     public enum CurrentWeapon { MainWeapon, SecondWeapon, Tool}
     public CurrentWeapon currentWeapon = CurrentWeapon.MainWeapon;
 
-    //[Tooltip("Параметры основного оружия")]
-    //[Header("MainWeapon")]
-    //[SerializeField] private GameObject mainWeaponBulletPrefab = null;
-    //[SerializeField] private float mainWeaponBulletSpeed = 0f;
-    //[SerializeField] private float mainWeaponBulletDamage = 0f;
-    //[SerializeField] private int mainWeaponBulletsInClip = 0;
-    //[SerializeField] private int mainWeaponBulletsMaxCount = 0;
-    //[SerializeField] private float mainWeaponBulletDestroyTime = 0f;
-    //[SerializeField] private Transform mainWeaponShootPoint = null;
-    //[SerializeField] private GameObject mainWeaponGameobject = null;
-    //[SerializeField] private bool mainWeaponChoosen = false;
-
-    //[Tooltip("Параметры дополнительного оружия")]
-    //[Header("SecondWeapon")]
-    //[SerializeField] private GameObject secondWeaponBulletPrefab = null;
-    //[SerializeField] private float secondWeaponBulletSpeed = 0f;
-    //[SerializeField] private float secondWeaponBulletDamage = 0f;
-    //[SerializeField] private int secondWeaponBulletsInClip = 0;
-    //[SerializeField] private int secondWeaponBulletsMaxCount = 0;
-    //[SerializeField] private float secondWeaponBulletDestroyTime = 0f;
-    //[SerializeField] private Transform secondWeaponShootPoint = null;
-    //[SerializeField] private GameObject secondWeapon = null;
-    //[SerializeField] private bool secondWeaponChoosen = false;
 
 
-    private PhotonView PV = null;
-    private PhotonChangeWeaponBar photonChangeWeaponBar = null;
-    private PhotonPlayerMovement photonPlayerMovement = null;
-    private ShootJoystick shootJoystick = null;
+    private PlayerManager playerManager = null;
+    private ChangeWeaponBar changeWeaponBar = null;
 
-    //public CrosshairPointsParent crosshairPointsParent = null;
-    public PhotonPlayerShootingTrajectory photonPlayerShootingTrajectory;
     public Color teamColor;
+
     private void Awake()
     {
-        PV = GetComponent<PhotonView>();
-        photonPlayerMovement = GetComponent<PhotonPlayerMovement>();
-        shootJoystick = ShootJoystick.Instance;
-        photonChangeWeaponBar = PhotonChangeWeaponBar.Instance;
-        //crosshairPointsParent = CrosshairPointsParent.Instance;
-        photonPlayerShootingTrajectory = GetComponent<PhotonPlayerShootingTrajectory>();
+        playerManager = GetComponent<PlayerManager>();
     }
 
 
 
     private void Start()
     {
+        changeWeaponBar = ChangeWeaponBar.Instance;
 
-        if (!PV.IsMine) return;
+        if (!playerManager.PV.IsMine) return;
 
-           // mainWeapon.mainWeaponChoosen = false;///?
-           // secondWeapon.secondWeaponChoosen = false;///?
             ChooseWeapon();
             CheckTeamColor();
 
-            shootJoystick.ResetPosition();
 
-            photonChangeWeaponBar.mainWeaponButton.onClick.AddListener(() => ChangeWeapon());
-            photonChangeWeaponBar.secondWeaponButton.onClick.AddListener(() => ChangeWeapon());
+        changeWeaponBar.mainWeaponButton.onClick.AddListener(() => ChangeWeapon());
+        changeWeaponBar.secondWeaponButton.onClick.AddListener(() => ChangeWeapon());
 
-        // crosshairPointsParent.GetData(mainWeapon.mainWeaponShootingDistance, teamColor);
-            photonPlayerShootingTrajectory.PopulatePoints(mainWeapon.mainWeaponShootingDistance, teamColor); 
+        playerManager.playerShootingTrajectory.PopulatePoints(mainWeapon.mainWeaponShootingDistance, teamColor);
 
-        
-            shootJoystick.OnBeginDragEvent += photonPlayerShootingTrajectory.EnablePoints;
-            shootJoystick.OnUpEvent += Shoot;   
+
+        playerManager.shootJoystick.OnBeginDragEvent += playerManager.playerShootingTrajectory.EnablePoints;
+        playerManager.shootJoystick.OnUpEvent += Shoot;   
     }
 
     public void CheckTeamColor()
@@ -125,17 +92,6 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
         teamColor = PhotonNetwork.LocalPlayer.GetTeam() == PhotonTeams.Team.Red ? Color.red : Color.blue;//new Color(1, 0, 0, 1) : new Color(0, 0, 1, 1); 
     }
 
-    //void Update()
-    //{
-    //    if (!PV.IsMine) return;
-
-    //    if (shootJoystick.HasInput)
-    //    {
-    //        crosshairPointsParent.originPosition = currentWeapon == CurrentWeapon.MainWeapon ? mainWeapon.mainWeaponShootPoint.position : secondWeapon.secondWeaponShootPoint.position;
-    //        crosshairPointsParent.finalVelocity = shootJoystick.Direction * new Vector2(crosshairPointsParent.distance - shootJoystick.Direction.x, crosshairPointsParent.distance - shootJoystick.Direction.y)/* * crosshairPointsParent.crosshairCheckCollision.distance*/;// * crosshairPointsParent.trajectoryVelocity;
-    //        crosshairPointsParent.ShowTrajectory();
-    //    }
-    //}
 
     private void ChooseWeapon()
     {
@@ -153,7 +109,7 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
                 mainWeapon.mainWeaponBulletsMaxCount = weapon.BulletsMaxCount;
                 mainWeapon.mainWeaponBulletDestroyTime = weapon.LifeTime;
                 mainWeapon.mainWeaponShootingDistance =  (int)weapon.ShootingDistance;
-                photonChangeWeaponBar.ChooseMainWeapon(weapon.WeaponSprite, weapon.BulletsCountInClip, weapon.BulletsMaxCount);
+                changeWeaponBar.ChooseMainWeapon(weapon.WeaponSprite, weapon.BulletsCountInClip, weapon.BulletsMaxCount);
             }
             else if (weapon.WeaponGroup == WeaponData._WeaponGroup.SecondWeapon)
             {
@@ -165,7 +121,7 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
                 secondWeapon.secondWeaponBulletsMaxCount = weapon.BulletsMaxCount;
                 secondWeapon.secondWeaponBulletDestroyTime = weapon.LifeTime;
                 secondWeapon.secondWeaponShootingDistance = (int)weapon.ShootingDistance;
-                photonChangeWeaponBar.ChooseSecondWeapon(weapon.WeaponSprite, weapon.BulletsCountInClip, weapon.BulletsMaxCount);
+                changeWeaponBar.ChooseSecondWeapon(weapon.WeaponSprite, weapon.BulletsCountInClip, weapon.BulletsMaxCount);
             }
 
             if (mainWeapon.mainWeaponChoosen && secondWeapon.secondWeaponChoosen)
@@ -176,20 +132,20 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
 
     private void ChangeWeapon()
     {
-        photonChangeWeaponBar.ChangeWeapon();
+        changeWeaponBar.ChangeWeapon();
         if(currentWeapon == CurrentWeapon.MainWeapon)
         {
             currentWeapon = CurrentWeapon.SecondWeapon;
 
-            photonPlayerShootingTrajectory.ChangeWeaponTrajectory(secondWeapon.secondWeaponShootingDistance);
-            PV.RPC("ChangeWeaponForOthers", RpcTarget.AllBufferedViaServer, false, true);
+            playerManager.playerShootingTrajectory.ChangeWeaponTrajectory(secondWeapon.secondWeaponShootingDistance);
+            playerManager.PV.RPC("ChangeWeaponForOthers", RpcTarget.AllBufferedViaServer, false, true);
         }
         else if(currentWeapon == CurrentWeapon.SecondWeapon)
         {
             currentWeapon = CurrentWeapon.MainWeapon;
 
-            photonPlayerShootingTrajectory.ChangeWeaponTrajectory(mainWeapon.mainWeaponShootingDistance);
-            PV.RPC("ChangeWeaponForOthers", RpcTarget.AllBufferedViaServer, true, false);
+            playerManager.playerShootingTrajectory.ChangeWeaponTrajectory(mainWeapon.mainWeaponShootingDistance);
+            playerManager.PV.RPC("ChangeWeaponForOthers", RpcTarget.AllBufferedViaServer, true, false);
         }        
 
     }
@@ -207,7 +163,7 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
 
     private void Shoot()
     {
-        if (photonPlayerMovement.canMove)
+        if (playerManager.playerMovement.canMove)
         {
             if (currentWeapon == CurrentWeapon.MainWeapon)
             {
@@ -229,8 +185,8 @@ public class PhotonPlayerShooting : MonoBehaviourPunCallbacks
 
     public void Disable()
     {
-        shootJoystick.OnBeginDragEvent -= photonPlayerShootingTrajectory.EnablePoints;    
-        shootJoystick.OnUpEvent -= Shoot;
+        playerManager.shootJoystick.OnBeginDragEvent -= playerManager.playerShootingTrajectory.EnablePoints;
+        playerManager.shootJoystick.OnUpEvent -= Shoot;
          
     }
 }

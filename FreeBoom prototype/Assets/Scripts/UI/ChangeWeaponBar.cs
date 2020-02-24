@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-
-public class PhotonChangeWeaponBar : MonoBehaviour
+public class ChangeWeaponBar : MonoBehaviour
 {
     public enum Buff
     {
@@ -28,7 +26,7 @@ public class PhotonChangeWeaponBar : MonoBehaviour
 
     public Buff currentBuff = Buff.None;
     private Buff addedBuff = Buff.None;
-    public static PhotonChangeWeaponBar Instance { get; private set; }
+    public static ChangeWeaponBar Instance { get; private set; }
 
     [Tooltip("Ячейка с основным оружием")]
     [Header("MainWeapon")]

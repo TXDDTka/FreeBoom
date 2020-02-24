@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 
-public class PhotonPlayerUI : MonoBehaviour
+public class PlayerUI : MonoBehaviour
 {
 
 	[Tooltip("Cмещение по y от игрока")]
@@ -21,7 +21,7 @@ public class PhotonPlayerUI : MonoBehaviour
 	[SerializeField]
 	private Slider playerHealthSlider = null;
 
-	private PhotonPlayerHealth player;
+	private PlayerHealth player;
 
 	private float characterControllerHeight;
 
@@ -57,30 +57,6 @@ public class PhotonPlayerUI : MonoBehaviour
 		}
 	}
 
-	//	public void DestroyBar()
-	//{
-	//	Destroy(gameObject);
-	//	return;
-	//}
-
-	//public void SetHealth(float playerHealth)
-	//{
-	//	playerHealthSlider.value = playerHealth;//player.currentHp;
-	//	playerHealthText.text = playerHealth.ToString();//player.currentHp.ToString();
-
-	//	//if (player.currentHp <= 0)
-	//	if (playerHealth <= 0)
-	//	{
-	//		Destroy(gameObject);
-	//		return;
-	//	}
-	//}
-
-	//public void DestroyBar()
-	//{
-	//	Destroy(gameObject);
-	//}
-
 	void LateUpdate()
 	{
 
@@ -102,14 +78,14 @@ public class PhotonPlayerUI : MonoBehaviour
 
 	}
 
-	public void SetPlayer(PhotonPlayerHealth _player)
+	public void SetPlayer(PlayerHealth _player)
 	{
 
 		player = _player;
 		playerTransform = player.GetComponent<Transform>();
 		CapsuleCollider capsuleCollider = player.GetComponent<CapsuleCollider>();
 		characterControllerHeight = capsuleCollider.height;
-		playerNameText.text = player.photonView.Owner.NickName;
+		playerNameText.text = player.playerManager.photonView.Owner.NickName;
 		playerHealthText.text = player.currentHp.ToString();
 		playerHealthSlider.maxValue = player.currentHp;
 		playerHealthSlider.value = playerHealthSlider.maxValue;

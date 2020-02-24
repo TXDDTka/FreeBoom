@@ -3,13 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhotonPlayerShootingTrajectory : MonoBehaviour
+[RequireComponent(typeof(PlayerManager))]
+public class PlayerShootingTrajectory : MonoBehaviour
 {
-   // public static PhotonPlayerShootingTrajectory Instance { get; private set; }
 
     [Header("Trajectory")]
-    //public int distance = 0;
-   // [SerializeField] private int crosshairIndex = 0;
+
     public Vector2 trajectoryVelocity = Vector2.one;
     public Vector2 finalVelocity = Vector2.zero;
     public Vector2 originPosition = Vector2.one;
@@ -17,53 +16,29 @@ public class PhotonPlayerShootingTrajectory : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject crosshairPrefab = null;
     [SerializeField] private GameObject pointPrefab = null;
-   // public GameObject pointsParent = null;
 
-    // public CrosshairCheckCollision crosshairCheckCollision;
-
-    //[System.Serializable]
-    //public class CrossHair
-    //{
-    //    public GameObject points;
-    //    public SpriteRenderer pointsSprites;
-    //}
-
-    //public List<CrossHair> crossHair;
 
     public Color teamColor;
 
-
-    private PhotonView PV = null;
-    private PhotonPlayerShooting photonPlayerShooting = null;
-    private ShootJoystick shootJoystick = null;
+    private PlayerManager playerManager = null;
     private CrosshairPointsParent crosshairPointsParent = null;
 
-    //private void InitializeSingleton()
-    //{
-    //    if (Instance == null)
-    //        Instance = this;
-    //    else if (Instance != this)
-    //        Destroy(this);
-    //}
 
     public void Awake()
     {
-      //  InitializeSingleton();
-        PV = GetComponent<PhotonView>();
-        photonPlayerShooting = GetComponent<PhotonPlayerShooting>();
-        shootJoystick = ShootJoystick.Instance;
+        playerManager = GetComponent<PlayerManager>();
         crosshairPointsParent = CrosshairPointsParent.Instance;
     }
 
 
     void Update()
     {
-        if (!PV.IsMine) return;
+        if (!playerManager.PV.IsMine) return;
 
-        if (shootJoystick.HasInput)
+        if (playerManager.shootJoystick.HasInput)
         {
-            originPosition = photonPlayerShooting.currentWeapon == PhotonPlayerShooting.CurrentWeapon.MainWeapon ? photonPlayerShooting.mainWeapon.mainWeaponShootPoint.position : photonPlayerShooting.secondWeapon.secondWeaponShootPoint.position;
-            finalVelocity = shootJoystick.Direction * trajectoryVelocity;
+            originPosition = playerManager.playerShooting.currentWeapon == PlayerShooting.CurrentWeapon.MainWeapon ? playerManager.playerShooting.mainWeapon.mainWeaponShootPoint.position : playerManager.playerShooting.secondWeapon.secondWeaponShootPoint.position;
+            finalVelocity = playerManager.shootJoystick.Direction * trajectoryVelocity;
             ShowTrajectory();
         }
     }
@@ -150,22 +125,17 @@ public class PhotonPlayerShootingTrajectory : MonoBehaviour
 
     public void ChangeWeaponTrajectory(int changeDistance)
     {
-
-        Debug.Log("ChangeMainWeaponTrajectory");
         //Полученная дистанция больше текущей
         if (changeDistance > crosshairPointsParent.distance)
         {
-            Debug.Log("Полученная дистанция больше текущей");
             crosshairPointsParent.distance = changeDistance;
 
             if (crosshairPointsParent.distance > crosshairPointsParent.crossHair.Count)//Полученная дистанция больше максимальной дистанция
             {
-                Debug.Log("Полученная дистанция больше максимальной дистанция");
                 AddTrajectory(); //Увеличиваем дистанцию
             }
             else //Полученная дистанция меньше или равна максимальной дистанция
             {
-                Debug.Log("Полученная дистанция меньше или равна максимальной дистанция");
 
                 for (int i = crosshairPointsParent.crosshairIndex; i < crosshairPointsParent.distance; i++)
                 {
@@ -178,7 +148,6 @@ public class PhotonPlayerShootingTrajectory : MonoBehaviour
         //Полученная дистанция меньше текущей
         else if (changeDistance < crosshairPointsParent.distance)
         {
-            Debug.Log("Полученная дистанция меньше текущей");
 
             crosshairPointsParent.distance = changeDistance;
 
