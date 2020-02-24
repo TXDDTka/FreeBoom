@@ -5,10 +5,18 @@ using UnityEngine;
 
 public class PhotonLobby : MonoBehaviourPunCallbacks
 {
-	private bool exitGame;
+	private bool exitGame = false;
 
+
+
+	//public override void OnJoinedLobby()
+	//{
+	//	base.OnJoinedLobby();
+	//	//PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+	//}
 	public void JoinRandomRoom()
 	{
+		PhotonNetwork.LocalPlayer.CustomProperties.Clear();
 		PhotonNetwork.JoinRandomRoom();
 	}
 
@@ -19,8 +27,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 	}
 
 	public override void OnJoinedRoom()
-	{
-		//MonoBehaviour.print("Локальный игрок " + PhotonNetwork.LocalPlayer.NickName + " подключился к комнате");
+	{	
 		StartGame();
 	}
 

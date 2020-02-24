@@ -70,7 +70,7 @@ public static class DeathsExtensions
         int current = player.GetDeaths();
         current = current + deathsToAddToCurrent;
 
-        player.SetCustomProperties(new Hashtable { { PhotonPlayerStatistics.PlayerKillsProp, current }, });
+        player.SetCustomProperties(new Hashtable { { PhotonPlayerStatistics.PlayerDeathsProp, current }, });
     }
 
     public static int GetDeaths(this Player player)
@@ -135,7 +135,7 @@ public static class ScoreExtensions
         //score[PunPlayerScores.PlayerScoreProp] = current;
 
         //player.SetCustomProperties(score);  // this locally sets the score and will sync it in-game asap.
-        player.SetCustomProperties(new Hashtable { { PhotonPlayerStatistics.PlayerKillsProp, current }, });
+        player.SetCustomProperties(new Hashtable { { PhotonPlayerStatistics.PlayerScoreProp, current }, });
     }
 
     public static int GetScore(this Player player)

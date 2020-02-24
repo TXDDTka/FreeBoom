@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class PhotonCharacters : MonoBehaviourPunCallbacks
 {
-    public enum Character : byte { none, demoman};
+    public enum Character : byte { None, Demoman, Engineer, Soldier };
     public static Dictionary<Character, List<Player>> PlayersChoosedCharacter;
     public const string CharacterPlayerProp = "Character";
 
@@ -100,7 +100,7 @@ public static class CharacterChange
             return (PhotonCharacters.Character)characterId;
         }
 
-        return PhotonCharacters.Character.none;
+        return PhotonCharacters.Character.None;
     }
 
     /// <summary>Switch that player's team to the one you assign.</summary>
@@ -115,7 +115,7 @@ public static class CharacterChange
             return;
         }
 
-        PhotonCharacters.Character currentCharacter= player.GetCharacter();
+        PhotonCharacters.Character currentCharacter = player.GetCharacter();
         if (currentCharacter != character)
         {
             player.SetCustomProperties(new Hashtable() { { PhotonCharacters.CharacterPlayerProp, (byte)character } });

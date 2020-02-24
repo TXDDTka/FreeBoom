@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Buff
   layers:
   - Default
   - TransparentFX
@@ -16,10 +17,10 @@ TagManager:
   - 
   - RedTeam
   - BlueTeam
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - Wall
+  - Buff
+  - JumperGround
   - 
   - 
   - 

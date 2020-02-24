@@ -24,15 +24,21 @@ MonoBehaviour:
     Protocol: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  PunLogging: 2
+  PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
   RpcList:
-  - ClickRpc
-  - DestroyRpc
   - AddPlayerListing
+  - ChangeWeaponForOthers
+  - ClickRpc
+  - CreatePlayerBar
+  - DestroyBuffObject
+  - DestroyRpc
+  - GetBuffs
+  - GetDamage
   - RemovePlayerListing
-  - ChangeLayer
+  - SetPlayerHealth
+  - DestroyPlayerBar
   DisableAutoOpenWizard: 1
   ShowSettings: 1

@@ -1,7 +1,5 @@
 using Photon.Pun;
-//using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
-//using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +7,17 @@ using UnityEngine.UI;
 
 public class PhotonGame : MonoBehaviourPunCallbacks
 {
+
+	public static PhotonGame Instance { get; private set; }
+
+	private void InitializeSingleton()
+	{
+		if (Instance == null)
+			Instance = this;
+		else if (Instance != this)
+			Destroy(this);
+	}
+
 	[SerializeField]
 	private int maxPlayersInTeam = 5;
 
@@ -18,10 +27,6 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	public GameObject photonNetworkPlayer;
 
-	//public List<GameObject> photonNetworkPlayerPrefabs;
-
-	//public List<PhotonPlayerNetwork> playersList;
-
 	public GameObject[] redTeamCharacters;
 
 	public GameObject[] blueTeamCharacters;
@@ -30,133 +35,216 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	public Transform[] teamTwoSpawnPoints;
 
-	public List<Button> buttons = new List<Button>();
+	private bool exitGame = false;
+
+	private UIManager uiManager = null;
 
 	public void Awake()
 	{
+		InitializeSingleton();
 		photonTeams = GetComponent<PhotonTeams>();
 		photonCharacters = GetComponent<PhotonCharacters>();
 	}
 
 	public override void OnJoinedRoom()
 	{
-		//PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
-		Instantiate(photonNetworkPlayer, transform.position, Quaternion.identity);
-	}
-
-	public void LeaveGame(Player player)
-	{
-		player.CustomProperties.Clear();
-
-		PhotonNetwork.LeaveRoom();
-		PhotonLoading.Load(LoadingScene.Lobby);
+		PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
 	}
 
 	public void ChooseTeam(string team, Player player)
 	{
-		if (team == "red" )//&& PunTeams.PlayersPerTeam[PunTeams.Team.red].Count < maxPlayersInTeam)
+
+		switch (team)
 		{
-			player.SetTeam(PhotonTeams.Team.red);
-			photonTeams.UpdateTeams();
-		}
-		else if (team == "blue") //&& PunTeams.PlayersPerTeam[PunTeams.Team.blue].Count < maxPlayersInTeam)
-		{
-			player.SetTeam(PhotonTeams.Team.blue);
-			photonTeams.UpdateTeams();
-		}
-		else if (team == "random")
-		{
-			if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.red].Count == PhotonTeams.PlayersPerTeam[PhotonTeams.Team.blue].Count)
-			{
-				int random = Random.Range(0, 1);
-				if (random == 0)
+			case "Red":
+				player.SetTeam(PhotonTeams.Team.Red);
+				photonTeams.UpdateTeams();
+
+
+				if (player.GetCharacter() != PhotonCharacters.Character.None)
 				{
-					player.SetTeam(PhotonTeams.Team.red);
-					photonTeams.UpdateTeams();
+					player.SetCharacter(PhotonCharacters.Character.None);
+				}
+				break;
+			case "Blue":
+				player.SetTeam(PhotonTeams.Team.Blue);
+				photonTeams.UpdateTeams();
+
+
+				if (player.GetCharacter() != PhotonCharacters.Character.None)
+				{
+					player.SetCharacter(PhotonCharacters.Character.None);
+				}
+				break;
+			case "Random":
+
+				if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count)
+				{
+					int random = Random.Range(0, 2);
+					if (random == 0)
+					{
+						player.SetTeam(PhotonTeams.Team.Red);
+						photonTeams.UpdateTeams();
+
+					}
+					else
+					{
+						player.SetTeam(PhotonTeams.Team.Blue);
+						photonTeams.UpdateTeams();
+
+					}
 				}
 				else
 				{
-					player.SetTeam(PhotonTeams.Team.blue);
-					photonTeams.UpdateTeams();
+					if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count < PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count)
+					{
+						player.SetTeam(PhotonTeams.Team.Red);
+						photonTeams.UpdateTeams();
+
+
+					}
+					if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count > PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count)
+					{
+						player.SetTeam(PhotonTeams.Team.Blue);
+						photonTeams.UpdateTeams();
+					}
 				}
-				
-			}
-			else
-			{
-				if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.red].Count < PhotonTeams.PlayersPerTeam[PhotonTeams.Team.blue].Count)
+
+				break;
+			case "AutoChoose":
+				if (player.GetTeam() == PhotonTeams.Team.Red)
 				{
-					player.SetTeam(PhotonTeams.Team.red);
+					player.SetTeam(PhotonTeams.Team.Blue);
 					photonTeams.UpdateTeams();
-					return;
+
+					if (player.GetCharacter() != PhotonCharacters.Character.None)
+					{
+						player.SetCharacter(PhotonCharacters.Character.None);
+					}
 				}
-				if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.red].Count > PhotonTeams.PlayersPerTeam[PhotonTeams.Team.blue].Count)
+				else if (player.GetTeam() == PhotonTeams.Team.Blue)
 				{
-					player.SetTeam(PhotonTeams.Team.blue);
+					player.SetTeam(PhotonTeams.Team.Red);
 					photonTeams.UpdateTeams();
+
+					if (player.GetCharacter() != PhotonCharacters.Character.None)
+					{
+						player.SetCharacter(PhotonCharacters.Character.None);
+					}
 				}
-			}
+				break;
 		}
-		if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.red].Count == maxPlayersInTeam)
-			buttons[0].interactable = false;
-		if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.blue].Count == maxPlayersInTeam)
-			buttons[1].interactable = false;
-	}
+		if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == maxPlayersInTeam)
+		{
+			uiManager.panelsLists[0].panelButtons[0].interactable = false;
+			uiManager.panelsLists[0].panelButtons[2].interactable = false;
+		}
+		if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count == maxPlayersInTeam)
+		{
+			uiManager.panelsLists[0].panelButtons[1].interactable = false;
+			uiManager.panelsLists[0].panelButtons[2].interactable = false;
+		}
+		if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == maxPlayersInTeam && PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count == maxPlayersInTeam)
+			uiManager.panelsLists[3].panelButtons[0].interactable = false;
+
+	}		
 
 	public void ChooseCharacter(string character, Player player)
 	{
-		if(character == "random")
+		if(character == "Random")
 		{
-			int characterNumber = Random.Range(0, 2);
+			int characterNumber = Random.Range(0, 3);
 			switch (characterNumber)
 			{
 				case 0:
-					character = "demoman";
+
+					if (player.GetCharacter() != PhotonCharacters.Character.Demoman)
+						character = "Demoman";
+					else
+					{
+						int newCharacterNumber = Random.Range(0, 2);
+						if(newCharacterNumber == 0)
+							character = "Engineer";
+						else
+							character = "Soldier";
+					}
 					break;
 				case 1:
-					character = "engineer";
+					if (player.GetCharacter() != PhotonCharacters.Character.Engineer)
+						character = "Engineer";
+					else
+					{
+						int newCharacterNumber = Random.Range(0, 2);
+						if (newCharacterNumber == 0)
+							character = "Demoman";
+						else
+							character = "Soldier";
+					}
 					break;
 				case 2:
-					character = "soldier";
+					if (player.GetCharacter() != PhotonCharacters.Character.Soldier)
+						character = "Soldier";
+					else
+					{
+						int newCharacterNumber = Random.Range(0, 2);
+						if (newCharacterNumber == 0)
+							character = "Demoman";
+						else
+							character = "Engineer";
+					}
 					break;
 			}
 		}
 		switch (character)
 		{
-			case "demoman":
-				player.SetCharacter(PhotonCharacters.Character.demoman);
+			case "Demoman":
+				player.SetCharacter(PhotonCharacters.Character.Demoman);
 				photonCharacters.UpdateCharacters();
 				break;
-			case "engineer":
-				player.SetCharacter(PhotonCharacters.Character.demoman);
+			case "Engineer":
+				player.SetCharacter(PhotonCharacters.Character.Engineer);
 				photonCharacters.UpdateCharacters();
 				break;
-			case "soldier":
-				player.SetCharacter(PhotonCharacters.Character.demoman);
+			case "Soldier":
+				player.SetCharacter(PhotonCharacters.Character.Soldier);
+				photonCharacters.UpdateCharacters();
+				break;
+			case "None":
+				player.SetCharacter(PhotonCharacters.Character.None);
 				photonCharacters.UpdateCharacters();
 				break;
 		}
 	}
 
-	public override void OnLeftRoom()
+
+
+
+
+	public void LeaveGame(Player player)
 	{
-		Debug.Log(PhotonNetwork.LocalPlayer.NickName + " локальный игрок покинул игру");
+
+		PhotonNetwork.LeaveRoom();
+		PhotonNetwork.JoinLobby();
+		PhotonLoading.Load(LoadingScene.Lobby);
 	}
 
-	public override void OnPlayerLeftRoom(Player otherPlayer)
+	public void ExitGame(bool exitStatus)
 	{
-		Debug.Log(otherPlayer.NickName + " покинул игру");
+		exitGame = exitStatus;
+		PhotonNetwork.Disconnect();
+
 	}
 
-	//public void OnPlayerDisconnected(Player player)
-	//{
-	//	Debug.Log(player.NickName + "дисконектнулся с сервера 1");
-	//	PhotonLoading.Load(LoadingScene.Login);
-	//}
+
 
 	public override void OnDisconnected(DisconnectCause cause)
 	{
 		base.OnDisconnected(cause);
-		PhotonLoading.Load(LoadingScene.Login);
+
+		if (exitGame == true)
+			Application.Quit();
+		else
+			PhotonLoading.Load(LoadingScene.Login);
 	}
 
 }

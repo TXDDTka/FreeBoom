@@ -1,23 +1,26 @@
 using Photon.Pun;
+using Photon.Pun.UtilityScripts;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PhotonLogin : MonoBehaviourPunCallbacks
 {
 
-	private static string gameVersion = "1.0";
-
 	[SerializeField]
 	private InputField nameInputField = null;
 
-	public void Connect()
+	[SerializeField]
+	private GameSettings gameSettings = null;
+
+public void Connect()
 	{
 		if (string.IsNullOrEmpty(nameInputField.text))
 		{
-			nameInputField.text = "Player" + UnityEngine.Random.Range(1000, 9999);
+			nameInputField.text = gameSettings.NickName;
 		}
-		PhotonNetwork.NickName = this.nameInputField.text;
-		PhotonNetwork.GameVersion = PhotonLogin.gameVersion;
+		PhotonNetwork.NickName = nameInputField.text;
+		PhotonNetwork.GameVersion = gameSettings.GameVersion;
 		PhotonNetwork.ConnectUsingSettings();
 	}
 
@@ -25,6 +28,7 @@ public class PhotonLogin : MonoBehaviourPunCallbacks
 	{
 		Debug.Log("Локальный игрок " + PhotonNetwork.NickName + " подключился к Master Server");
 		PhotonNetwork.AutomaticallySyncScene = true;
+		PhotonNetwork.JoinLobby();
 		PhotonLoading.Load(LoadingScene.Lobby);
 	}
 

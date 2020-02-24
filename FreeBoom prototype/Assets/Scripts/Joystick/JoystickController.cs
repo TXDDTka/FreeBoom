@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class JoystickController : MonoBehaviour, 
+public abstract class JoystickController : MonoBehaviour,
                                            IPointerDownHandler, IPointerUpHandler, IDragHandler,
                                            IBeginDragHandler, IEndDragHandler
 {
-    [SerializeField] private bool smoothEnabled = true;
+   // public bool smoothEnabled = true;
     [SerializeField] private AnimationCurve smoothCurve = null;
     [SerializeField, Range(0.1f, 5)] private float transitionDuration = 0.5f;
 
-    [SerializeField] private RectTransform joystickBackground = null;
-    private RectTransform moveableJoytick = null;
-    private CanvasGroup canvasGroup = null;
+    public RectTransform joystickBackground = null;
+    public RectTransform moveableJoytick = null;
+    public CanvasGroup canvasGroup = null;
     private Vector2 delta = Vector2.zero;
-    private Vector2 startPosition = Vector2.zero;
+    public Vector2 startPosition = Vector2.zero;
     private IEnumerator joytickRoutine = null;
 
     protected Vector2 direction = Vector2.zero;
@@ -23,6 +23,7 @@ public abstract class JoystickController : MonoBehaviour,
     public virtual float Vertical => direction.y;
     public bool HasInput => direction != Vector2.zero;
 
+    public bool inGame = false;
     protected virtual void Awake()
     {
         //used for singleton
@@ -40,34 +41,44 @@ public abstract class JoystickController : MonoBehaviour,
         moveableJoytick = joystickBackground.GetChild(0).GetComponent<RectTransform>();
     }
 
+    //Вызывается когда нажимаем на стик
     public void OnPointerDown(PointerEventData eventData)
     {
-        joystickBackground.position = eventData.position;
 
-        if (smoothEnabled)
+        if (inGame) return;
+
+        joystickBackground.position = eventData.position - moveableJoytick.anchoredPosition;
+       // joystickBackground.position = eventData.position;
+
+
+       // if (smoothEnabled)
             InvokeJoytickRoutine(true);
-        else
-            canvasGroup.alpha = 1;
+      //  else
+       //     canvasGroup.alpha = 1;
     }
 
+    //Вызывается когда отпускаем стик
     public virtual void OnPointerUp(PointerEventData eventData)
     {
+        
         direction = Vector2.zero;
         moveableJoytick.anchoredPosition = direction;
 
-        if (smoothEnabled)
-        {
-            InvokeJoytickRoutine(false);
-        }
-        else
-        {
-            canvasGroup.alpha = 0;
-            joystickBackground.anchoredPosition = startPosition;
-        }
+        //if (smoothEnabled)
+        //{
+        InvokeJoytickRoutine(false);
+        //}
+        //else
+        //{
+        //    canvasGroup.alpha = 0;
+        //    joystickBackground.anchoredPosition = startPosition;
+        //}
     }
 
+    //Вызывается когда перемещаем стик
     public void OnDrag(PointerEventData eventData)
     {
+
         Vector2 pos = Vector2.zero;
 
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(joystickBackground, eventData.position, eventData.pressEventCamera, out pos))
@@ -83,24 +94,33 @@ public abstract class JoystickController : MonoBehaviour,
         }
     }
 
+    public void MoveJoystickPointerUp()
+    {
+        direction = Vector2.zero;
+        moveableJoytick.anchoredPosition = direction;
+
+        //  InvokeJoytickRoutine(false);
+        canvasGroup.alpha = 0;
+    }
+
     public virtual void OnBeginDrag(PointerEventData eventData)
     {
-        
+
     }
 
     public virtual void OnEndDrag(PointerEventData eventData)
     {
-        
+
     }
 
-    private void InvokeJoytickRoutine(bool enable)
+    public void InvokeJoytickRoutine(bool enable)
     {
         if (joytickRoutine != null) StopCoroutine(joytickRoutine);
         joytickRoutine = JoystickRoutine(enable);
         StartCoroutine(joytickRoutine);
     }
 
-    private IEnumerator JoystickRoutine(bool enable)
+    public IEnumerator JoystickRoutine(bool enable)
     {
         float percent = 0;
         float smoothPercent = 0;

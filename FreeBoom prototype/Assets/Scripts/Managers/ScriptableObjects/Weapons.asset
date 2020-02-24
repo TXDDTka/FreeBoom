@@ -1,0 +1,101 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01244d00e089a7541b607d4dcb460497, type: 3}
+  m_Name: Weapons
+  m_EditorClassIdentifier: 
+  weaponsList:
+  - weaponGroup: 1
+    mainWeaponName: 1
+    secondWeaponName: 0
+    characterClass: 2
+    damageType: 1
+    bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
+      type: 3}
+    damage: 50
+    lifeTime: 5
+    bulletSpeed: 8
+    bulletsCountInClip: 1
+    bulletsMaxCount: 12
+    shootDelay: 0
+    reloadTime: 0
+    shootingDistance: 6
+    weaponWeight: 0
+    weaponSprite: {fileID: 21300000, guid: 621946783fc060b4db88f13637e543eb, type: 3}
+  - weaponGroup: 2
+    mainWeaponName: 0
+    secondWeaponName: 1
+    characterClass: 1
+    damageType: 0
+    bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
+      type: 3}
+    damage: 25
+    lifeTime: 5
+    bulletSpeed: 12
+    bulletsCountInClip: 20
+    bulletsMaxCount: 100
+    shootDelay: 0
+    reloadTime: 0
+    shootingDistance: 4
+    weaponWeight: 0
+    weaponSprite: {fileID: 21300000, guid: a947536f74054cc4293456ae1ed31d29, type: 3}
+  - weaponGroup: 1
+    mainWeaponName: 3
+    secondWeaponName: 0
+    characterClass: 4
+    damageType: 0
+    bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
+      type: 3}
+    damage: 35
+    lifeTime: 5
+    bulletSpeed: 8
+    bulletsCountInClip: 10
+    bulletsMaxCount: 50
+    shootDelay: 0
+    reloadTime: 0
+    shootingDistance: 10
+    weaponWeight: 0
+    weaponSprite: {fileID: 21300000, guid: 159deeed636b4f74c808fa35ea5d308f, type: 3}
+  - weaponGroup: 1
+    mainWeaponName: 2
+    secondWeaponName: 0
+    characterClass: 3
+    damageType: 0
+    bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
+      type: 3}
+    damage: 30
+    lifeTime: 5
+    bulletSpeed: 9
+    bulletsCountInClip: 10
+    bulletsMaxCount: 50
+    shootDelay: 0
+    reloadTime: 0
+    shootingDistance: 8
+    weaponWeight: 0
+    weaponSprite: {fileID: 21300000, guid: db3daa13faf14c54a94a7269863fc39d, type: 3}
+  currentWeapon:
+    weaponGroup: 1
+    mainWeaponName: 2
+    secondWeaponName: 0
+    characterClass: 3
+    damageType: 0
+    bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
+      type: 3}
+    damage: 30
+    lifeTime: 5
+    bulletSpeed: 9
+    bulletsCountInClip: 10
+    bulletsMaxCount: 50
+    shootDelay: 0
+    reloadTime: 0
+    shootingDistance: 8
+    weaponWeight: 0
+    weaponSprite: {fileID: 21300000, guid: db3daa13faf14c54a94a7269863fc39d, type: 3}

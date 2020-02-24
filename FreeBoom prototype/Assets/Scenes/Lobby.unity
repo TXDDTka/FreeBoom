@@ -886,6 +886,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de8188095875f174eb0dfa2c34fc2eb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  photonNetworkPlayer: {fileID: 7188125536183458375, guid: e940a084fc7089c4491ec147c84ccc03,
+    type: 3}
 --- !u!4 &1859363206
 Transform:
   m_ObjectHideFlags: 0
