@@ -7,8 +7,8 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerMovement))]
-[RequireComponent(typeof(PlayerShootingTrajectory))]
-[RequireComponent(typeof(PlayerShootingTrajectory))]
+//[RequireComponent(typeof(PlayerShootingTrajectory))]
+[RequireComponent(typeof(PlayerShootingCrosshairs))]
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
@@ -18,7 +18,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public PlayerMovement playerMovement;
     public PlayerShooting playerShooting;
-    public PlayerShootingTrajectory playerShootingTrajectory;
+    // public PlayerShootingTrajectory playerShootingTrajectory;
+
+    public PlayerShootingCrosshairs playerShootingCrosshairs;
 
     public MoveJoystick moveJoystick = null;
     public ShootJoystick shootJoystick = null;
@@ -30,8 +32,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         rb = GetComponent<Rigidbody>();
         playerMovement = GetComponent<PlayerMovement>();
         playerShooting = GetComponent<PlayerShooting>();
-        playerShootingTrajectory = GetComponent<PlayerShootingTrajectory>();
+        //   playerShootingTrajectory = GetComponent<PlayerShootingTrajectory>();
 
+        playerShootingCrosshairs = GetComponent<PlayerShootingCrosshairs>();
         moveJoystick = MoveJoystick.Instance;
         shootJoystick = ShootJoystick.Instance;
 
@@ -40,7 +43,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public void JoysticksPointerUp()
     {
-        playerShootingTrajectory.EnablePoints(false);
+      //  playerShootingTrajectory.EnablePoints(false);
         moveJoystick.MoveJoystickPointerUp();
         shootJoystick.ShootJoystickPointerUp();
     }

@@ -938,8 +938,8 @@ GameObject:
   - component: {fileID: 3103586171277707176}
   - component: {fileID: 8012151285183674929}
   - component: {fileID: -4394904572911958507}
-  - component: {fileID: -131811217733033887}
   - component: {fileID: -6410919985163475561}
+  - component: {fileID: 2053201186863976430}
   m_Layer: 9
   m_Name: DemomanBlue
   m_TagString: Player
@@ -1026,32 +1026,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainWeapon:
-    mainWeaponBulletPrefab: {fileID: 0}
-    mainWeaponBulletSpeed: 0
-    mainWeaponBulletDamage: 0
-    mainWeaponBulletsInClip: 0
-    mainWeaponBulletsMaxCount: 0
-    mainWeaponBulletDestroyTime: 0
-    mainWeaponShootingDistance: 0
-    mainWeaponGameobject: {fileID: 6280849935623038036}
-    mainWeaponShootPoint: {fileID: 8902785240289925730}
-    mainWeaponChoosen: 0
+    bulletPrefab: {fileID: 0}
+    bulletSpeed: 0
+    bulletDamage: 0
+    bulletsInClip: 0
+    bulletsMaxCount: 0
+    bulletsCurrentCount: 0
+    bulletDestroyTime: 0
+    shootingDistance: 0
+    reloadingTime: 0
+    weaponGameobject: {fileID: 6280849935623038036}
+    shootPoint: {fileID: 8902785240289925730}
+    weaponChoosen: 0
+    weaponReloading: 0
   secondWeapon:
-    secondWeaponBulletPrefab: {fileID: 0}
-    secondWeaponBulletSpeed: 0
-    secondWeaponBulletDamage: 0
-    secondWeaponBulletsInClip: 0
-    secondWeaponBulletsMaxCount: 0
-    secondWeaponBulletDestroyTime: 0
-    secondWeaponShootingDistance: 0
-    secondWeaponGameobject: {fileID: 9196154809038159568}
-    secondWeaponShootPoint: {fileID: 8439567273527076205}
-    secondWeaponChoosen: 0
+    bulletPrefab: {fileID: 0}
+    bulletSpeed: 0
+    bulletDamage: 0
+    bulletsInClip: 0
+    bulletsMaxCount: 0
+    bulletsCurrentCount: 0
+    bulletDestroyTime: 0
+    shootingDistance: 0
+    reloadingTime: 0
+    weaponGameobject: {fileID: 9196154809038159568}
+    shootPoint: {fileID: 8439567273527076205}
+    weaponChoosen: 0
+    weaponReloading: 0
   weaponsSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
     type: 2}
   currentWeapon: 0
-  photonPlayerShootingTrajectory: {fileID: 0}
-  teamColor: {r: 0, g: 0, b: 0, a: 0}
+  colorIsRed: 0
 --- !u!114 &7154082447285930865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1068,6 +1073,7 @@ MonoBehaviour:
   playerUiPrefab: {fileID: 635763035191279664, guid: fc6053341e082ef43a4e6f0593faac7d,
     type: 3}
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
+  playerManager: {fileID: 0}
   playerBar: {fileID: 5781572023488503030, guid: fc6053341e082ef43a4e6f0593faac7d,
     type: 3}
 --- !u!114 &-5586687382332817165
@@ -1082,12 +1088,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3162e42b659fa49b86259594d8e0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  PV: {fileID: 0}
-  photonPlayerMovement: {fileID: 0}
-  photonPlayerShooting: {fileID: 0}
-  moveJoystick: {fileID: 0}
-  shootJoystick: {fileID: 0}
   speed: 0
   groundMask:
     serializedVersion: 2
@@ -1097,6 +1097,7 @@ MonoBehaviour:
   lookPosition: {x: 0, y: 0, z: 0}
   forward: 0
   isFacingRight: 0
+  rb: {fileID: 0}
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
   groundJumpMask:
     serializedVersion: 2
@@ -1211,26 +1212,6 @@ MonoBehaviour:
   potionsCount: 0
   buffsSettingsDatabase: {fileID: 11400000, guid: d8e581ae3f75bdd479b2da277e4eb16e,
     type: 2}
---- !u!114 &-131811217733033887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 957723125328212725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ab2d30aff4b334418678da928022b27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trajectoryVelocity: {x: 5, y: 5}
-  finalVelocity: {x: 0, y: 0}
-  originPosition: {x: 1, y: 1}
-  crosshairPrefab: {fileID: 8408340472644753021, guid: 59391f2c2edbb3046b2cd87294d243d8,
-    type: 3}
-  pointPrefab: {fileID: 7027943101153551785, guid: adfb7431783c747438ed36cd6f03c54c,
-    type: 3}
-  teamColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &-6410919985163475561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1245,10 +1226,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
   PV: {fileID: 0}
-  photonPlayerMovement: {fileID: 0}
-  photonPlayerShooting: {fileID: 0}
+  playerMovement: {fileID: 0}
+  playerShooting: {fileID: 0}
+  playerShootingCrosshairs: {fileID: 0}
   moveJoystick: {fileID: 0}
   shootJoystick: {fileID: 0}
+--- !u!114 &2053201186863976430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957723125328212725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d54c79c3df101344bb533970195a6d50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshairTypeMainWeapon: 0
+  crosshairTypeSecondWeapon: 0
+  layer:
+  - serializedVersion: 2
+    m_Bits: 1024
+  - serializedVersion: 2
+    m_Bits: 2048
+  crosshairs:
+  - {fileID: 4408531312379487411, guid: 89328f0f0138af745be3839d78488696, type: 3}
 --- !u!1 &957723125328431547
 GameObject:
   m_ObjectHideFlags: 0

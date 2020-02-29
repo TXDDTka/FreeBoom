@@ -18,7 +18,8 @@ public class CrosshairPointsParent : MonoBehaviour
 
 
     public int crosshairIndex = 0;
-    public int distance = 0;
+    public float distance = 0f;
+    public Color currentColor;
     private void InitializeSingleton()
 	{
 		if (Instance == null)

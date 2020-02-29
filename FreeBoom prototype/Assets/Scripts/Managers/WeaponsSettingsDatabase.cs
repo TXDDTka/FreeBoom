@@ -130,11 +130,19 @@ public class WeaponData
         protected set { }
     }
 
-    public enum TypeOfDamage { Unit, Mass }
-    [SerializeField] private TypeOfDamage damageType = TypeOfDamage.Unit;
-    public TypeOfDamage DamageType
+    public enum _DamageType { None, Unit, Mass }
+    [SerializeField] private _DamageType damageType = _DamageType.Unit;
+    public _DamageType DamageType
     {
         get { return damageType; }
+        protected set { }
+    }
+
+    public enum _CrosshairType { None, LineCrosshair}
+    [SerializeField] private _CrosshairType crosshairType = _CrosshairType.None;
+    public _CrosshairType CrosshairType
+    {
+        get { return crosshairType; }
         protected set { }
     }
 
@@ -151,14 +159,6 @@ public class WeaponData
     public float Damage
     {
         get { return damage; }
-        protected set { }
-    }
-
-    [Tooltip("Время через которое пуля уничтожится")]
-    [SerializeField] private float lifeTime = 0f;
-    public float LifeTime
-    {
-        get { return lifeTime; }
         protected set { }
     }
 
