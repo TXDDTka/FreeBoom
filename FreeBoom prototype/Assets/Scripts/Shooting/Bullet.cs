@@ -8,10 +8,11 @@ public class Bullet : MonoBehaviourPunCallbacks/*,IPunPrefabPool//,IPunInstantia
     private PhotonView PV;
     private Rigidbody rb = null;
     private float damageAmount = 0f;
-    // private Coroutine lastRoutine = null;
-    // private Coroutine bulletRoutine = null;
-    [SerializeField] private float timeToDestroyBullet = 0f;
-    // [SerializeField] private float timeToDeactivateBullet = 0f;
+
+   // [SerializeField] private float timeToDestroyBullet = 0f;
+    private float distance = 0f;
+    private Vector3 spawnPosition;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -27,14 +28,38 @@ public class Bullet : MonoBehaviourPunCallbacks/*,IPunPrefabPool//,IPunInstantia
     }
 
     //public void Set(Vector3 velocity, float damage, float destroyTime)
-    public void Set(float speed, float damage, float destroyTime)
+    //public void Set(float speed, float damage, float destroyTime)
+    public void Set(Vector3 newSpawnPosition,float newDistance,float speed, float damage)//, float destroyTime)
     {
-      //  rb.velocity = rb.transform.right * speed;
+        spawnPosition = newSpawnPosition;
+        distance = newDistance;
+        //  rb.velocity = rb.transform.right * speed;
         //rb.velocity = velocity;
-        rb.velocity = transform.TransformDirection(new Vector3(0, 0, speed));
+         rb.velocity = transform.TransformDirection(new Vector3(0, 0, speed));
+       // rb.velocity = transform.TransformDirection(Vector3.forward * speed);
+        //rb.AddForce(bulletForece * 150, ForceMode.Impulse);
+        //rb.AddRelativeForce(Vector2.right * 150, ForceMode.Impulse);
         damageAmount = damage;
-        timeToDestroyBullet = destroyTime;
-        Invoke("DestoyBullet", timeToDestroyBullet);
+       // timeToDestroyBullet = destroyTime;
+        //Invoke("DestoyBullet", timeToDestroyBullet);
+    }
+
+    private void FixedUpdate()
+    {
+        float maxDistance = Vector3.Distance(spawnPosition, transform.position);
+        if (maxDistance > distance)
+        {
+            //Debug.Log(maxDistance);
+            rb.velocity = Vector3.zero;
+        }
+
+        //var heading = spawnPosition - transform.position;
+
+        //if (heading.sqrMagnitude > distance * distance)
+        //{
+        //    Debug.Log(heading.sqrMagnitude);
+        //    rb.velocity = Vector3.zero;
+        //}
     }
 
     private void OnTriggerEnter(Collider other)

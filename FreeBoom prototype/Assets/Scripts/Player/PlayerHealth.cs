@@ -16,7 +16,7 @@ public class PlayerHealth : MonoBehaviour
     private PlayerNetwork playerNetwork;
     public PlayerManager playerManager = null;
 
-    public PlayerUI playerBar;
+    public PlayerDataBar playerBar;
 
     private void Awake()
     {
@@ -35,7 +35,7 @@ public class PlayerHealth : MonoBehaviour
     [PunRPC]
     public void CreatePlayerBar()
     {
-        playerBar = Instantiate(playerUiPrefab).GetComponent<PlayerUI>(); ;
+        playerBar = Instantiate(playerUiPrefab).GetComponent<PlayerDataBar>(); ;
         playerBar.SetPlayer(this);
     }
 

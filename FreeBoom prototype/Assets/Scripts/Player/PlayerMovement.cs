@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour, IPunObservable
 
         isFacingRight = lookPosition.x > transform.position.x;
 
-         forward = horizontal;
+        forward = horizontal;
         if (!isFacingRight)
             forward = -forward;
 
