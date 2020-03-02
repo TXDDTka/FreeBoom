@@ -89,7 +89,8 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 				case "GamePanel":
 					panel.panelButtons[0].onClick.AddListener(delegate //Если нажата кнопка меню
 					{
-						playerInstantiate.JoysticksPointerUp();
+						//playerInstantiate.JoysticksPointerUp();
+						JoysticksPointerUp();
 						_uiManager.currentPanel = UIManager.CurrentPanel.MenuPanel; // Меняем панель на панель меню в скрипте UIManager
 						_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
 					});
@@ -134,7 +135,8 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	{
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-			playerInstantiate.JoysticksPointerUp();
+			//playerInstantiate.JoysticksPointerUp();
+			JoysticksPointerUp(); 
 			_uiManager.currentPanel = UIManager.CurrentPanel.MenuPanel; // Меняем панель на панель меню в скрипте UIManager
 			_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
 		}
@@ -150,6 +152,12 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	}
 
 
+	public void JoysticksPointerUp()
+	{
+		//  playerShootingTrajectory.EnablePoints(false);
+		playerInstantiate.moveJoystick.MoveJoystickPointerUp();
+		playerInstantiate.shootJoystick.ShootJoystickPointerUp();
+	}
 
 	private void ChooseTeam()
 	{
@@ -220,7 +228,7 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		if (playerInstantiate != null)
 		{
 			playerInstantiate.playerShooting.Disable();
-			playerInstantiate.JoysticksPointerUp();
+			JoysticksPointerUp();
 			_changeWeaponBar.HideBuff();
 			if (_changeWeaponBar.secondWeaponActive)
 				_changeWeaponBar.ChangeWeapon();

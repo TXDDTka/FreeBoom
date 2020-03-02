@@ -58,43 +58,59 @@ public class PlayerShooting : MonoBehaviour
     [Header("WeaponParams")]
     public WeaponsSettingsDatabase weaponsSettingsDatabase = null;
 
-
     public enum CurrentWeapon { MainWeapon, SecondWeapon, Tool}
     public CurrentWeapon currentWeapon = CurrentWeapon.MainWeapon;
 
 
-
     private PlayerManager playerManager = null;
     private ChangeWeaponBar changeWeaponBar = null;
+    private CrosshairManager crosshairManager = null;
 
-    public bool colorIsRed = false;
     private void Awake()
     {
         playerManager = GetComponent<PlayerManager>();
+        changeWeaponBar = ChangeWeaponBar.Instance;
+        crosshairManager = CrosshairManager.Instance;
     }
 
 
 
     private void Start()
     {
-        changeWeaponBar = ChangeWeaponBar.Instance;
-
         if (!playerManager.PV.IsMine) return;
             ChooseWeapon();
-        playerManager.playerShootingCrosshairs.CheckCrosshair();
 
         changeWeaponBar.mainWeaponButton.onClick.AddListener(() => ChangeWeapon());
         changeWeaponBar.secondWeaponButton.onClick.AddListener(() => ChangeWeapon());
 
-        // playerManager.playerShootingTrajectory.PopulatePoints(mainWeapon.shootingDistance);
 
 
-        playerManager.shootJoystick.OnBeginDragEvent += playerManager.playerShootingCrosshairs.EnablePoints;//playerManager.playerShootingTrajectory.EnablePoints;
+        playerManager.shootJoystick.OnBeginDragEvent += crosshairManager.EnableCrosshair;
         playerManager.shootJoystick.OnUpEvent += Shoot;   
 
     }
 
+    private void Update()
+    {
+        if (!playerManager.PV.IsMine) return;
+        if (playerManager.shootJoystick.HasInput)
+        {
+            crosshairManager.crosshairActive = true;
+            if (currentWeapon == CurrentWeapon.MainWeapon)
+            {
+                crosshairManager.SetParemeters(playerManager.playerShooting.mainWeapon.shootPoint.position, playerManager.shootJoystick.Direction.normalized, playerManager.playerShooting.mainWeapon.shootingDistance);
+            }
+            else if(currentWeapon == CurrentWeapon.SecondWeapon)
+            {
+                crosshairManager.SetParemeters(playerManager.playerShooting.secondWeapon.shootPoint.position, playerManager.shootJoystick.Direction.normalized, playerManager.playerShooting.secondWeapon.shootingDistance);
+            }
 
+        }
+        else if(!playerManager.shootJoystick.HasInput)
+        {
+            crosshairManager.crosshairActive = false;
+        }
+    }
 
     private void ChooseWeapon()
     {
@@ -113,8 +129,10 @@ public class PlayerShooting : MonoBehaviour
                 mainWeapon.bulletsCurrentCount = mainWeapon.bulletsInClip;
                 mainWeapon.reloadingTime = weapon.ReloadTime;
                 mainWeapon.shootingDistance =  weapon.ShootingDistance;
-                playerManager.playerShootingCrosshairs.crosshairTypeMainWeapon = (PlayerShootingCrosshairs.CrosshairType)(byte)weapon.CrosshairType;
-
+                crosshairManager.currentCrosshair = (CrosshairManager.CrosshairType)(byte)weapon.CrosshairType;
+                crosshairManager.mainWeaponCrosshair = (CrosshairManager.CrosshairType)(byte)weapon.CrosshairType;
+                
+                ChangeCrosshairColor(Color.white);
                 mainWeapon.enumeratorWeaponReloading = ReloadMainWeapon();
                 changeWeaponBar.ChooseMainWeapon(weapon.WeaponSprite, weapon.BulletsCountInClip, weapon.BulletsMaxCount);
             }
@@ -129,7 +147,7 @@ public class PlayerShooting : MonoBehaviour
                 secondWeapon.bulletsCurrentCount = secondWeapon.bulletsInClip;
                 secondWeapon.reloadingTime = weapon.ReloadTime;
                 secondWeapon.shootingDistance = weapon.ShootingDistance;
-                playerManager.playerShootingCrosshairs.crosshairTypeSecondWeapon = (PlayerShootingCrosshairs.CrosshairType)(byte)weapon.CrosshairType;
+                crosshairManager.secondWeaponCrosshair = (CrosshairManager.CrosshairType)(byte)weapon.CrosshairType;
 
                 secondWeapon.enumeratorWeaponReloading = ReloadSecondWeapon();
                 changeWeaponBar.ChooseSecondWeapon(weapon.WeaponSprite, weapon.BulletsCountInClip, weapon.BulletsMaxCount);
@@ -147,38 +165,34 @@ public class PlayerShooting : MonoBehaviour
         if(currentWeapon == CurrentWeapon.MainWeapon)
         {
             currentWeapon = CurrentWeapon.SecondWeapon;
-
+            crosshairManager.currentCrosshair = crosshairManager.secondWeaponCrosshair;
             if (mainWeapon.weaponReloading)
             {
                 changeWeaponBar.MainWeaponCooldownBar(false, 0);
                 StopAllCoroutines();
-                mainWeapon.weaponReloading = false;
+                mainWeapon.weaponReloading = false;;
             }
 
             if (secondWeapon.bulletsCurrentCount == 0 && secondWeapon.bulletsMaxCount > 0)
             {
                 StartCoroutine(ReloadSecondWeapon());
             }
-            else if (secondWeapon.bulletsCurrentCount == 0 && secondWeapon.bulletsMaxCount == 0 && !colorIsRed)
+            else if (secondWeapon.bulletsCurrentCount == 0 && secondWeapon.bulletsMaxCount == 0)
             {
-                ChangeCrosshairColor(Color.red, true);
+                ChangeCrosshairColor(Color.red);
             }
             else
             {
-                ChangeCrosshairColor(Color.white, false);
+                ChangeCrosshairColor(Color.white);
             }
 
-
-            //playerManager.playerShootingTrajectory.ChangeWeaponTrajectory(secondWeapon.shootingDistance);
-            // playerManager.playerShootingCrosshairs.shootingDistance = secondWeapon.shootingDistance;
-
-            playerManager.playerShootingCrosshairs.CheckCrosshair();
 
             playerManager.PV.RPC("ChangeWeaponForOthers", RpcTarget.AllBufferedViaServer, false, true);
         }
         else if(currentWeapon == CurrentWeapon.SecondWeapon)
         {
             currentWeapon = CurrentWeapon.MainWeapon;
+            crosshairManager.currentCrosshair = crosshairManager.mainWeaponCrosshair;
 
             if (secondWeapon.weaponReloading)
             {
@@ -192,18 +206,16 @@ public class PlayerShooting : MonoBehaviour
             {
                 StartCoroutine(ReloadMainWeapon());
             }
-           else if (mainWeapon.bulletsCurrentCount == 0 && mainWeapon.bulletsMaxCount == 0 && !colorIsRed)
+           else if (mainWeapon.bulletsCurrentCount == 0 && mainWeapon.bulletsMaxCount == 0)
             {
-                ChangeCrosshairColor(Color.red, true);
+                ChangeCrosshairColor(Color.red);
             }
             else
             {
-                ChangeCrosshairColor(Color.white, false);
+                ChangeCrosshairColor(Color.white);
             }
 
-            // playerManager.playerShootingTrajectory.ChangeWeaponTrajectory(mainWeapon.shootingDistance);
-            playerManager.playerShootingCrosshairs.CheckCrosshair();
-            // playerManager.playerShootingCrosshairs.shootingDistance = mainWeapon.shootingDistance;
+
             playerManager.PV.RPC("ChangeWeaponForOthers", RpcTarget.AllBufferedViaServer, true, false);
         }        
 
@@ -228,16 +240,9 @@ public class PlayerShooting : MonoBehaviour
             {
                 if (mainWeapon.bulletsCurrentCount > 0 && !mainWeapon.weaponReloading)
                 {
-                    //Vector2 bulletPosition = secondWeapon.shootPoint.position;
-                    //Vector2 bulletForece;
-                    //float x = secondWeapon.shootPoint.position.x - transform.position.x;
-                    //float y = secondWeapon.shootPoint.position.y - transform.position.y;
-                    //bulletForece = new Vector2(x, y);
 
                     Bullet bulletGameobject = PhotonNetwork.Instantiate(mainWeapon.bulletPrefab.name, mainWeapon.shootPoint.position, mainWeapon.shootPoint.rotation).GetComponent<Bullet>();
-                    bulletGameobject.Set(mainWeapon.shootPoint.position, mainWeapon.shootingDistance, mainWeapon.bulletSpeed, mainWeapon.bulletDamage);//, mainWeapon.bulletDestroyTime);
-                   // Bullet bulletGameobject = PhotonNetwork.Instantiate(mainWeapon.bulletPrefab.name, bulletPosition, transform.rotation).GetComponent<Bullet>();
-                   // bulletGameobject.Set(mainWeapon.shootPoint.position, mainWeapon.bulletSpeed, mainWeapon.bulletDamage, mainWeapon.bulletDestroyTime);
+                    bulletGameobject.Set(mainWeapon.shootPoint.position, mainWeapon.shootingDistance, mainWeapon.bulletSpeed, mainWeapon.bulletDamage);
                     mainWeapon.bulletsCurrentCount -= 1;
 
                     changeWeaponBar.ChangeMainWeaponBulletsCount(mainWeapon.bulletsCurrentCount, mainWeapon.bulletsMaxCount);
@@ -248,7 +253,7 @@ public class PlayerShooting : MonoBehaviour
                     }
                     else if (mainWeapon.bulletsCurrentCount == 0 && mainWeapon.bulletsMaxCount == 0)
                     {
-                        ChangeCrosshairColor(Color.red, true);
+                        ChangeCrosshairColor(Color.red);
                     }
                 }
             }
@@ -256,11 +261,8 @@ public class PlayerShooting : MonoBehaviour
             {
                 if (secondWeapon.bulletsCurrentCount > 0 && !secondWeapon.weaponReloading)
                 {
-
-                    // Bullet bulletGameobject = PhotonNetwork.Instantiate(secondWeapon.bulletPrefab.name, secondWeapon.shootPoint.position, secondWeapon.shootPoint.rotation).GetComponent<Bullet>();
                     Bullet bulletGameobject = PhotonNetwork.Instantiate(secondWeapon.bulletPrefab.name, secondWeapon.shootPoint.position, secondWeapon.shootPoint.rotation).GetComponent<Bullet>();
-                    //bulletGameobject.Set(secondWeapon.bulletSpeed, secondWeapon.bulletDamage, secondWeapon.bulletDestroyTime);
-                    bulletGameobject.Set(secondWeapon.shootPoint.position, secondWeapon.shootingDistance, secondWeapon.bulletSpeed, secondWeapon.bulletDamage);// secondWeapon.bulletDestroyTime);
+                    bulletGameobject.Set(secondWeapon.shootPoint.position, secondWeapon.shootingDistance, secondWeapon.bulletSpeed, secondWeapon.bulletDamage);
                     secondWeapon.bulletsCurrentCount -= 1;
 
                     changeWeaponBar.ChangeSeconWeaponBulletsCount(secondWeapon.bulletsCurrentCount, secondWeapon.bulletsMaxCount);
@@ -272,7 +274,7 @@ public class PlayerShooting : MonoBehaviour
                 }
                 else if (secondWeapon.bulletsCurrentCount == 0 && secondWeapon.bulletsMaxCount == 0)
                 {
-                    ChangeCrosshairColor(Color.red, true);
+                    ChangeCrosshairColor(Color.red);
                 }
 
             }
@@ -287,7 +289,7 @@ public class PlayerShooting : MonoBehaviour
         if (!mainWeapon.weaponReloading)
         {
             mainWeapon.weaponReloading = true;
-            ChangeCrosshairColor(Color.red, true);
+            ChangeCrosshairColor(Color.red);
             changeWeaponBar.mainWeaponCooldown = true;
             changeWeaponBar.MainWeaponCooldownBar(true, mainWeapon.reloadingTime);
             yield return new WaitForSeconds(mainWeapon.reloadingTime);
@@ -307,7 +309,7 @@ public class PlayerShooting : MonoBehaviour
             changeWeaponBar.mainWeaponCooldown = false;
             changeWeaponBar.MainWeaponCooldownBar(false, 0);
             changeWeaponBar.ChangeMainWeaponBulletsCount(mainWeapon.bulletsCurrentCount, mainWeapon.bulletsMaxCount);
-            ChangeCrosshairColor(Color.white, false);
+            ChangeCrosshairColor(Color.white);
             mainWeapon.weaponReloading = false;
         }
     }
@@ -317,7 +319,7 @@ public class PlayerShooting : MonoBehaviour
         if (!secondWeapon.weaponReloading)
         {
             secondWeapon.weaponReloading = true;
-            ChangeCrosshairColor(Color.red,true);
+            ChangeCrosshairColor(Color.red);
             changeWeaponBar.secondWeaponCooldown = true;
             changeWeaponBar.SecondWeaponCooldownBar(true, secondWeapon.reloadingTime);
             yield return new WaitForSeconds(secondWeapon.reloadingTime);
@@ -337,22 +339,21 @@ public class PlayerShooting : MonoBehaviour
             changeWeaponBar.secondWeaponCooldown = false;
             changeWeaponBar.SecondWeaponCooldownBar(false, 0);
             changeWeaponBar.ChangeSeconWeaponBulletsCount(secondWeapon.bulletsCurrentCount, secondWeapon.bulletsMaxCount);
-            ChangeCrosshairColor(Color.white, false);
+            ChangeCrosshairColor(Color.white);
             secondWeapon.weaponReloading = false;
         }
     }
 
 
-    public void ChangeCrosshairColor(Color color,bool changeColor)
-    {
-        //  playerManager.playerShootingTrajectory.ChangeReloadingColor(color);
-            playerManager.playerShootingCrosshairs.ChangeColor(color);
-            colorIsRed = changeColor;
+    public void ChangeCrosshairColor(Color color)
+    { 
+        crosshairManager.ChangeColor(color);
     }
+
 
     public void Disable()
     {
-        playerManager.shootJoystick.OnBeginDragEvent -= playerManager.playerShootingCrosshairs.EnablePoints;
+        playerManager.shootJoystick.OnBeginDragEvent -= crosshairManager.EnableCrosshair;
         playerManager.shootJoystick.OnUpEvent -= Shoot;
          
     }

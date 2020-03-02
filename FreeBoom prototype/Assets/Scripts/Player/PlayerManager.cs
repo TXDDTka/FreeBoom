@@ -7,23 +7,17 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(PlayerMovement))]
-//[RequireComponent(typeof(PlayerShootingTrajectory))]
-[RequireComponent(typeof(PlayerShootingCrosshairs))]
+[RequireComponent(typeof(PlayerShooting))]
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
 
-    public Rigidbody rb = null;
-    public PhotonView PV = null;
-
-    public PlayerMovement playerMovement;
-    public PlayerShooting playerShooting;
-    // public PlayerShootingTrajectory playerShootingTrajectory;
-
-    public PlayerShootingCrosshairs playerShootingCrosshairs;
-
-    public MoveJoystick moveJoystick = null;
-    public ShootJoystick shootJoystick = null;
+    [HideInInspector]public Rigidbody rb = null;
+    [HideInInspector] public PhotonView PV = null;
+    [HideInInspector] public PlayerMovement playerMovement;
+    [HideInInspector] public PlayerShooting playerShooting;
+    [HideInInspector] public MoveJoystick moveJoystick = null;
+    [HideInInspector] public ShootJoystick shootJoystick = null;
 
     public Player player = null;
     private void Awake()
@@ -32,19 +26,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         rb = GetComponent<Rigidbody>();
         playerMovement = GetComponent<PlayerMovement>();
         playerShooting = GetComponent<PlayerShooting>();
-        //   playerShootingTrajectory = GetComponent<PlayerShootingTrajectory>();
-
-        playerShootingCrosshairs = GetComponent<PlayerShootingCrosshairs>();
         moveJoystick = MoveJoystick.Instance;
         shootJoystick = ShootJoystick.Instance;
 
         player = PhotonNetwork.LocalPlayer;
     }
 
-    public void JoysticksPointerUp()
-    {
-      //  playerShootingTrajectory.EnablePoints(false);
-        moveJoystick.MoveJoystickPointerUp();
-        shootJoystick.ShootJoystickPointerUp();
-    }
+    //public void JoysticksPointerUp()
+    //{
+    //  //  playerShootingTrajectory.EnablePoints(false);
+    //    moveJoystick.MoveJoystickPointerUp();
+    //    shootJoystick.ShootJoystickPointerUp();
+    //}
 }

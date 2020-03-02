@@ -18,12 +18,12 @@ public abstract class JoystickController : MonoBehaviour,
     public Vector2 startPosition = Vector2.zero;
     private IEnumerator joytickRoutine = null;
 
-    protected Vector2 direction = Vector2.zero;
+    public Vector2 direction = Vector2.zero;
     public virtual float Horizontal => direction.x;
     public virtual float Vertical => direction.y;
     public bool HasInput => direction != Vector2.zero;
 
-    public bool inGame = false;
+   // public bool inGame = false;
     protected virtual void Awake()
     {
         //used for singleton
@@ -45,7 +45,7 @@ public abstract class JoystickController : MonoBehaviour,
     public void OnPointerDown(PointerEventData eventData)
     {
 
-        if (inGame) return;
+      //  if (inGame) return;
 
         joystickBackground.position = eventData.position - moveableJoytick.anchoredPosition;
        // joystickBackground.position = eventData.position;
@@ -101,6 +101,7 @@ public abstract class JoystickController : MonoBehaviour,
 
         //  InvokeJoytickRoutine(false);
         canvasGroup.alpha = 0;
+
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData)

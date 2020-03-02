@@ -939,7 +939,6 @@ GameObject:
   - component: {fileID: 8012151285183674929}
   - component: {fileID: -4394904572911958507}
   - component: {fileID: -6410919985163475561}
-  - component: {fileID: 2053201186863976430}
   m_Layer: 9
   m_Name: DemomanBlue
   m_TagString: Player
@@ -1032,7 +1031,6 @@ MonoBehaviour:
     bulletsInClip: 0
     bulletsMaxCount: 0
     bulletsCurrentCount: 0
-    bulletDestroyTime: 0
     shootingDistance: 0
     reloadingTime: 0
     weaponGameobject: {fileID: 6280849935623038036}
@@ -1046,7 +1044,6 @@ MonoBehaviour:
     bulletsInClip: 0
     bulletsMaxCount: 0
     bulletsCurrentCount: 0
-    bulletDestroyTime: 0
     shootingDistance: 0
     reloadingTime: 0
     weaponGameobject: {fileID: 9196154809038159568}
@@ -1056,6 +1053,40 @@ MonoBehaviour:
   weaponsSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
     type: 2}
   currentWeapon: 0
+  mainWeaponWeaponData:
+    weaponGroup: 0
+    mainWeaponName: 0
+    secondWeaponName: 0
+    characterClass: 0
+    damageType: 1
+    crosshairType: 0
+    bulletPrefab: {fileID: 0}
+    damage: 0
+    bulletSpeed: 0
+    bulletsCountInClip: 0
+    bulletsMaxCount: 0
+    shootDelay: 0
+    reloadTime: 0
+    shootingDistance: 0
+    weaponWeight: 0
+    weaponSprite: {fileID: 0}
+  secondWeaponData:
+    weaponGroup: 0
+    mainWeaponName: 0
+    secondWeaponName: 0
+    characterClass: 0
+    damageType: 1
+    crosshairType: 0
+    bulletPrefab: {fileID: 0}
+    damage: 0
+    bulletSpeed: 0
+    bulletsCountInClip: 0
+    bulletsMaxCount: 0
+    shootDelay: 0
+    reloadTime: 0
+    shootingDistance: 0
+    weaponWeight: 0
+    weaponSprite: {fileID: 0}
   colorIsRed: 0
 --- !u!114 &7154082447285930865
 MonoBehaviour:
@@ -1228,30 +1259,8 @@ MonoBehaviour:
   PV: {fileID: 0}
   playerMovement: {fileID: 0}
   playerShooting: {fileID: 0}
-  playerShootingCrosshairs: {fileID: 0}
   moveJoystick: {fileID: 0}
   shootJoystick: {fileID: 0}
---- !u!114 &2053201186863976430
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 957723125328212725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d54c79c3df101344bb533970195a6d50, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  crosshairTypeMainWeapon: 0
-  crosshairTypeSecondWeapon: 0
-  layer:
-  - serializedVersion: 2
-    m_Bits: 1024
-  - serializedVersion: 2
-    m_Bits: 2048
-  crosshairs:
-  - {fileID: 4408531312379487411, guid: 89328f0f0138af745be3839d78488696, type: 3}
 --- !u!1 &957723125328431547
 GameObject:
   m_ObjectHideFlags: 0

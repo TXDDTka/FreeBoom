@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Photon.Pun;
+using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -21,7 +22,7 @@ public class PlayerDataBar : MonoBehaviour
 	[SerializeField]
 	private Slider playerHealthSlider = null;
 
-	private PlayerHealth player;
+	//private PlayerHealth player;
 
 	private float characterControllerHeight;
 
@@ -31,6 +32,7 @@ public class PlayerDataBar : MonoBehaviour
 
 	private Vector2 playerPosition;
 
+	private CapsuleCollider playerCapsuleCollider;
 
 	void Awake()
 	{
@@ -44,16 +46,30 @@ public class PlayerDataBar : MonoBehaviour
 
 	void Update()
 	{
-		if (player == null || player.currentHp <= 0)
+		if (playerTransform == null || playerHealthSlider.value <= 0)
 		{
 			Destroy(gameObject);
 			return;
 		}
+		//else
+		//{
+		//	playerHealthSlider.value = player.currentHp;
+		//	playerHealthText.text = player.currentHp.ToString();
+
+		//}
+	}
+
+	public void SetPlayerHealth(float playerHealth)
+	{
+		if (playerHealth > 0)
+		{
+			playerHealthSlider.value = playerHealth;
+			playerHealthText.text = playerHealth.ToString();
+		}
 		else
 		{
-			playerHealthSlider.value = player.currentHp;
-			playerHealthText.text = player.currentHp.ToString();
-
+			playerHealthSlider.value = 0;
+			playerHealthText.text = "0";
 		}
 	}
 
@@ -78,16 +94,24 @@ public class PlayerDataBar : MonoBehaviour
 
 	}
 
-	public void SetPlayer(PlayerHealth _player)
+	public void SetPlayer(Transform playerTransform, CapsuleCollider capsuleCollider, string playerName,float playerHealth)//(PlayerHealth _player)
 	{
 
-		player = _player;
-		playerTransform = player.GetComponent<Transform>();
-		CapsuleCollider capsuleCollider = player.GetComponent<CapsuleCollider>();
+		//player = _player;
+		//playerTransform = player.GetComponent<Transform>();
+		//CapsuleCollider capsuleCollider = player.GetComponent<CapsuleCollider>();
+		//characterControllerHeight = capsuleCollider.height;
+		//playerNameText.text = player.playerManager.photonView.Owner.NickName;
+		//playerHealthText.text = player.currentHp.ToString();
+		//playerHealthSlider.maxValue = player.currentHp;
+		//playerHealthSlider.value = playerHealthSlider.maxValue;
+
+		this.playerTransform = playerTransform;
+		playerCapsuleCollider = capsuleCollider;
 		characterControllerHeight = capsuleCollider.height;
-		playerNameText.text = player.playerManager.photonView.Owner.NickName;
-		playerHealthText.text = player.currentHp.ToString();
-		playerHealthSlider.maxValue = player.currentHp;
+		playerNameText.text = playerName;
+		playerHealthText.text = playerHealth.ToString();
+		playerHealthSlider.maxValue = playerHealth;
 		playerHealthSlider.value = playerHealthSlider.maxValue;
 	}
 

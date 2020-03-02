@@ -28,7 +28,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (!playerManager.PV.IsMine) return;
             CheckCharacterHealth();
-        playerManager.PV.RPC("CreatePlayerBar", RpcTarget.AllBuffered);
+            playerManager.PV.RPC("CreatePlayerBar", RpcTarget.AllBuffered);
 
     }
 
@@ -36,7 +36,8 @@ public class PlayerHealth : MonoBehaviour
     public void CreatePlayerBar()
     {
         playerBar = Instantiate(playerUiPrefab).GetComponent<PlayerDataBar>(); ;
-        playerBar.SetPlayer(this);
+        //  playerBar.SetPlayer(this);
+        playerBar.SetPlayer(transform, GetComponent<CapsuleCollider>(), playerManager.PV.Owner.NickName, currentHp);
     }
 
    // [PunRPC]
@@ -63,7 +64,7 @@ public class PlayerHealth : MonoBehaviour
     public void GetDamage(float damage, Player killer)
     {
         currentHp -= damage;
-
+        playerBar.SetPlayerHealth(currentHp);
         if (currentHp <= 0)
         {
 

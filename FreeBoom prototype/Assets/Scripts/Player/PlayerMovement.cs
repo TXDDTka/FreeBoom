@@ -80,7 +80,7 @@ public class PlayerMovement : MonoBehaviour, IPunObservable
         Vector3 aimPos = transform.position + Vector3.up * 1.3f;
 
 
-        if (playerManager.shootJoystick.HasInput && canMove)
+        if (playerManager.shootJoystick.direction != Vector2.zero && canMove)
         {
             look = aimPos + playerManager.shootJoystick.Direction.normalized * 2;
         }

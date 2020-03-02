@@ -138,7 +138,7 @@ public class WeaponData
         protected set { }
     }
 
-    public enum _CrosshairType { None, LineCrosshair}
+    public enum _CrosshairType { None, LineCrosshair, ShotgunСrosshair }
     [SerializeField] private _CrosshairType crosshairType = _CrosshairType.None;
     public _CrosshairType CrosshairType
     {
