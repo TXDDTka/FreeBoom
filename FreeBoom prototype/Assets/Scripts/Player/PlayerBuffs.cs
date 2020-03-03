@@ -6,7 +6,11 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerManager))]
 public class PlayerBuffs : MonoBehaviour
 {
-    public enum Buff { None, FirstAid, Shield, Potions }
+    public enum Buff
+    {
+        None, HealthMin, HealthMid, HealthMax, ShieldMin, ShieldMid, ShieldMax, StimulantMin,
+        StimulantMid, StimulantMax, EnergeticMin, EnergeticMid, EnergeticMax
+    }
 
     [Tooltip("Параметры бафов")]
     [Header("Buffs")]
@@ -14,12 +18,18 @@ public class PlayerBuffs : MonoBehaviour
     public Buff currentBuff = Buff.None;
     public bool firstBuffAdded = false;
 
-    public int firstAidCount = 0;
-    public int shieldCount = 0;
-    public int potionsCount = 0;
+    public int healthMinCount = 0;
+    public int healthMidCount = 0;
+    public int healthMaxCount = 0;
+
+    public int shieldMinCount = 0;
+    public int shieldMidCount = 0;
+    public int shieldMaxCount = 0;
+
+    public int stimulantMinCount = 0;
 
     private ChangeWeaponBar changeWeaponBar = null;
-    public BuffsSettingsDatabase buffsSettingsDatabase;
+    public BuffsSettingsDatabase buffsSettingsDatabase = null;
     private PlayerManager playerManager = null;
 
     private void Awake()
@@ -48,27 +58,54 @@ public class PlayerBuffs : MonoBehaviour
         addedBuff = (Buff)buff;
         switch (addedBuff)
         {
-            case Buff.FirstAid:
-                    firstAidCount += 1;
-                if (!changeWeaponBar.firstAid)
-                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.FirstAid, firstAidCount);
+            case Buff.HealthMin:
+                    healthMinCount += 1;
+                if (!changeWeaponBar.healthMinBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.HealthMin, healthMinCount);
                 else
-                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.FirstAid, firstAidCount);
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.HealthMin, healthMinCount);
                 break;
-            case Buff.Shield:
-                shieldCount += 1;
-                if (!changeWeaponBar.shield)
-                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.Shield, shieldCount);
+            case Buff.HealthMid:
+                healthMidCount += 1;
+                if (!changeWeaponBar.healthMidBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.HealthMid, healthMidCount);
                 else
-                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.Shield, shieldCount);
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.HealthMid, healthMidCount);
                 break;
-            case Buff.Potions:
-                potionsCount += 1;
-
-                if (!changeWeaponBar.potions)
-                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.Potions, potionsCount);
+            case Buff.HealthMax:
+                healthMinCount += 1;
+                if (!changeWeaponBar.healthMaxBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.HealthMax, healthMaxCount);
                 else
-                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.Potions, potionsCount);
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.HealthMax, healthMaxCount);
+                break;
+            case Buff.ShieldMin:
+                shieldMinCount += 1;
+                if (!changeWeaponBar.shieldMinBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.ShieldMin, shieldMinCount);
+                else
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.ShieldMin, shieldMinCount);
+                break;
+            case Buff.ShieldMid:
+                shieldMidCount += 1;
+                if (!changeWeaponBar.shieldMidBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.ShieldMid, shieldMidCount);
+                else
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.ShieldMid, shieldMidCount);
+                break;
+            case Buff.ShieldMax:
+                shieldMaxCount += 1;
+                if (!changeWeaponBar.shieldMaxBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.ShieldMax, shieldMaxCount);
+                else
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.ShieldMax, shieldMaxCount);
+                break;
+            case Buff.StimulantMin:
+                stimulantMinCount += 1;
+                if (!changeWeaponBar.stimulantMinBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.StimulantMin, stimulantMinCount);
+                else
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.StimulantMin, stimulantMinCount);
                 break;
         }
         if (!firstBuffAdded)
@@ -83,17 +120,33 @@ public class PlayerBuffs : MonoBehaviour
     {     
         switch(changeWeaponBar.currentBuff)
         {
-            case ChangeWeaponBar.Buff.FirstAid:
-                firstAidCount -= 1;
-                changeWeaponBar.UseBuff(firstAidCount);
+            case ChangeWeaponBar.Buff.HealthMin:
+                healthMinCount -= 1;
+                changeWeaponBar.UseBuff(healthMinCount);
                 break;
-            case ChangeWeaponBar.Buff.Shield:
-                shieldCount -= 1;
-                changeWeaponBar.UseBuff(shieldCount);
+            case ChangeWeaponBar.Buff.HealthMid:
+                healthMidCount -= 1;
+                changeWeaponBar.UseBuff(healthMidCount);
                 break;
-            case ChangeWeaponBar.Buff.Potions:
-                potionsCount -= 1;
-                changeWeaponBar.UseBuff(potionsCount);
+            case ChangeWeaponBar.Buff.HealthMax:
+                healthMaxCount -= 1;
+                changeWeaponBar.UseBuff(healthMaxCount);
+                break;
+            case ChangeWeaponBar.Buff.ShieldMin:
+                shieldMinCount -= 1;
+                changeWeaponBar.UseBuff(shieldMinCount);
+                break;
+            case ChangeWeaponBar.Buff.ShieldMid:
+                shieldMidCount -= 1;
+                changeWeaponBar.UseBuff(shieldMidCount);
+                break;
+            case ChangeWeaponBar.Buff.ShieldMax:
+                shieldMaxCount -= 1;
+                changeWeaponBar.UseBuff(shieldMaxCount);
+                break;
+            case ChangeWeaponBar.Buff.StimulantMin:
+                stimulantMinCount -= 1;
+                changeWeaponBar.UseBuff(stimulantMinCount);
                 break;
         }
     }

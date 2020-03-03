@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class BuffObject : MonoBehaviour
 {
-    public enum BuffType { None, FirstAid, Shield, Potions }
+    public enum BuffType
+    {
+        None, HealthMin, HealthMid, HealthMax, ShieldMin, ShieldMid, ShieldMax, StimulantMin,
+        StimulantMid, StimulantMax, EnergeticMin, EnergeticMid, EnergeticMax
+    }
     public BuffType buffType = BuffType.None;
 }
 

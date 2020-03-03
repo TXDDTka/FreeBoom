@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [CreateAssetMenu(menuName = "Database/Buffs", fileName = "Buffs")]
 public class BuffsSettingsDatabase : ScriptableObject
 {
-    [/*SerializeField,*/ HideInInspector] public List<BuffData> buffsList; //Лист где хранятся данны, SerializeField сохраняет данные после выхода из редактора, HideInInspector что бы не отображало List в Editor
+    [SerializeField, HideInInspector] public List<BuffData> buffsList; //Лист где хранятся данны, SerializeField сохраняет данные после выхода из редактора, HideInInspector что бы не отображало List в Editor
 
     [SerializeField] private BuffData currentBuff; //Текущий отображаемый элемент
 

@@ -13,12 +13,138 @@ MonoBehaviour:
   m_Name: Buffs
   m_EditorClassIdentifier: 
   buffsList:
-  - buffName: 2
-    buffSprite: {fileID: 21300000, guid: a86d6ec79bd4a8b4c8ed523ec8e485f2, type: 3}
-  - buffName: 3
-    buffSprite: {fileID: 21300000, guid: 4038e400188e7964b9c2de037a6ad687, type: 3}
   - buffName: 1
+    buffPrefab: {fileID: 3062367183538843012, guid: 591672b12cea0e04c9022d21d0385d71,
+      type: 3}
+    buffHP: 25
+    buffShield: 0
+    buffSpeed: 0
+    buffDamage: 0
+    buffInversion: 0
+    buffSpeedDamage: 0
+    buffSprite: {fileID: 21300000, guid: aae95139c7bb2764d9aedb7c5479599c, type: 3}
+  - buffName: 2
+    buffPrefab: {fileID: 5811618905583428742, guid: ca35403c3b24dce40be214af41b2f7f9,
+      type: 3}
+    buffHP: 50
+    buffShield: 0
+    buffSpeed: 0
+    buffDamage: 0
+    buffInversion: 0
+    buffSpeedDamage: 0
+    buffSprite: {fileID: 21300000, guid: ce115825cf0060644acdca0c92b8eabc, type: 3}
+  - buffName: 3
+    buffPrefab: {fileID: 7102158212723056667, guid: 21e4762522510eb4bb1a4c3b739d39be,
+      type: 3}
+    buffHP: 75
+    buffShield: 0
+    buffSpeed: 0
+    buffDamage: 0
+    buffInversion: 0
+    buffSpeedDamage: 0
     buffSprite: {fileID: 21300000, guid: b398502bf65ca7a4fae9142cfdf21846, type: 3}
-  currentBuff:
-    buffName: 2
+  - buffName: 4
+    buffPrefab: {fileID: 7552813455923044218, guid: c5654ac02ffe2e34d98c82a0938e806d,
+      type: 3}
+    buffHP: 0
+    buffShield: 25
+    buffSpeed: 0
+    buffDamage: 0
+    buffInversion: 0
+    buffSpeedDamage: 0
+    buffSprite: {fileID: 21300000, guid: 98584ab5a9ae8e14f9f2f8fe83b4f905, type: 3}
+  - buffName: 5
+    buffPrefab: {fileID: 2765840419035926101, guid: 60d4b346cd8b67843a038b9c8a1e311c,
+      type: 3}
+    buffHP: 0
+    buffShield: 40
+    buffSpeed: -5
+    buffDamage: 0
+    buffInversion: 0
+    buffSpeedDamage: 0
+    buffSprite: {fileID: 21300000, guid: f4304b5eff2ae024fb7901d9573b43d8, type: 3}
+  - buffName: 6
+    buffPrefab: {fileID: 4647501218204915703, guid: 5a2357d2c2b1d4640a0f0020451b671e,
+      type: 3}
+    buffHP: 0
+    buffShield: 100
+    buffSpeed: -20
+    buffDamage: 0
+    buffInversion: 0
+    buffSpeedDamage: 0
     buffSprite: {fileID: 21300000, guid: a86d6ec79bd4a8b4c8ed523ec8e485f2, type: 3}
+  - buffName: 7
+    buffPrefab: {fileID: 2523498800338766605, guid: 6d4a8b4f713486c41870ab7c6f8e8635,
+      type: 3}
+    buffHP: 0
+    buffShield: 0
+    buffSpeed: 0
+    buffDamage: 5
+    buffInversion: 0
+    buffSpeedDamage: 0
+    buffSprite: {fileID: 21300000, guid: 6b187a28d64cd954bbd354c187214e11, type: 3}
+  - buffName: 8
+    buffPrefab: {fileID: 6890392495478157395, guid: 54832069d65846f41a617196a85931f3,
+      type: 3}
+    buffHP: 0
+    buffShield: 0
+    buffSpeed: -5
+    buffDamage: 10
+    buffInversion: 0
+    buffSpeedDamage: 0
+    buffSprite: {fileID: 21300000, guid: 3966cfc8c0ba0cd4e91b031cb5b8c575, type: 3}
+  - buffName: 9
+    buffPrefab: {fileID: 6433334966611581087, guid: 5d6a44b14f458674daeeca6dc0dbd275,
+      type: 3}
+    buffHP: 0
+    buffShield: 0
+    buffSpeed: 0
+    buffDamage: 20
+    buffInversion: 1
+    buffSpeedDamage: 0
+    buffSprite: {fileID: 21300000, guid: 21eb6bd0c1973e5429144e15b2e1e7f6, type: 3}
+  - buffName: 10
+    buffPrefab: {fileID: 2492276184224141561, guid: d20928b3466fc64418f736249b454be6,
+      type: 3}
+    buffHP: 0
+    buffShield: 0
+    buffSpeed: 10
+    buffDamage: -10
+    buffInversion: 0
+    buffSpeedDamage: 0
+    buffSprite: {fileID: -4615884708997034403, guid: eccccd580dbad9340ba09df058bca5e1,
+      type: 3}
+  - buffName: 11
+    buffPrefab: {fileID: 1943184622533608732, guid: 348b8be011a4610479c1ebcb4ed0309e,
+      type: 3}
+    buffHP: 0
+    buffShield: 0
+    buffSpeed: -10
+    buffDamage: 0
+    buffInversion: 0
+    buffSpeedDamage: 10
+    buffSprite: {fileID: 439694583746552237, guid: eccccd580dbad9340ba09df058bca5e1,
+      type: 3}
+  - buffName: 12
+    buffPrefab: {fileID: 2378738212798969762, guid: 4de4349044638d043b13b3fb6ff98024,
+      type: 3}
+    buffHP: 0
+    buffShield: 0
+    buffSpeed: 10
+    buffDamage: -15
+    buffInversion: 0
+    buffSpeedDamage: 10
+    buffSprite: {fileID: 4214611430032567560, guid: eccccd580dbad9340ba09df058bca5e1,
+      type: 3}
+  currentBuff:
+    buffName: 12
+    buffPrefab: {fileID: 2378738212798969762, guid: 4de4349044638d043b13b3fb6ff98024,
+      type: 3}
+    buffHP: 0
+    buffShield: 0
+    buffSpeed: 10
+    buffDamage: -15
+    buffInversion: 0
+    buffSpeedDamage: 10
+    buffSprite: {fileID: 4214611430032567560, guid: eccccd580dbad9340ba09df058bca5e1,
+      type: 3}

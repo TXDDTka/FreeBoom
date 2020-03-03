@@ -8,10 +8,8 @@ public class ChangeWeaponBar : MonoBehaviour
 {
     public enum Buff
     {
-        None,
-        FirstAid,
-        Shield,
-        Potions
+        None, HealthMin, HealthMid, HealthMax, ShieldMin, ShieldMid, ShieldMax, StimulantMin,
+        StimulantMid, StimulantMax, EnergeticMin, EnergeticMid, EnergeticMax
     }
 
     [Serializable]
@@ -28,13 +26,20 @@ public class ChangeWeaponBar : MonoBehaviour
     private Buff addedBuff = Buff.None;
     public static ChangeWeaponBar Instance { get; private set; }
 
-    
+
 
     [Tooltip("Ячейка с бафами")]
     [Header("Buffs")]
-    public bool firstAid = false;
-    public bool shield = false;
-    public bool potions = false;
+    public bool healthMinBuff = false;
+    public bool healthMidBuff = false;
+    public bool healthMaxBuff = false;
+
+    public bool shieldMinBuff = false;
+    public bool shieldMidBuff = false;
+    public bool shieldMaxBuff = false;
+
+    public bool stimulantMinBuff = false;
+
     private bool firstElementExitst = false;
     private int buffIndex = 0;
     public BuffsSettingsDatabase buffsSettingsDatabase;
@@ -215,14 +220,26 @@ public class ChangeWeaponBar : MonoBehaviour
         addedBuff = buff;
         switch (addedBuff)
         {
-            case Buff.FirstAid:
-                firstAid = true;
+            case Buff.HealthMin:
+                healthMinBuff = true;
                 break;
-            case Buff.Shield:
-                shield = true;
+            case Buff.HealthMid:
+                healthMidBuff = true;
                 break;
-            case Buff.Potions:
-                potions = true;
+            case Buff.HealthMax:
+                healthMaxBuff = true;
+                break;
+            case Buff.ShieldMin:
+                shieldMinBuff = true;
+                break;
+            case Buff.ShieldMid:
+                shieldMidBuff = true;
+                break;
+            case Buff.ShieldMax:
+                shieldMaxBuff = true;
+                break;
+            case Buff.StimulantMin:
+                stimulantMinBuff = true;
                 break;
         }
 
@@ -272,9 +289,14 @@ public class ChangeWeaponBar : MonoBehaviour
 
     public void HideBuff()
     {
-        firstAid = false;
-        potions = false;
-        shield = false;
+        healthMinBuff = false;
+        healthMidBuff = false;
+        healthMaxBuff = false;
+        shieldMinBuff = false;
+        shieldMidBuff = false;
+        shieldMaxBuff = false;
+        stimulantMinBuff = false;
+
 
         buffSprite.gameObject.SetActive(false);
         buffCountText.gameObject.SetActive(false);
@@ -290,9 +312,13 @@ public class ChangeWeaponBar : MonoBehaviour
 
     public bool BuffsActive()
     {
-        firstAid = false;
-        potions = false;
-        shield = false;
+        healthMinBuff = false;
+        healthMidBuff = false;
+        healthMaxBuff = false;
+        shieldMinBuff = false;
+        shieldMidBuff = false;
+        shieldMaxBuff = false;
+        stimulantMinBuff = false;
 
         return true;
     }
@@ -311,14 +337,26 @@ public class ChangeWeaponBar : MonoBehaviour
 
                     switch (currentBuff)
                     {
-                        case Buff.FirstAid:
-                            firstAid = false;
+                        case Buff.HealthMin:
+                            healthMinBuff = false;
                             break;
-                        case Buff.Shield:
-                            shield = false;
+                        case Buff.HealthMid:
+                            healthMidBuff = false;
                             break;
-                        case Buff.Potions:
-                            potions = false;
+                        case Buff.HealthMax:
+                            healthMaxBuff = false;
+                            break;
+                        case Buff.ShieldMin:
+                            shieldMinBuff = false;
+                            break;
+                        case Buff.ShieldMid:
+                            shieldMidBuff = false;
+                            break;
+                        case Buff.ShieldMax:
+                            shieldMaxBuff = false;
+                            break;
+                        case Buff.StimulantMin:
+                            stimulantMinBuff = false;
                             break;
                     }
 

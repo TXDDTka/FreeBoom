@@ -275,9 +275,13 @@ MonoBehaviour:
   addedBuff: 0
   currentBuff: 0
   firstBuffAdded: 0
-  firstAidCount: 0
-  shieldCount: 0
-  potionsCount: 0
+  healthMinCount: 0
+  healthMidCount: 0
+  healthMaxCount: 0
+  shieldMinCount: 0
+  shieldMidCount: 0
+  shieldMaxCount: 0
+  stimulantMinCount: 0
   buffsSettingsDatabase: {fileID: 11400000, guid: d8e581ae3f75bdd479b2da277e4eb16e,
     type: 2}
 --- !u!114 &9167454096780573260
