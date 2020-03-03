@@ -107,7 +107,8 @@ public class BuffData
     //}
 
 
-    public enum Buff {None, FirstAid, Shield, Potions }
+    public enum Buff {None, HealthMin, HealthMid, HealthMax, ShieldMin, ShieldMid, ShieldMax,  StimulantMin,
+                        StimulantMid, StimulantMax, EnergeticMin, EnergeticMid, EnergeticMax }
     [SerializeField] private Buff buffName = Buff.None;
     public Buff BuffName
     {
@@ -122,6 +123,61 @@ public class BuffData
     //    protected set { }
     //}
 
+    [Tooltip("Префаб бафа")]
+    [SerializeField] private GameObject buffPrefab = null;
+    public GameObject BuffPrefab
+    {
+        get { return buffPrefab; }
+        protected set { }
+    }
+
+    [Tooltip("Здоровье востонавливаемое бафом")]
+    [SerializeField] private float buffHP = 0f;
+    public float BuffHPRecovery
+    {
+        get { return buffHP; }
+        protected set { }
+    }
+
+    [Tooltip("Защита востонавливаемая бафом")]
+    [SerializeField] private float buffShield = 0f;
+    public float BuffShieldRecovery
+    {
+        get { return buffShield; }
+        protected set { }
+    }
+
+    [Tooltip("Скорость от бафа")]
+    [SerializeField] private float buffSpeed = 0f;
+    public float BuffSpeed
+    {
+        get { return buffSpeed; }
+        protected set { }
+    }
+
+    [Tooltip("Урон от оружия от бафа")]
+    [SerializeField] private float buffDamage = 0f;
+    public float BuffDamage
+    {
+        get { return buffDamage; }
+        protected set { }
+    }
+
+    [Tooltip("Инверсия управления от бафа")]
+    [SerializeField] private bool buffInversion = false;
+    public bool BuffInversion
+    {
+        get { return buffInversion; }
+        protected set { }
+    }
+
+    [Tooltip("Скорость стрельбы из оружия от бафа")]
+    [SerializeField] private float buffSpeedDamage = 0f;
+    public float BuffSpeedDamage
+    {
+        get { return buffSpeedDamage; }
+        protected set { }
+    }
 
     [Tooltip("Иконка баффа")]
     [SerializeField] private Sprite buffSprite = null;
@@ -129,6 +185,5 @@ public class BuffData
     {
         get { return buffSprite; }
         protected set { }
-
     }
 }

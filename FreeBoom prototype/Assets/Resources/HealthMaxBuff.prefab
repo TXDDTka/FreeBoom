@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4127915461104876289}
   - component: {fileID: -2736341836703324050}
   m_Layer: 12
-  m_Name: HpBuff
+  m_Name: HealthMaxBuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
