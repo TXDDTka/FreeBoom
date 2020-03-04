@@ -6,17 +6,19 @@ using UnityEngine;
 
 public class SpawnBuffs : MonoBehaviourPunCallbacks
 {
-    public Transform firstAid;
-    public Transform shield;
-    public Transform potions;
-
-    public Transform firstAidSpawnPosition;
-    public Transform shieldSpawnPosition;
-    public Transform potionsSpawnPosition;
-
-    public Transform firstAidSpawnPosition2;
-    public Transform shieldSpawnPosition2;
-    public Transform potionsSpawnPosition2;
+    public Transform healthMin;
+    public Transform healthMid;
+    public Transform healthMax;
+    public Transform shieldMin;
+    public Transform shieldMid;
+    public Transform shieldMax;
+    
+    public Transform healthMinSpawnPosition;
+    public Transform healthMidSpawnPosition;
+    public Transform healthMaxSpawnPosition;
+    public Transform shieldMinSpawnPosition;
+    public Transform shieldMidSpawnPosition;
+    public Transform shieldMaxSpawnPosition;
 
     public override void OnEnable()
     {
@@ -26,39 +28,15 @@ public class SpawnBuffs : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom()
     {
-        SpawnFirstAid();
-        SpawnShield();
-        SpawnPotion();
+        SpawnHealthBuffs();
     }
     void Start()
     {
         
     }
 
-    private void SpawnFirstAid()
+    private void SpawnHealthBuffs()
     {
-      BuffObject buffObject = PhotonNetwork.Instantiate(firstAid.name, firstAidSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
-     // buffObject.buffType = BuffObject.BuffType.FirstAid;
-
-        BuffObject buffObject2 = PhotonNetwork.Instantiate(firstAid.name, firstAidSpawnPosition2.position, Quaternion.identity).GetComponent<BuffObject>();
-       // buffObject2.buffType = BuffObject.BuffType.FirstAid;
-    }
-
-    private void SpawnShield()
-    {
-        BuffObject buffObject = PhotonNetwork.Instantiate(shield.name, shieldSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
-      //  buffObject.buffType = BuffObject.BuffType.Shield;
-
-        BuffObject buffObject2 = PhotonNetwork.Instantiate(shield.name, shieldSpawnPosition2.position, Quaternion.identity).GetComponent<BuffObject>();
-      //  buffObject2.buffType = BuffObject.BuffType.Shield;
-    }
-
-    private void SpawnPotion()
-    {
-        BuffObject buffObject = PhotonNetwork.Instantiate(potions.name, potionsSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
-     //   buffObject.buffType = BuffObject.BuffType.Potions;
-
-        BuffObject buffObject2 = PhotonNetwork.Instantiate(potions.name, potionsSpawnPosition2.position, Quaternion.identity).GetComponent<BuffObject>();
-      //  buffObject2.buffType = BuffObject.BuffType.Potions;
+        BuffObject buffObject = PhotonNetwork.Instantiate(healthMin.name, healthMinSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
     }
 }

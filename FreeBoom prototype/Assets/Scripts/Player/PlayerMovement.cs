@@ -111,7 +111,6 @@ public class PlayerMovement : MonoBehaviour, IPunObservable
 
     private void CheckCharacterSpeed()
     {
-
         for(int i = 0; i < charactersSettings.charactersList.Count; i++)
         {
             var character = charactersSettings.charactersList[i];
@@ -135,5 +134,11 @@ public class PlayerMovement : MonoBehaviour, IPunObservable
         }
     }
 
-
+    public void GetSpeed(float addSpeed)
+    {
+        CheckCharacterSpeed();
+        speed += (speed / 100) * addSpeed;
+        Debug.Log($"Add speed: {addSpeed}");
+        Debug.Log($"Curent speed: {speed}");
+    }
 }

@@ -31,9 +31,13 @@ public class PlayerBuffs : MonoBehaviour
     private ChangeWeaponBar changeWeaponBar = null;
     public BuffsSettingsDatabase buffsSettingsDatabase = null;
     private PlayerManager playerManager = null;
+    private PlayerHealth playerHealth = null;
+    private PlayerMovement playerMovement = null;
 
     private void Awake()
     {
+        playerMovement = GetComponent<PlayerMovement>();
+        playerHealth = GetComponent<PlayerHealth>();
         playerManager = GetComponent<PlayerManager>();
         changeWeaponBar = ChangeWeaponBar.Instance;
     }
@@ -122,26 +126,34 @@ public class PlayerBuffs : MonoBehaviour
         {
             case ChangeWeaponBar.Buff.HealthMin:
                 healthMinCount -= 1;
+                playerHealth.GetHealthPoint(buffsSettingsDatabase.buffsList[0].BuffHPRecovery);
                 changeWeaponBar.UseBuff(healthMinCount);
                 break;
             case ChangeWeaponBar.Buff.HealthMid:
                 healthMidCount -= 1;
+                playerHealth.GetHealthPoint(buffsSettingsDatabase.buffsList[1].BuffHPRecovery);
                 changeWeaponBar.UseBuff(healthMidCount);
                 break;
             case ChangeWeaponBar.Buff.HealthMax:
                 healthMaxCount -= 1;
+                playerHealth.GetHealthPoint(buffsSettingsDatabase.buffsList[2].BuffHPRecovery);
                 changeWeaponBar.UseBuff(healthMaxCount);
                 break;
             case ChangeWeaponBar.Buff.ShieldMin:
                 shieldMinCount -= 1;
+                playerHealth.GetShieldPoint(buffsSettingsDatabase.buffsList[3].BuffShieldRecovery);
                 changeWeaponBar.UseBuff(shieldMinCount);
                 break;
             case ChangeWeaponBar.Buff.ShieldMid:
                 shieldMidCount -= 1;
+                playerHealth.GetShieldPoint(buffsSettingsDatabase.buffsList[4].BuffShieldRecovery);
+                playerMovement.GetSpeed(buffsSettingsDatabase.buffsList[4].BuffSpeed);
                 changeWeaponBar.UseBuff(shieldMidCount);
                 break;
             case ChangeWeaponBar.Buff.ShieldMax:
                 shieldMaxCount -= 1;
+                playerHealth.GetShieldPoint(buffsSettingsDatabase.buffsList[5].BuffShieldRecovery);
+                playerMovement.GetSpeed(buffsSettingsDatabase.buffsList[5].BuffSpeed);
                 changeWeaponBar.UseBuff(shieldMaxCount);
                 break;
             case ChangeWeaponBar.Buff.StimulantMin:
@@ -165,8 +177,6 @@ public class PlayerBuffs : MonoBehaviour
                 {
                     PhotonNetwork.Destroy(other.gameObject);
                 }
-
             }
     }
-
 }

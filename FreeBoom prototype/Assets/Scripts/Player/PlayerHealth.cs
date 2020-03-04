@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
 {
 
     public  float currentHp = 0;
+    public float currentShield = 0;
     [SerializeField]
     private GameObject playerUiPrefab = null;
     [SerializeField] private CharactersSettingsDatabase charactersSettings = null;
@@ -53,6 +54,25 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void GetHealthPoint(float addHP)
+    {
+        currentHp += addHP;
+        Debug.Log($"Add hp: {addHP}");
+        Debug.Log($"Current hp: {currentHp}");
+    }
+
+    public void GetShieldPoint(float addShield)
+    {
+        currentShield += addShield;
+
+        if(currentHp > 200)
+        {
+            currentHp = 200;
+        }
+        Debug.Log($"Add Sheild point: { addShield}");
+        Debug.Log($"Current Shield point: {currentShield}");
+    }
+
     [PunRPC]
     public void SetPlayerHealth(float health)
     {
@@ -71,6 +91,8 @@ public class PlayerHealth : MonoBehaviour
                 playerNetwork.PlayerDied(killer);
         }
     }
+
+    
 
     
 }
