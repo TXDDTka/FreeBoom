@@ -22,8 +22,6 @@ public class PlayerDataBar : MonoBehaviour
 	[SerializeField]
 	private Slider playerHealthSlider = null;
 
-	//private PlayerHealth player;
-
 	private float characterControllerHeight;
 
 	private Transform playerTransform;
@@ -32,14 +30,12 @@ public class PlayerDataBar : MonoBehaviour
 
 	private Vector2 playerPosition;
 
-	private CapsuleCollider playerCapsuleCollider;
+	private BoxCollider2D playerBoxCollider;
 
 	void Awake()
 	{
 		canvasGroup = GetComponent<CanvasGroup>();
-
 		transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
-
 	}
 
 
@@ -94,7 +90,7 @@ public class PlayerDataBar : MonoBehaviour
 
 	}
 
-	public void SetPlayer(Transform playerTransform, CapsuleCollider capsuleCollider, string playerName,float playerHealth)//(PlayerHealth _player)
+	public void SetPlayer(Transform playerTransform, BoxCollider2D boxCollider, string playerName,float playerHealth)//(PlayerHealth _player)
 	{
 
 		//player = _player;
@@ -107,8 +103,8 @@ public class PlayerDataBar : MonoBehaviour
 		//playerHealthSlider.value = playerHealthSlider.maxValue;
 
 		this.playerTransform = playerTransform;
-		playerCapsuleCollider = capsuleCollider;
-		characterControllerHeight = capsuleCollider.height;
+		playerBoxCollider = boxCollider;
+		characterControllerHeight = boxCollider.size.y;
 		playerNameText.text = playerName;
 		playerHealthText.text = playerHealth.ToString();
 		playerHealthSlider.maxValue = playerHealth;

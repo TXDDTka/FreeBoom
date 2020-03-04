@@ -3,8 +3,6 @@ using Photon.Realtime;
 using Unity.Collections;
 using UnityEngine;
 
-
-[RequireComponent(typeof(PlayerManager))]
 public class PlayerHealth : MonoBehaviour
 {
 
@@ -14,7 +12,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private CharactersSettingsDatabase charactersSettings = null;
    
     private PlayerNetwork playerNetwork;
-    public PlayerManager playerManager = null;
+    private PlayerManager playerManager = null;
 
     public PlayerDataBar playerBar;
 
@@ -35,9 +33,9 @@ public class PlayerHealth : MonoBehaviour
     [PunRPC]
     public void CreatePlayerBar()
     {
-        playerBar = Instantiate(playerUiPrefab).GetComponent<PlayerDataBar>(); ;
+        playerBar = Instantiate(playerUiPrefab).GetComponent<PlayerDataBar>();
         //  playerBar.SetPlayer(this);
-        playerBar.SetPlayer(transform, GetComponent<CapsuleCollider>(), playerManager.PV.Owner.NickName, currentHp);
+        playerBar.SetPlayer(transform, GetComponent<BoxCollider2D>(), playerManager.PV.Owner.NickName, currentHp);
     }
 
    // [PunRPC]

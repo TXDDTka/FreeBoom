@@ -21,13 +21,6 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	private ChangeWeaponBar _changeWeaponBar = null;
 	private UIManager _uiManager = null;
 
-	[Header("Trajectory")]
-	public GameObject pointsParent = null;
-	public List<GameObject> points = new List<GameObject>();
-	public int distance = 0;
-	public int crosshairIndex = 0;
-	public int crosshairPrefabPosition = 0;
-	public Color teamColor;
 
 	private void Awake()
 	{
@@ -154,7 +147,6 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 
 	public void JoysticksPointerUp()
 	{
-		//  playerShootingTrajectory.EnablePoints(false);
 		playerInstantiate.moveJoystick.MoveJoystickPointerUp();
 		playerInstantiate.shootJoystick.ShootJoystickPointerUp();
 	}
@@ -185,9 +177,9 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 			int random = Random.Range(0, _photonGame.teamOneSpawnPoints.Length);
 			playerInstantiate =
 				PhotonNetwork.Instantiate(_photonGame.redTeamCharacters[(byte)_player.GetCharacter() - 1].name, _photonGame.teamOneSpawnPoints[random].position,
-				Quaternion.identity, 0, null).GetComponent<PlayerManager>();
+				Quaternion.identity).GetComponent<PlayerManager>();
+			//Quaternion.identity, 0, null).GetComponent<PlayerManager>();
 
-			//CameraFollow.Instance.SetTarget(playerInstantiate.transform);
 			_uiManager.panelsLists[2].panelObjects[3].SetActive(true);
 
 			BoomJump.Instance.Activate(playerInstantiate.playerMovement, 30);
@@ -198,9 +190,8 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 			int random = Random.Range(0, _photonGame.teamTwoSpawnPoints.Length);
 			playerInstantiate =
 				PhotonNetwork.Instantiate(_photonGame.blueTeamCharacters[(byte)_player.GetCharacter() - 1].name, _photonGame.teamTwoSpawnPoints[random].position,
-				Quaternion.identity, 0, null).GetComponent<PlayerManager>();
+				Quaternion.identity).GetComponent<PlayerManager>();
 
-			//CameraFollow.Instance.SetTarget(playerInstantiate.transform);
 			_uiManager.panelsLists[2].panelObjects[3].SetActive(true);
 
 			BoomJump.Instance.Activate(playerInstantiate.playerMovement, -30);

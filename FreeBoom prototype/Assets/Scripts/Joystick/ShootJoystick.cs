@@ -31,21 +31,12 @@ public class ShootJoystick : JoystickController
     //Вызывается когда отпускаем стик
     public new void OnPointerDown(PointerEventData eventData)
     {
-
-
         joystickBackground.position = eventData.position - moveableJoytick.anchoredPosition;
-        // joystickBackground.position = eventData.position;
-
-
-        // if (smoothEnabled)
         InvokeJoytickRoutine(true);
-        //  else
-        //     canvasGroup.alpha = 1;
     }
 
     public override void OnPointerUp(PointerEventData eventData)
     {
-        // if (inGame) return;
         OnBeginDragEvent?.Invoke(false); //Событие перемещение джойстиком
         OnUpEvent?.Invoke(); //События нажатия на джойстик
 
@@ -65,7 +56,6 @@ public class ShootJoystick : JoystickController
         OnBeginDragEvent?.Invoke(false); //Событие перемещение джойстиком
         OnUpEvent?.Invoke(); //События нажатия на джойстик
 
-        //  InvokeJoytickRoutine(false);
         canvasGroup.alpha = 0;
 
         direction = Vector2.zero;

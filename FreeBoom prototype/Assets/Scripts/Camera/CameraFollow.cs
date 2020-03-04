@@ -34,7 +34,7 @@ public class CameraFollow : MonoBehaviour
         if (target != null)
         {
             HandleMovement();
-
+            
         }
     }
 

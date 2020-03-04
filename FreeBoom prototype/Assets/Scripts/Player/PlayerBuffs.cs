@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerManager))]
 public class PlayerBuffs : MonoBehaviour
 {
     public enum Buff { None, FirstAid, Shield, Potions }

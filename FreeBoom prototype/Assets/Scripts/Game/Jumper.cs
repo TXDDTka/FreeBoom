@@ -62,7 +62,7 @@ public class Jumper : MonoBehaviour
                 amount %= 1;
                 Calculate();
 
-                other.GetComponent<PlayerMovement>().rb.velocity = finalVelocity;
+                other.GetComponent<PlayerManager>().rb.velocity = finalVelocity;
             }
         }
     }

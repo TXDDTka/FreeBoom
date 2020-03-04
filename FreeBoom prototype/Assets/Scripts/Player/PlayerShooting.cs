@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(PlayerManager))]
 public class PlayerShooting : MonoBehaviour
 {
 
@@ -24,11 +23,12 @@ public class PlayerShooting : MonoBehaviour
         public int bulletsCurrentCount = 0;
         public float shootingDistance = 0;
         public float reloadingTime = 0f;
-        public GameObject weaponGameobject = null;
-        public Transform shootPoint = null;
         public bool weaponChoosen = false;
         public bool weaponReloading = false;
         public IEnumerator enumeratorWeaponReloading;
+
+        public GameObject weaponGameobject = null;
+        public Transform shootPoint = null;
     }
 
     [Serializable]
@@ -43,11 +43,12 @@ public class PlayerShooting : MonoBehaviour
         public int bulletsCurrentCount = 0;
         public float shootingDistance = 0;
         public float reloadingTime = 0f;
-        public GameObject weaponGameobject = null;
-        public Transform shootPoint = null;
         public bool weaponChoosen = false;
         public bool weaponReloading = false;
         public IEnumerator enumeratorWeaponReloading;
+
+        public GameObject weaponGameobject = null;
+        public Transform shootPoint = null;
     }
 
 
@@ -65,7 +66,7 @@ public class PlayerShooting : MonoBehaviour
     private PlayerManager playerManager = null;
     private ChangeWeaponBar changeWeaponBar = null;
     private CrosshairManager crosshairManager = null;
-
+    public Transform weaponHolder = null;
     private void Awake()
     {
         playerManager = GetComponent<PlayerManager>();
@@ -104,7 +105,8 @@ public class PlayerShooting : MonoBehaviour
             {
                 crosshairManager.SetParemeters(playerManager.playerShooting.secondWeapon.shootPoint.position, playerManager.shootJoystick.Direction.normalized, playerManager.playerShooting.secondWeapon.shootingDistance);
             }
-
+            
+            RotateGun();
         }
         else if(!playerManager.shootJoystick.HasInput)
         {
@@ -229,7 +231,24 @@ public class PlayerShooting : MonoBehaviour
     }
 
 
+    private void RotateGun()
+    {
+        float rotationAngle = Mathf.Atan2(playerManager.shootJoystick.Vertical, playerManager.shootJoystick.Horizontal) * Mathf.Rad2Deg;
 
+        weaponHolder.eulerAngles = new Vector3(0, 0, rotationAngle);
+
+        Vector3 localScale = Vector3.one;
+        if (rotationAngle > 90 || rotationAngle < -90)
+        {
+            localScale.y = -1f;
+        }
+        else
+        {
+            localScale.y = +1f;
+        }
+
+        weaponHolder.localScale = localScale;
+    }
 
 
     private void Shoot()
