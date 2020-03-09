@@ -19,6 +19,7 @@ public class PlayerShooting : MonoBehaviour
         public GameObject bulletPrefab = null;
         public float bulletSpeed = 0f;
         public float bulletDamage = 0f;
+        private float bulletSaveDamage = 0;
         public int bulletsInClip = 0;
         public int bulletsMaxCount = 0;
         public int bulletsCurrentCount = 0;
@@ -216,10 +217,6 @@ public class PlayerShooting : MonoBehaviour
         secondWeapon.weaponGameobject.SetActive(secondWeaponObject);
     }
 
-
-
-
-
     private void Shoot()
     {
         if (playerManager.playerMovement.canMove)
@@ -355,5 +352,19 @@ public class PlayerShooting : MonoBehaviour
         playerManager.shootJoystick.OnBeginDragEvent -= playerManager.playerShootingCrosshairs.EnablePoints;
         playerManager.shootJoystick.OnUpEvent -= Shoot;
          
+    }
+
+    public void GetDamage(float addDamage)
+    {
+        mainWeapon.bulletDamage += (mainWeapon.bulletDamage / 100) * addDamage;
+        Debug.Log($"Add damage: {addDamage}");
+        Debug.Log($"Curent damage: {mainWeapon.bulletDamage}");
+        Invoke("ReturnStartDamage", 3f);
+    }
+
+    private void ReturnStartDamage()
+    {
+        mainWeapon.bulletDamage = 50;
+        Debug.Log($"Curent damage: {mainWeapon.bulletDamage}");
     }
 }

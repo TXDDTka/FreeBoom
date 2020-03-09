@@ -57,6 +57,11 @@ public class PlayerHealth : MonoBehaviour
     public void GetHealthPoint(float addHP)
     {
         currentHp += addHP;
+
+        if (currentHp > 200)
+        {
+            currentHp = 200;
+        }
         Debug.Log($"Add hp: {addHP}");
         Debug.Log($"Current hp: {currentHp}");
     }
@@ -65,9 +70,9 @@ public class PlayerHealth : MonoBehaviour
     {
         currentShield += addShield;
 
-        if(currentHp > 200)
+        if (currentShield > 200)
         {
-            currentHp = 200;
+            currentShield = 200;
         }
         Debug.Log($"Add Sheild point: { addShield}");
         Debug.Log($"Current Shield point: {currentShield}");

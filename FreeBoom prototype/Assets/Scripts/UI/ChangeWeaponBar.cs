@@ -39,6 +39,12 @@ public class ChangeWeaponBar : MonoBehaviour
     public bool shieldMaxBuff = false;
 
     public bool stimulantMinBuff = false;
+    public bool stimulantMidBuff = false;
+    public bool stimulantMaxBuff = false;
+
+    public bool energeticMinBuff = false;
+    public bool energeticMidBuff = false;
+    public bool energeticMaxBuff = false;
 
     private bool firstElementExitst = false;
     private int buffIndex = 0;
@@ -241,6 +247,21 @@ public class ChangeWeaponBar : MonoBehaviour
             case Buff.StimulantMin:
                 stimulantMinBuff = true;
                 break;
+            case Buff.StimulantMid:
+                stimulantMidBuff = true;
+                break;
+            case Buff.StimulantMax:
+                stimulantMaxBuff = true;
+                break;
+            case Buff.EnergeticMin:
+                energeticMinBuff = true;
+                break;
+            case Buff.EnergeticMid:
+                energeticMidBuff = true;
+                break;
+            case Buff.EnergeticMax:
+                energeticMaxBuff = true;
+                break;
         }
 
         for (int i = buffsSettingsDatabase.buffsList.Count - 1; i >= 0; i--)
@@ -296,6 +317,11 @@ public class ChangeWeaponBar : MonoBehaviour
         shieldMidBuff = false;
         shieldMaxBuff = false;
         stimulantMinBuff = false;
+        stimulantMidBuff = false;
+        stimulantMaxBuff = false;
+        energeticMinBuff = false;
+        energeticMidBuff = false;
+        energeticMaxBuff = false;
 
 
         buffSprite.gameObject.SetActive(false);
@@ -319,6 +345,11 @@ public class ChangeWeaponBar : MonoBehaviour
         shieldMidBuff = false;
         shieldMaxBuff = false;
         stimulantMinBuff = false;
+        stimulantMidBuff = false;
+        stimulantMaxBuff = false;
+        energeticMinBuff = false;
+        energeticMidBuff = false;
+        energeticMaxBuff = false;
 
         return true;
     }
@@ -356,7 +387,22 @@ public class ChangeWeaponBar : MonoBehaviour
                             shieldMaxBuff = false;
                             break;
                         case Buff.StimulantMin:
-                            stimulantMinBuff = false;
+                            stimulantMinBuff = true;
+                            break;
+                        case Buff.StimulantMid:
+                            stimulantMidBuff = true;
+                            break;
+                        case Buff.StimulantMax:
+                            stimulantMaxBuff = true;
+                            break;
+                        case Buff.EnergeticMin:
+                            energeticMinBuff = true;
+                            break;
+                        case Buff.EnergeticMid:
+                            energeticMidBuff = true;
+                            break;
+                        case Buff.EnergeticMax:
+                            energeticMaxBuff = true;
                             break;
                     }
 

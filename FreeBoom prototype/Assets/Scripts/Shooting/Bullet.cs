@@ -86,4 +86,5 @@ public class Bullet : MonoBehaviourPunCallbacks/*,IPunPrefabPool//,IPunInstantia
     { 
         PhotonNetwork.Destroy(gameObject);
     }
+
 }

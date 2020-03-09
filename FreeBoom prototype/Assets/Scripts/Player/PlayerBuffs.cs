@@ -27,15 +27,23 @@ public class PlayerBuffs : MonoBehaviour
     public int shieldMaxCount = 0;
 
     public int stimulantMinCount = 0;
+    public int stimulantMidCount = 0;
+    public int stimulantMaxCount = 0;
+
+    public int energeticMinCount = 0;
+    public int energeticMidCount = 0;
+    public int energeticMaxCount = 0;
 
     private ChangeWeaponBar changeWeaponBar = null;
     public BuffsSettingsDatabase buffsSettingsDatabase = null;
     private PlayerManager playerManager = null;
     private PlayerHealth playerHealth = null;
     private PlayerMovement playerMovement = null;
+    private PlayerShooting playerShooting = null;
 
     private void Awake()
     {
+        playerShooting = GetComponent<PlayerShooting>();
         playerMovement = GetComponent<PlayerMovement>();
         playerHealth = GetComponent<PlayerHealth>();
         playerManager = GetComponent<PlayerManager>();
@@ -77,7 +85,7 @@ public class PlayerBuffs : MonoBehaviour
                     changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.HealthMid, healthMidCount);
                 break;
             case Buff.HealthMax:
-                healthMinCount += 1;
+                healthMaxCount += 1;
                 if (!changeWeaponBar.healthMaxBuff)
                     changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.HealthMax, healthMaxCount);
                 else
@@ -110,6 +118,41 @@ public class PlayerBuffs : MonoBehaviour
                     changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.StimulantMin, stimulantMinCount);
                 else
                     changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.StimulantMin, stimulantMinCount);
+                break;
+            case Buff.StimulantMid:
+                stimulantMidCount += 1;
+                if (!changeWeaponBar.stimulantMidBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.StimulantMid, stimulantMidCount);
+                else
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.StimulantMid, stimulantMidCount);
+                break;
+            case Buff.StimulantMax:
+                stimulantMaxCount += 1;
+                if (!changeWeaponBar.stimulantMaxBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.StimulantMax, stimulantMaxCount);
+                else
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.StimulantMax, stimulantMaxCount);
+                break;
+            case Buff.EnergeticMin:
+                energeticMinCount += 1;
+                if (!changeWeaponBar.energeticMinBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.EnergeticMin, energeticMinCount);
+                else
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.EnergeticMin, energeticMinCount);
+                break;
+            case Buff.EnergeticMid:
+                energeticMidCount += 1;
+                if (!changeWeaponBar.energeticMidBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.EnergeticMid, energeticMidCount);
+                else
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.EnergeticMid, energeticMidCount);
+                break;
+            case Buff.EnergeticMax:
+                energeticMaxCount += 1;
+                if (!changeWeaponBar.energeticMinBuff)
+                    changeWeaponBar.AddBuffsToListFirstTime(ChangeWeaponBar.Buff.EnergeticMax, energeticMaxCount);
+                else
+                    changeWeaponBar.AddBuffsToList(ChangeWeaponBar.Buff.EnergeticMax, energeticMaxCount);
                 break;
         }
         if (!firstBuffAdded)
@@ -158,7 +201,37 @@ public class PlayerBuffs : MonoBehaviour
                 break;
             case ChangeWeaponBar.Buff.StimulantMin:
                 stimulantMinCount -= 1;
+                playerShooting.GetDamage(buffsSettingsDatabase.buffsList[6].BuffDamage);
                 changeWeaponBar.UseBuff(stimulantMinCount);
+                break;
+            case ChangeWeaponBar.Buff.StimulantMid:
+                stimulantMidCount -= 1;
+                playerShooting.GetDamage(buffsSettingsDatabase.buffsList[7].BuffDamage);
+                playerMovement.GetSpeed(buffsSettingsDatabase.buffsList[7].BuffSpeed);
+                changeWeaponBar.UseBuff(stimulantMidCount);
+                break;
+            case ChangeWeaponBar.Buff.StimulantMax:
+                stimulantMaxCount -= 1;
+                playerShooting.GetDamage(buffsSettingsDatabase.buffsList[8].BuffDamage);
+                // инверсия
+                //playerMovement.(buffsSettingsDatabase.buffsList[8].BuffInversion);
+                changeWeaponBar.UseBuff(stimulantMaxCount);
+                break;
+            case ChangeWeaponBar.Buff.EnergeticMin:
+                energeticMinCount -= 1;
+                playerMovement.GetSpeed(buffsSettingsDatabase.buffsList[9].BuffSpeed);
+                playerShooting.GetDamage(buffsSettingsDatabase.buffsList[9].BuffDamage);
+                changeWeaponBar.UseBuff(energeticMinCount);
+                break;
+            case ChangeWeaponBar.Buff.EnergeticMid:
+                energeticMidCount -= 1;
+                playerMovement.GetSpeed(buffsSettingsDatabase.buffsList[10].BuffSpeed);
+                changeWeaponBar.UseBuff(energeticMidCount);
+                break;
+            case ChangeWeaponBar.Buff.EnergeticMax:
+                energeticMaxCount -= 1;
+                playerMovement.GetSpeed(buffsSettingsDatabase.buffsList[11].BuffSpeed);
+                changeWeaponBar.UseBuff(energeticMidCount);
                 break;
         }
     }
