@@ -38,5 +38,11 @@ public class SpawnBuffs : MonoBehaviourPunCallbacks
     private void SpawnHealthBuffs()
     {
         BuffObject buffObject = PhotonNetwork.Instantiate(healthMin.name, healthMinSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
+        BuffObject buffObject1 = PhotonNetwork.Instantiate(healthMid.name, healthMidSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
+        BuffObject buffObject2 = PhotonNetwork.Instantiate(healthMax.name, healthMaxSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
+
+        BuffObject buffObject3 = PhotonNetwork.Instantiate(shieldMin.name, shieldMinSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
+        BuffObject buffObject4 = PhotonNetwork.Instantiate(shieldMid.name, shieldMidSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
+        BuffObject buffObject5 = PhotonNetwork.Instantiate(shieldMax.name, shieldMaxSpawnPosition.position, Quaternion.identity).GetComponent<BuffObject>();
     }
 }
