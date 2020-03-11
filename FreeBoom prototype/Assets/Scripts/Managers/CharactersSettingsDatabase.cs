@@ -96,13 +96,23 @@ public class CharactersSettingsDatabase : ScriptableObject
 [System.Serializable] //Отображает объекты этого класса в Editor
 public class CharacterData
 {
-    [SerializeField] private string name = null;
-    public string CharacterName
+    //[SerializeField] private string name = null;
+    //public string CharacterName
+    //{
+    //    get { return name; }
+    //    protected set { }
+    //}
+
+    public enum _CharacterClass : byte { None, All, Demoman, Engineer, Soldier }
+    [Tooltip("Класс персонажа")]
+    [SerializeField] private _CharacterClass characterClass = _CharacterClass.None;
+    public _CharacterClass CharacterClass
     {
-        get { return name; }
+        get { return characterClass; }
         protected set { }
     }
 
+    [Tooltip("Cкорость персонажа")]
     [SerializeField] private float speed = 0f;
     public float Speed
     {
@@ -110,6 +120,7 @@ public class CharacterData
         protected set { }
     }
 
+    [Tooltip("Здоровье персонажа")]
     [SerializeField] private float health = 0f;
     public float Health
     {

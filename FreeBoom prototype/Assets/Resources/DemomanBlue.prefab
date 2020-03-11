@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6575398126504085446}
   - component: {fileID: 8457730980312862473}
   - component: {fileID: 2327393101828987337}
-  - component: {fileID: 7300205605522748662}
   - component: {fileID: 3786010301672796998}
   - component: {fileID: 8262171760594314199}
   - component: {fileID: 2266560291783431992}
@@ -21,6 +20,7 @@ GameObject:
   - component: {fileID: 175329951967709899}
   - component: {fileID: 8180566507296424729}
   - component: {fileID: 3308569054637482658}
+  - component: {fileID: 56282928860416001}
   - component: {fileID: 6405320755845583108}
   - component: {fileID: 3785003625245494860}
   - component: {fileID: 2543716665727907299}
@@ -135,7 +135,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &2327393101828987337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,61 +148,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3162e42b659fa49b86259594d8e0fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0
-  groundMask:
-    serializedVersion: 2
+  layers:
+  - serializedVersion: 2
     m_Bits: 1024
-  isGrounded: 0
-  canMove: 0
-  lookPosition: {x: 0, y: 0, z: 0}
-  forward: 0
-  isFacingRight: 0
+  - serializedVersion: 2
+    m_Bits: 16384
+  horizontal: 0
+  groundCheckDistance: 0
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
-  groundJumpMask:
-    serializedVersion: 2
-    m_Bits: 8192
-  isJumpedGounded: 0
---- !u!114 &7300205605522748662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 50002792516079815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6a6ea04bb243e0448d8834540f5c233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainWeapon:
-    bulletPrefab: {fileID: 0}
-    bulletSpeed: 0
-    bulletDamage: 0
-    bulletsInClip: 0
-    bulletsMaxCount: 0
-    bulletsCurrentCount: 0
-    shootingDistance: 0
-    reloadingTime: 0
-    weaponGameobject: {fileID: 3313705733656874490}
-    shootPoint: {fileID: 4989256871306087469}
-    weaponChoosen: 0
-    weaponReloading: 0
-  secondWeapon:
-    bulletPrefab: {fileID: 0}
-    bulletSpeed: 0
-    bulletDamage: 0
-    bulletsInClip: 0
-    bulletsMaxCount: 0
-    bulletsCurrentCount: 0
-    shootingDistance: 0
-    reloadingTime: 0
-    weaponGameobject: {fileID: 4409703606971913998}
-    shootPoint: {fileID: 2328170829469306771}
-    weaponChoosen: 0
-    weaponReloading: 0
-  weaponsSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
-    type: 2}
-  currentWeapon: 0
 --- !u!114 &3786010301672796998
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +228,7 @@ MonoBehaviour:
   - {fileID: 175329951967709899}
   - {fileID: 8180566507296424729}
   - {fileID: 3308569054637482658}
+  - {fileID: 56282928860416001}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -294,7 +248,7 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 1
     Name: isMoving
   m_SynchronizeLayers:
   - SynchronizeType: 0
@@ -330,6 +284,54 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
+--- !u!114 &56282928860416001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 50002792516079815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e453fb94347e6844b854c1b5256e28a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainWeaponGameobject: {fileID: 3313705733656874490}
+  mainWeaponShootPoint: {fileID: 4989256871306087469}
+  secondWeaponGameobject: {fileID: 4409703606971913998}
+  secondWeaponshootPoint: {fileID: 2328170829469306771}
+  weaponHolder: {fileID: 573801906982851319}
+  mainWeapon:
+    bulletPrefab: {fileID: 0}
+    bulletSpeed: 0
+    bulletDamage: 0
+    bulletsInClip: 0
+    bulletsMaxCount: 0
+    bulletsCurrentCount: 0
+    bulletsPerShoot: 0
+    shootDelay: 0
+    shootDelayPerShoot: 0
+    shootingDistance: 0
+    reloadingTime: 0
+    weaponChoosen: 0
+    weaponReloading: 0
+  secondWeapon:
+    bulletPrefab: {fileID: 0}
+    bulletSpeed: 0
+    bulletDamage: 0
+    bulletsInClip: 0
+    bulletsMaxCount: 0
+    bulletsCurrentCount: 0
+    bulletsPerShoot: 0
+    shootDelay: 0
+    shootDelayPerShoot: 0
+    shootingDistance: 0
+    reloadingTime: 0
+    weaponChoosen: 0
+    weaponReloading: 0
+  weaponsSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
+    type: 2}
+  currentWeapon: 1
 --- !u!114 &6405320755845583108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,14 +344,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c90e0d418967024b982472c43baa132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   PV: {fileID: 0}
+  rb: {fileID: 0}
+  animator: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteRenderer: {fileID: 0}
   playerMovement: {fileID: 0}
-  playerShooting: {fileID: 0}
+  mainWeaponShooting: {fileID: 8327540312626886530}
+  secondWeaponShooting: {fileID: 5211102419498855864}
+  playerWeaponManager: {fileID: 0}
+  crosshairManager: {fileID: 0}
+  changeWeaponBar: {fileID: 0}
   moveJoystick: {fileID: 0}
   shootJoystick: {fileID: 0}
-  spriteRenderer: {fileID: 0}
-  animator: {fileID: 0}
 --- !u!61 &3785003625245494860
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -363,10 +370,10 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.9}
+  m_Offset: {x: 0, y: -0.188}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.027027028}
+    pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 3.125, y: 2.3125}
     newSize: {x: 3.125, y: 2.3125}
     adaptiveTilingThreshold: 0.5
@@ -374,7 +381,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.3, y: 1.8}
+  m_Size: {x: 1.2, y: 1.82}
   m_EdgeRadius: 0
 --- !u!114 &2543716665727907299
 MonoBehaviour:
@@ -391,6 +398,7 @@ MonoBehaviour:
   hassleBarLink: {fileID: 1605984976861140310, guid: 071ffd6181b4b2c4f86c5af3a26cd7c9,
     type: 3}
   playerTouchCount: 10
+  offset: {x: 0, y: 1.2, z: -1}
 --- !u!1 &1481701395918650300
 GameObject:
   m_ObjectHideFlags: 0
@@ -416,8 +424,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1481701395918650300}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.0641503, y: 0.07336624, z: 0.25010815}
-  m_LocalScale: {x: 2.0236769, y: 2.0236769, z: 2.0236769}
+  m_LocalPosition: {x: 2.161, y: 0.07336624, z: 0.25010815}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2393390192058487064}
   m_RootOrder: 0
@@ -444,6 +452,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2393390192058487064}
   - component: {fileID: 2744605126373320247}
+  - component: {fileID: 8327540312626886530}
   m_Layer: 9
   m_Name: Bazuka
   m_TagString: Untagged
@@ -459,7 +468,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3313705733656874490}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.184, y: 0.977, z: 0}
+  m_LocalPosition: {x: 0.465, y: -0.103, z: 0}
   m_LocalScale: {x: 0.49415, y: 0.49415, z: 0.49415}
   m_Children:
   - {fileID: 4989256871306087469}
@@ -516,6 +525,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8327540312626886530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3313705733656874490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec484d7776935a045825bcaa347609aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 1
+  canShoot: 1
 --- !u!1 &4409703606971913998
 GameObject:
   m_ObjectHideFlags: 0
@@ -526,6 +549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4529277793063864667}
   - component: {fileID: 8534201158702125784}
+  - component: {fileID: 5211102419498855864}
   m_Layer: 9
   m_Name: Pistol
   m_TagString: Untagged
@@ -540,9 +564,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4409703606971913998}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.352, y: 0.95, z: 0}
-  m_LocalScale: {x: 0.37986532, y: 0.37986532, z: 0.37986532}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.679, y: -0.172, z: 0}
+  m_LocalScale: {x: 0.37986532, y: 0.3798653, z: 0.37986532}
   m_Children:
   - {fileID: 2328170829469306771}
   m_Father: {fileID: 573801906982851319}
@@ -598,6 +622,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5211102419498855864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4409703606971913998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2378ef440afd5c4d960b02c34c9275a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponName: 4
+  canShoot: 1
 --- !u!1 &6464354560609320912
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,15 +659,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6464354560609320912}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children:
   - {fileID: 2393390192058487064}
   - {fileID: 4529277793063864667}
   m_Father: {fileID: 50002792516079833}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!1 &8939372892440697235
 GameObject:
   m_ObjectHideFlags: 0

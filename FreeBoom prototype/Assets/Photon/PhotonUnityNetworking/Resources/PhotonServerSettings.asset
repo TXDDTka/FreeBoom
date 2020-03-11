@@ -33,12 +33,17 @@ MonoBehaviour:
   - ChangeWeaponForOthers
   - ClickRpc
   - CreatePlayerBar
-  - DestroyBuffObject
   - DestroyRpc
   - GetBuffs
   - GetDamage
   - RemovePlayerListing
   - SetPlayerHealth
-  - DestroyPlayerBar
+  - Test
+  - Test2
+  - FreezePlayer
+  - ChangeWeaponForOther
+  - ChangeWeaponForsMaster
+  - RPC_ChangeWeaponForOthers
+  - RPC_ChangeWeapon
   DisableAutoOpenWizard: 1
   ShowSettings: 1

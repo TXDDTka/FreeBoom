@@ -19,9 +19,10 @@ public class PlayerAnimation : MonoBehaviour
     void Update()
     {
         if (!playerManager.PV.IsMine) return;
-        //if (playerManager.playerMovement.isGrounded && playerManager.playerMovement.canMove)
-            //animator.SetFloat("Forward", playerManager.playerMovement.forward, 0.2f, Time.deltaTime);
-          //  playerManager.animator.SetFloat("isMoving", playerManager.playerMovement.forward, 0.2f, Time.deltaTime);
+        if (playerManager.playerMovement.IsGrounded())
+        {
+            playerManager.animator.SetBool("isMoving", playerManager.playerMovement.horizontal != 0);
+        }
     }
 
     //public void OnAnimatorIK(int index)

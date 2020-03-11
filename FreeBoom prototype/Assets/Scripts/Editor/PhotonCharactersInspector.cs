@@ -10,7 +10,7 @@ using UnityEngine.UI;
 [CustomEditor(typeof(PhotonCharacters))]
 public class PhotonCharactersInspector : Editor
 { 
-		Dictionary<PhotonCharacters.Character, bool> _Foldouts ;
+		Dictionary<CharacterData._CharacterClass, bool> _Foldouts ;
 
 
 	public override void OnInspectorGUI()	
@@ -19,12 +19,12 @@ public class PhotonCharactersInspector : Editor
 
 		if (_Foldouts == null)
 	{
-		_Foldouts = new Dictionary<PhotonCharacters.Character, bool>();
+		_Foldouts = new Dictionary<CharacterData._CharacterClass, bool>();
 	}
 
 	if (PhotonCharacters.PlayersChoosedCharacter != null)
 	{
-		foreach (KeyValuePair<PhotonCharacters.Character, List<Player>> _pair in PhotonCharacters.PlayersChoosedCharacter)
+		foreach (KeyValuePair<CharacterData._CharacterClass, List<Player>> _pair in PhotonCharacters.PlayersChoosedCharacter)
 		{
 			if (!_Foldouts.ContainsKey(_pair.Key))
 			{

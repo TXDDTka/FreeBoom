@@ -61,9 +61,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 				photonTeams.UpdateTeams();
 
 
-				if (player.GetCharacter() != PhotonCharacters.Character.None)
+				if (player.GetCharacter() != CharacterData._CharacterClass.None)
 				{
-					player.SetCharacter(PhotonCharacters.Character.None);
+					player.SetCharacter(CharacterData._CharacterClass.None);
 				}
 				break;
 			case "Blue":
@@ -71,9 +71,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 				photonTeams.UpdateTeams();
 
 
-				if (player.GetCharacter() != PhotonCharacters.Character.None)
+				if (player.GetCharacter() != CharacterData._CharacterClass.None)
 				{
-					player.SetCharacter(PhotonCharacters.Character.None);
+					player.SetCharacter(CharacterData._CharacterClass.None);
 				}
 				break;
 			case "Random":
@@ -117,9 +117,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					player.SetTeam(PhotonTeams.Team.Blue);
 					photonTeams.UpdateTeams();
 
-					if (player.GetCharacter() != PhotonCharacters.Character.None)
+					if (player.GetCharacter() != CharacterData._CharacterClass.None)
 					{
-						player.SetCharacter(PhotonCharacters.Character.None);
+						player.SetCharacter(CharacterData._CharacterClass.None);
 					}
 				}
 				else if (player.GetTeam() == PhotonTeams.Team.Blue)
@@ -127,9 +127,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					player.SetTeam(PhotonTeams.Team.Red);
 					photonTeams.UpdateTeams();
 
-					if (player.GetCharacter() != PhotonCharacters.Character.None)
+					if (player.GetCharacter() != CharacterData._CharacterClass.None)
 					{
-						player.SetCharacter(PhotonCharacters.Character.None);
+						player.SetCharacter(CharacterData._CharacterClass.None);
 					}
 				}
 				break;
@@ -158,7 +158,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 			{
 				case 0:
 
-					if (player.GetCharacter() != PhotonCharacters.Character.Demoman)
+					if (player.GetCharacter() != CharacterData._CharacterClass.Demoman)
 						character = "Demoman";
 					else
 					{
@@ -170,7 +170,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					}
 					break;
 				case 1:
-					if (player.GetCharacter() != PhotonCharacters.Character.Engineer)
+					if (player.GetCharacter() != CharacterData._CharacterClass.Engineer)
 						character = "Engineer";
 					else
 					{
@@ -182,7 +182,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					}
 					break;
 				case 2:
-					if (player.GetCharacter() != PhotonCharacters.Character.Soldier)
+					if (player.GetCharacter() != CharacterData._CharacterClass.Soldier)
 						character = "Soldier";
 					else
 					{
@@ -198,19 +198,19 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		switch (character)
 		{
 			case "Demoman":
-				player.SetCharacter(PhotonCharacters.Character.Demoman);
+				player.SetCharacter(CharacterData._CharacterClass.Demoman);
 				photonCharacters.UpdateCharacters();
 				break;
 			case "Engineer":
-				player.SetCharacter(PhotonCharacters.Character.Engineer);
+				player.SetCharacter(CharacterData._CharacterClass.Engineer);
 				photonCharacters.UpdateCharacters();
 				break;
 			case "Soldier":
-				player.SetCharacter(PhotonCharacters.Character.Soldier);
+				player.SetCharacter(CharacterData._CharacterClass.Soldier);
 				photonCharacters.UpdateCharacters();
 				break;
 			case "None":
-				player.SetCharacter(PhotonCharacters.Character.None);
+				player.SetCharacter(CharacterData._CharacterClass.None);
 				photonCharacters.UpdateCharacters();
 				break;
 		}

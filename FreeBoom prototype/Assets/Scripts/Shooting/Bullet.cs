@@ -3,87 +3,83 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviourPunCallbacks/*,IPunPrefabPool//,IPunInstantiateMagicCallback*/
+public class Bullet : MonoBehaviourPunCallbacks
 {
-    private PhotonView PV;
-    private Rigidbody rb = null;
-    private float damageAmount = 0f;
+    [SerializeField]private PhotonView _PV;
+    [SerializeField]private Rigidbody2D _rb = null;
+    private float _damageAmount = 0f;
+    private float _distance = 0f;
+    private float _speed = 0f;
+    private Vector3 _direction;
+    private Vector3 _spawnPosition;
 
-   // [SerializeField] private float timeToDestroyBullet = 0f;
-    private float distance = 0f;
-    private Vector3 spawnPosition;
+    //public override void OnEnable()
+    //{
+    //    base.OnEnable();
+    //    _PV = GetComponent<PhotonView>();
+    //    _rb = GetComponent<Rigidbody2D>();
+    //    _spawnPosition = transform.position;
+    //}
 
-    private void Awake()
+    //private void Awake()
+    //{
+    //    _spawnPosition = transform.position;
+    //}
+    //public override void OnDisable()
+    //{
+    //    base.OnDisable();
+    //    if (!_PV.IsMine) return;
+    //    CancelInvoke();
+    //}
+
+    public void Set(Vector2 direction,float speed, float damage, float distance)
     {
-        PV = GetComponent<PhotonView>();
-        rb = GetComponent<Rigidbody>();
-    }
-
-
-    public override void OnDisable()
-    {
-        base.OnDisable();
-        if (!PV.IsMine) return;
-        CancelInvoke();
-    }
-
-    //public void Set(Vector3 velocity, float damage, float destroyTime)
-    //public void Set(float speed, float damage, float destroyTime)
-    public void Set(Vector3 newSpawnPosition,float newDistance,float speed, float damage)//, float destroyTime)
-    {
-        spawnPosition = newSpawnPosition;
-        distance = newDistance;
-        //  rb.velocity = rb.transform.right * speed;
-        //rb.velocity = velocity;
-         rb.velocity = transform.TransformDirection(new Vector3(0, 0, speed));
-       // rb.velocity = transform.TransformDirection(Vector3.forward * speed);
-        //rb.AddForce(bulletForece * 150, ForceMode.Impulse);
-        //rb.AddRelativeForce(Vector2.right * 150, ForceMode.Impulse);
-        damageAmount = damage;
-       // timeToDestroyBullet = destroyTime;
-        //Invoke("DestoyBullet", timeToDestroyBullet);
+        _direction = direction;
+        _speed = speed;
+        _distance = distance;
+        _damageAmount = damage;
+        _spawnPosition = transform.position;
     }
 
     private void FixedUpdate()
     {
-        float maxDistance = Vector3.Distance(spawnPosition, transform.position);
-        if (maxDistance > distance)
+        if (!_PV.IsMine) return;
+         _rb.velocity = _direction * _speed;
+        // _rb.velocity = transform.TransformDirection(_direction * _speed);
+        _rb.velocity = transform.TransformDirection(new Vector3(_speed, 0, 0));
+        // _rb.AddForce(_direction * _speed,ForceMode2D.Impulse);
+
+        float maxDistance = Vector2.Distance(_spawnPosition, transform.position);
+        if (maxDistance > _distance)
         {
-            //Debug.Log(maxDistance);
-            rb.velocity = Vector3.zero;
+            PhotonNetwork.Destroy(gameObject);
         }
 
-        //var heading = spawnPosition - transform.position;
-
-        //if (heading.sqrMagnitude > distance * distance)
-        //{
-        //    Debug.Log(heading.sqrMagnitude);
-        //    rb.velocity = Vector3.zero;
-        //}
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        if (!PV.IsMine) return;
+        if (!_PV.IsMine) return;
 
 
-        if (other.tag == "Player")
+        if (other.gameObject.tag == "Player")
         { 
-            if (other.GetComponent<PhotonView>().Owner.GetTeam() != PhotonNetwork.LocalPlayer.GetTeam())
+            if (other.gameObject.GetComponent<PhotonView>().Owner.GetTeam() != PhotonNetwork.LocalPlayer.GetTeam())
             {
-            
-                other.GetComponent<PhotonView>().RPC("GetDamage", RpcTarget.AllViaServer, damageAmount, PhotonNetwork.LocalPlayer);
+
+                other.gameObject.GetComponent<PhotonView>().RPC("GetDamage", RpcTarget.AllViaServer, _damageAmount, PhotonNetwork.LocalPlayer);
                 PhotonNetwork.Destroy(gameObject);
             }
-      }
+        }
         else
         {
+            Debug.Log("else");
             PhotonNetwork.Destroy(gameObject);
         }
     }
 
-    public void DestoyBullet()
-    { 
-        PhotonNetwork.Destroy(gameObject);
-    }
+    //public void DestoyBullet()
+    //{ 
+    //    PhotonNetwork.Destroy(gameObject);
+    //}
 }

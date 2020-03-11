@@ -9,7 +9,7 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 {
 	public static PlayerNetwork Instance { get; private set; }
 	[Tooltip("Наш созданный игрок,изначально = null")]
-	private PlayerManager playerInstantiate = null;
+	private PlayerManager playerManager = null;
 
 	[Tooltip("Добавлен ли игрок в в статистику")]
 	private bool addedPlayerToList = false;
@@ -20,7 +20,7 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	private PhotonPlayerListingMenu _photonPlayerListingMenu = null;
 	private ChangeWeaponBar _changeWeaponBar = null;
 	private UIManager _uiManager = null;
-
+	private CameraFollow _cameraFollow = null;
 
 	private void Awake()
 	{
@@ -31,6 +31,7 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		_changeWeaponBar = ChangeWeaponBar.Instance;
 		_uiManager = UIManager.Instance;
 		_player = PhotonNetwork.LocalPlayer;
+		_cameraFollow = CameraFollow.Instance;
 	}
 
 	void Start()
@@ -48,10 +49,9 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 
 		foreach (var panel in _uiManager.panelsLists) //Ищем нужную панель среди всех панелей в скрипте UIManager
 		{
-
 			switch (panel.panelName) //Название текущей панели
 			{
-				case "ChooseTeamPanel": //Если данная панель ChooseTeamPanel
+				case UIManager.CurrentPanel.ChooseTeamPanel: //Если данная панель - панель выбора команды
 					for (int i = 0; i < panel.panelButtons.Length; i++) //Обращаемся ко всем кнопкам в данной панели
 					{
 						int index = i;
@@ -65,7 +65,7 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 						});
 					}
 					break;
-				case "ChooseCharacterPanel":
+				case UIManager.CurrentPanel.ChooseCharacterPanel: //Если данная панель - панель выбора песонажа
 					for (int i = 0; i < panel.panelButtons.Length; i++)
 					{
 						int index = i;
@@ -79,16 +79,16 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 						});
 					}
 					break;
-				case "GamePanel":
+				case UIManager.CurrentPanel.GamePanel: //Если данная панель - панель игры
 					panel.panelButtons[0].onClick.AddListener(delegate //Если нажата кнопка меню
 					{
-						//playerInstantiate.JoysticksPointerUp();
-						JoysticksPointerUp();
+						//playerManager.JoysticksPointerUp();
+					//	JoysticksPointerUp();
 						_uiManager.currentPanel = UIManager.CurrentPanel.MenuPanel; // Меняем панель на панель меню в скрипте UIManager
 						_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
 					});
 					break;
-				case "MenuPanel":
+				case UIManager.CurrentPanel.MenuPanel: //Если данная панель - панель меню
 					panel.panelButtons[0].onClick.AddListener(delegate //Если нажата кнопка сменить команду
 					{
 						_photonGame.ChooseTeam(panel.buttonValue[0], _player); // Меняем игроку команду в скрипте PhotonGame, обновляем список команд для всех
@@ -128,7 +128,7 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	{
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-			//playerInstantiate.JoysticksPointerUp();
+			//playerManager.JoysticksPointerUp();
 			JoysticksPointerUp(); 
 			_uiManager.currentPanel = UIManager.CurrentPanel.MenuPanel; // Меняем панель на панель меню в скрипте UIManager
 			_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
@@ -137,27 +137,31 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		if(Input.GetKeyDown(KeyCode.K))
 		{
 			RemovePlayer();
-			_uiManager.team = _player.GetTeam().ToString();
+			_uiManager.team = _player.GetTeam();
 			_uiManager.RespawnPanelOn();
 			StartCoroutine(RespawnPlayer());
 		}
 
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			playerManager.rb.constraints = RigidbodyConstraints2D.FreezeAll;
+		}
 	}
 
 
-	public void JoysticksPointerUp()
-	{
-		playerInstantiate.moveJoystick.MoveJoystickPointerUp();
-		playerInstantiate.shootJoystick.ShootJoystickPointerUp();
-	}
+
 
 	private void ChooseTeam()
 	{
 
 		if (addedPlayerToList) //Если игрок уже выбирал команду 
+		{
 			_PV.RPC("RemovePlayerListing", RpcTarget.AllBuffered, _player); //Удалеям игрока из статистики
+		}
 		else
-		addedPlayerToList = true; //Игрок добавлен в статистику																  
+		{
+			addedPlayerToList = true; //Игрок добавлен в статистику																  
+		}
 
 		_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, _player, 0);//Добавляем игрока в статистику	
 	}
@@ -165,7 +169,9 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	private void ChooseCharacter()
 	{
 		if (addedPlayerToList)
+		{
 			_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, _player, 1);
+		}
 	}
 
 
@@ -175,29 +181,30 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		if (_player.GetTeam() == PhotonTeams.Team.Red)
 		{
 			int random = Random.Range(0, _photonGame.teamOneSpawnPoints.Length);
-			playerInstantiate =
-				PhotonNetwork.Instantiate(_photonGame.redTeamCharacters[(byte)_player.GetCharacter() - 1].name, _photonGame.teamOneSpawnPoints[random].position,
+			
+			playerManager =
+				PhotonNetwork.Instantiate(_photonGame.redTeamCharacters[(byte)_player.GetCharacter() - 2].name, _photonGame.teamOneSpawnPoints[random].position,
 				Quaternion.identity).GetComponent<PlayerManager>();
 			//Quaternion.identity, 0, null).GetComponent<PlayerManager>();
 
 			_uiManager.panelsLists[2].panelObjects[3].SetActive(true);
 
-			BoomJump.Instance.Activate(playerInstantiate.playerMovement, 30);
+			BoomJump.Instance.Activate(playerManager.playerMovement, 30);
 		}
 		else if (_player.GetTeam() == PhotonTeams.Team.Blue)
 		{
 
 			int random = Random.Range(0, _photonGame.teamTwoSpawnPoints.Length);
-			playerInstantiate =
-				PhotonNetwork.Instantiate(_photonGame.blueTeamCharacters[(byte)_player.GetCharacter() - 1].name, _photonGame.teamTwoSpawnPoints[random].position,
+			playerManager =
+				PhotonNetwork.Instantiate(_photonGame.blueTeamCharacters[(byte)_player.GetCharacter() - 2].name, _photonGame.teamTwoSpawnPoints[random].position,
 				Quaternion.identity).GetComponent<PlayerManager>();
 
 			_uiManager.panelsLists[2].panelObjects[3].SetActive(true);
 
-			BoomJump.Instance.Activate(playerInstantiate.playerMovement, -30);
+			BoomJump.Instance.Activate(playerManager.playerMovement, -30);
 		}
 
-		CameraFollow.Instance.SetTarget(playerInstantiate.transform);
+		_cameraFollow.SetTarget(playerManager.transform);
 		_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, _player, 1);
 
 	}
@@ -209,27 +216,55 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		killer.AddKills(1);
 		killer.AddScore(50);
 		_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, killer, 2);
-		_uiManager.team = _player.GetTeam().ToString();
+		_uiManager.team = _player.GetTeam();
 		_uiManager.RespawnPanelOn();
 		StartCoroutine(RespawnPlayer());
 	}
 
 	private void RemovePlayer()
 	{
-		if (playerInstantiate != null)
+		if (playerManager != null)
 		{
-			playerInstantiate.playerShooting.Disable();
-			JoysticksPointerUp();
+			
 			_changeWeaponBar.HideBuff();
 			if (_changeWeaponBar.secondWeaponActive)
+			{
 				_changeWeaponBar.ChangeWeapon();
+			}
+			DisableEvents();
+			JoysticksPointerUp();
 			_player.AddDeaths(1);
 
 			_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, _player, 2);
-			PhotonNetwork.Destroy(playerInstantiate.gameObject);
+			PhotonNetwork.Destroy(playerManager.gameObject);
 
 		}
 
+	}
+
+	public void JoysticksPointerUp()
+	{
+		playerManager.moveJoystick.MoveJoystickPointerUp();
+		playerManager.shootJoystick.ShootJoystickPointerUp();
+	}
+
+	private void DisableEvents()
+	{
+		playerManager.shootJoystick.OnBeginDragEvent -= playerManager.crosshairManager.EnableCrosshair;
+
+		if (playerManager.playerWeaponManager.currentWeapon == WeaponData._WeaponGroup.MainWeapon)
+		{
+			playerManager.mainWeaponShooting.DisableCurrentWeapon();
+			playerManager.changeWeaponBar.mainWeaponReloadingBarStatus = PlayerWeaponManager.ReloadingStatus.NoReloadNeeded;
+			playerManager.changeWeaponBar.MainWeaponBarReloadingStatus();
+
+		}
+		else if(playerManager.playerWeaponManager.currentWeapon == WeaponData._WeaponGroup.SecondWeapon)
+		{
+			playerManager.secondWeaponShooting.DisableCurrentWeapon();
+			playerManager.changeWeaponBar.secondWeaponReloadingBarStatus = PlayerWeaponManager.ReloadingStatus.NoReloadNeeded;
+			playerManager.changeWeaponBar.SecondWeaponBarReloadingStatus();
+		}
 	}
 
 	private IEnumerator RespawnPlayer()
@@ -284,10 +319,10 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	}
 
 
-	public void ClearProperties(Player playerSend)
-	{
-		playerSend.CustomProperties.Clear();
-	}
+	//public void ClearProperties(Player playerSend)
+	//{
+	//	playerSend.CustomProperties.Clear();
+	//}
 
 	private void LeaveGame()
 	{

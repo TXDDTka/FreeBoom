@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,15 +19,17 @@ public class UIManager : MonoBehaviour
         ChooseTeamPanel,
         ChooseCharacterPanel,
         GamePanel,
-        MenuPanel
+        MenuPanel,
     }
+
+    public PhotonTeams.Team team = PhotonTeams.Team.None;
 
     public CurrentPanel currentPanel = CurrentPanel.ChooseTeamPanel;
 
     public float timer = 0f;
     [SerializeField] private float respawnTimer = 0f;
     private Coroutine timerCoroutine;
-    [SerializeField] private new Camera camera = new Camera();
+    [SerializeField] private Camera mainCamera = new Camera();
     [SerializeField] private GameObject monitoringPanel = null;
     [SerializeField] private Image redRespawnBar = null;
     [SerializeField] private Image redLoadingBar = null;
@@ -37,8 +40,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text redRespawnText = null;
     [SerializeField] private Text blueRespawnText = null;
 
-    public string team = null;
-
     public Button leaveGameBtn;
     public Button exitGameBtn;
 
@@ -48,7 +49,7 @@ public class UIManager : MonoBehaviour
     [Serializable]
     public class PanelsList
     {
-        public string panelName;
+        public CurrentPanel panelName;
         public GameObject[] panelObjects;
         public Button[] panelButtons;
         public string[] buttonValue;
@@ -83,7 +84,7 @@ public class UIManager : MonoBehaviour
                     }
                     foreach (var panel in panelsLists)
                     {
-                        if (panel.panelName == currentPanel.ToString())
+                        if (panel.panelName == currentPanel)
                         {
                             panel.panelObjects[0].SetActive(true);
                         }
@@ -104,7 +105,7 @@ public class UIManager : MonoBehaviour
 
                     foreach (var panel in panelsLists)
                     {
-                        if (panel.panelName == currentPanel.ToString())
+                        if (panel.panelName == currentPanel)
                         {
                             panel.panelObjects[0].SetActive(false);
                             panel.panelObjects[1].SetActive(true);
@@ -118,12 +119,12 @@ public class UIManager : MonoBehaviour
                 {
                     foreach (var panel in panelsLists)
                     {
-                        if (panel.panelName == currentPanel.ToString())
+                        if (panel.panelName == currentPanel)
                         {
                             panel.panelObjects[0].SetActive(false);
                             panel.panelObjects[1].SetActive(false);
                             panel.panelObjects[2].SetActive(true);
-                            camera.cullingMask = -1;
+                            mainCamera.cullingMask = -1;
                         }
                     }
 
@@ -133,7 +134,7 @@ public class UIManager : MonoBehaviour
                 {
                     foreach (var panel in panelsLists)
                     {
-                        if (panel.panelName == currentPanel.ToString())
+                        if (panel.panelName == currentPanel)
                         {
                             if(respawn)
                             {
@@ -144,7 +145,7 @@ public class UIManager : MonoBehaviour
                             panel.panelObjects[0].SetActive(false);
                             panel.panelObjects[1].SetActive(true);
                             panel.panelObjects[2].SetActive(true);
-                            camera.cullingMask = 0;
+                            mainCamera.cullingMask = 0;
                         }
                     }
 
@@ -180,12 +181,12 @@ public class UIManager : MonoBehaviour
         {
             timer -= Time.deltaTime;
 
-            if (team == "Red")
+            if (team == PhotonTeams.Team.Red)
             {
                 redRespawnText.text = string.Format("{0:0}", timer);
                 redLoadingBar.fillAmount = timer/ respawnTimer;
             }
-            else
+            else if (team == PhotonTeams.Team.Blue)
             {
                 blueRespawnText.text = string.Format("{0:0}", timer);
                 blueLoadingBar.fillAmount = timer / respawnTimer;
@@ -197,7 +198,7 @@ public class UIManager : MonoBehaviour
 
         if (timer < 0)
         {
-            Camera.main.cullingMask = -1;
+            mainCamera.cullingMask = -1;
 
             RespawnStatus(false);
             currentPanel = CurrentPanel.GamePanel;
@@ -208,13 +209,13 @@ public class UIManager : MonoBehaviour
 
     private void RespawnStatus(bool active)
     {
-        if (team == "Red")
+        if (team == PhotonTeams.Team.Red)
         {
             redRespawnBar.gameObject.SetActive(active);
             redLoadingBar.gameObject.SetActive(active);
             redRespawnText.gameObject.SetActive(active);
         }
-        else
+        else if (team == PhotonTeams.Team.Blue)
         {
             blueRespawnBar.gameObject.SetActive(active);
             blueLoadingBar.gameObject.SetActive(active);

@@ -2,14 +2,17 @@
 using Photon.Realtime;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(SpriteRenderer))]
-[RequireComponent(typeof(Rigidbody2D))]
+
 [RequireComponent(typeof(PlayerMovement))]
-[RequireComponent(typeof(PlayerShooting))]
 [RequireComponent(typeof(PlayerHealth))]
 [RequireComponent(typeof(PlayerBuffs))]
 [RequireComponent(typeof(PlayerAnimation))]
+[RequireComponent(typeof(PlayerWeaponManager))]
+
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(Rigidbody2D))]
+
 [RequireComponent(typeof(BoxCollider2D))]
 
 [RequireComponent(typeof(PhotonView))]
@@ -21,15 +24,22 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
-    [HideInInspector] public Rigidbody2D rb = null;
     [HideInInspector] public PhotonView PV = null;
-    [HideInInspector] public PlayerMovement playerMovement;
-    [HideInInspector] public PlayerShooting playerShooting;
-    [HideInInspector] public MoveJoystick moveJoystick = null;
-    [HideInInspector] public ShootJoystick shootJoystick = null;
-    [HideInInspector] public SpriteRenderer spriteRenderer;
+    [HideInInspector] public Rigidbody2D rb = null;
     [HideInInspector] public Animator animator = null;
     [HideInInspector] public BoxCollider2D boxCollider = null;
+    [HideInInspector] public SpriteRenderer spriteRenderer = null;
+
+    [HideInInspector] public PlayerMovement playerMovement;
+    public MainWeaponShooting mainWeaponShooting = null;
+    public SecondWeaponShooting secondWeaponShooting = null;
+    [HideInInspector] public PlayerWeaponManager playerWeaponManager = null;
+
+    [HideInInspector] public CrosshairManager crosshairManager = null;
+    [HideInInspector] public ChangeWeaponBar changeWeaponBar = null;
+    [HideInInspector] public MoveJoystick moveJoystick = null;
+    [HideInInspector] public ShootJoystick shootJoystick = null;
+
     public Player player = null;
 
     private void Awake()
@@ -40,9 +50,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         PV = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody2D>();
         playerMovement = GetComponent<PlayerMovement>();
-        playerShooting = GetComponent<PlayerShooting>();
+        playerWeaponManager = GetComponent<PlayerWeaponManager>();
+
         moveJoystick = MoveJoystick.Instance;
         shootJoystick = ShootJoystick.Instance;
+        crosshairManager = CrosshairManager.Instance;
+        changeWeaponBar = ChangeWeaponBar.Instance;
 
         player = PhotonNetwork.LocalPlayer;
     }
