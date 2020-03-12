@@ -233,8 +233,12 @@ public class PlayerShooting : MonoBehaviour
 
                     Bullet bulletGameobject = PhotonNetwork.Instantiate(mainWeapon.bulletPrefab.name, mainWeapon.shootPoint.position, mainWeapon.shootPoint.rotation).GetComponent<Bullet>();
                     bulletGameobject.Set(mainWeapon.shootPoint.position, mainWeapon.shootingDistance, mainWeapon.bulletSpeed, mainWeapon.bulletDamage);//, mainWeapon.bulletDestroyTime);
-                   // Bullet bulletGameobject = PhotonNetwork.Instantiate(mainWeapon.bulletPrefab.name, bulletPosition, transform.rotation).GetComponent<Bullet>();
-                   // bulletGameobject.Set(mainWeapon.shootPoint.position, mainWeapon.bulletSpeed, mainWeapon.bulletDamage, mainWeapon.bulletDestroyTime);
+                    Debug.Log(mainWeapon.shootPoint.position);
+                    Debug.Log(mainWeapon.shootingDistance);
+                    Debug.Log(mainWeapon.bulletSpeed);
+                    Debug.Log(mainWeapon.bulletDamage);
+                    // Bullet bulletGameobject = PhotonNetwork.Instantiate(mainWeapon.bulletPrefab.name, bulletPosition, transform.rotation).GetComponent<Bullet>();
+                    // bulletGameobject.Set(mainWeapon.shootPoint.position, mainWeapon.bulletSpeed, mainWeapon.bulletDamage, mainWeapon.bulletDestroyTime);
                     mainWeapon.bulletsCurrentCount -= 1;
 
                     changeWeaponBar.ChangeMainWeaponBulletsCount(mainWeapon.bulletsCurrentCount, mainWeapon.bulletsMaxCount);
@@ -258,6 +262,7 @@ public class PlayerShooting : MonoBehaviour
                     Bullet bulletGameobject = PhotonNetwork.Instantiate(secondWeapon.bulletPrefab.name, secondWeapon.shootPoint.position, secondWeapon.shootPoint.rotation).GetComponent<Bullet>();
                     //bulletGameobject.Set(secondWeapon.bulletSpeed, secondWeapon.bulletDamage, secondWeapon.bulletDestroyTime);
                     bulletGameobject.Set(secondWeapon.shootPoint.position, secondWeapon.shootingDistance, secondWeapon.bulletSpeed, secondWeapon.bulletDamage);// secondWeapon.bulletDestroyTime);
+                    
                     secondWeapon.bulletsCurrentCount -= 1;
 
                     changeWeaponBar.ChangeSeconWeaponBulletsCount(secondWeapon.bulletsCurrentCount, secondWeapon.bulletsMaxCount);

@@ -23,7 +23,6 @@ public class SpawnBuffs : MonoBehaviourPunCallbacks
     public override void OnEnable()
     {
         base.OnEnable();
-        
     }
 
     public override void OnCreatedRoom()

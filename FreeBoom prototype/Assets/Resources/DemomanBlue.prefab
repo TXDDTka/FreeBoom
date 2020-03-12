@@ -1032,7 +1032,6 @@ MonoBehaviour:
     bulletsInClip: 0
     bulletsMaxCount: 0
     bulletsCurrentCount: 0
-    bulletDestroyTime: 0
     shootingDistance: 0
     reloadingTime: 0
     weaponGameobject: {fileID: 6280849935623038036}
@@ -1046,7 +1045,6 @@ MonoBehaviour:
     bulletsInClip: 0
     bulletsMaxCount: 0
     bulletsCurrentCount: 0
-    bulletDestroyTime: 0
     shootingDistance: 0
     reloadingTime: 0
     weaponGameobject: {fileID: 9196154809038159568}
@@ -1070,6 +1068,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHp: 0
+  currentShield: 0
   playerUiPrefab: {fileID: 635763035191279664, guid: fc6053341e082ef43a4e6f0593faac7d,
     type: 3}
   charactersSettings: {fileID: 11400000, guid: 97c526e94c1098b4b80ab1140d43c269, type: 2}
@@ -1207,9 +1206,18 @@ MonoBehaviour:
   addedBuff: 0
   currentBuff: 0
   firstBuffAdded: 0
-  firstAidCount: 0
-  shieldCount: 0
-  potionsCount: 0
+  healthMinCount: 0
+  healthMidCount: 0
+  healthMaxCount: 0
+  shieldMinCount: 0
+  shieldMidCount: 0
+  shieldMaxCount: 0
+  stimulantMinCount: 0
+  stimulantMidCount: 0
+  stimulantMaxCount: 0
+  energeticMinCount: 0
+  energeticMidCount: 0
+  energeticMaxCount: 0
   buffsSettingsDatabase: {fileID: 11400000, guid: d8e581ae3f75bdd479b2da277e4eb16e,
     type: 2}
 --- !u!114 &-6410919985163475561
@@ -1245,6 +1253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   crosshairTypeMainWeapon: 0
   crosshairTypeSecondWeapon: 0
+  shootingDistance: 0
   layer:
   - serializedVersion: 2
     m_Bits: 1024
@@ -1252,6 +1261,10 @@ MonoBehaviour:
     m_Bits: 2048
   crosshairs:
   - {fileID: 4408531312379487411, guid: 89328f0f0138af745be3839d78488696, type: 3}
+  line: {fileID: 0}
+  localPosition: {x: 0, y: 0, z: 0}
+  localRotation: {x: 0, y: 0, z: 0, w: 1}
+  fieldOfView: {fileID: 0}
 --- !u!1 &957723125328431547
 GameObject:
   m_ObjectHideFlags: 0

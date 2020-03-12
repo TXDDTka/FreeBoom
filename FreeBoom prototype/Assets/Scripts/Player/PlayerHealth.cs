@@ -96,8 +96,4 @@ public class PlayerHealth : MonoBehaviour
                 playerNetwork.PlayerDied(killer);
         }
     }
-
-    
-
-    
 }
