@@ -4,10 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CreepsSpawner : MonoBehaviourPunCallbacks
+public class CreepsSpawnerRed : MonoBehaviourPunCallbacks
 {
-    public Transform spawnPoint;
-    public GameObject creep;
+    public GameObject creepRed;
+    public PhotonTeams.Team botTeam = PhotonTeams.Team.Red;
 
     public override void OnEnable()
     {
@@ -23,11 +23,11 @@ public class CreepsSpawner : MonoBehaviourPunCallbacks
     {
         Invoke("SpawnCreep", 1f);
         Invoke("SpawnCreep", 2f);
-        Invoke("Wave", 10f);
+        Invoke("Wave", 5f);
     }
 
     private void SpawnCreep()
     {
-        BuffObject creepObject = PhotonNetwork.Instantiate(creep.name, creep.transform.position, Quaternion.identity).GetComponent<BuffObject>();
+        BuffObject creepObject = PhotonNetwork.Instantiate(creepRed.name, transform.position, Quaternion.identity).GetComponent<BuffObject>();
     }
 }
