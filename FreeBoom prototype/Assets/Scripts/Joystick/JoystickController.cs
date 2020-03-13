@@ -51,7 +51,7 @@ public abstract class JoystickController : MonoBehaviour,
     //Вызывается когда отпускаем стик
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-        
+
         direction = Vector2.zero;
         moveableJoytick.anchoredPosition = direction;
 

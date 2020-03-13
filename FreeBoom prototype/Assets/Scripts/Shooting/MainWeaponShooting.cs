@@ -121,13 +121,13 @@ public class MainWeaponShooting : MonoBehaviourPunCallbacks
               //  StartCoroutine(ShootDealy());
             }
 
-            
+
             //yield return new WaitForSeconds(playerManager.playerWeaponManager.mainWeapon.shootDelay);
             //canShoot = true;
         }
     }
 
-    
+
 
     private void BazukaShoot()
     {
@@ -145,14 +145,14 @@ public class MainWeaponShooting : MonoBehaviourPunCallbacks
             {
                 Bullet bulletGameobject = PhotonNetwork.Instantiate(playerManager.playerWeaponManager.mainWeapon.bulletPrefab.name, playerManager.playerWeaponManager.mainWeaponShootPoint.position, playerManager.playerWeaponManager.mainWeaponShootPoint.rotation).GetComponent<Bullet>();
                 bulletGameobject.Set(playerManager.rb, BulletDirection(), playerManager.playerWeaponManager.mainWeapon.bulletSpeed, playerManager.playerWeaponManager.mainWeapon.bulletDamage, playerManager.playerWeaponManager.mainWeapon.shootingDistance);
-                
+
                 playerManager.playerWeaponManager.mainWeapon.bulletsCurrentCount -= playerManager.playerWeaponManager.mainWeapon.bulletsPerShoot;
                 playerManager.changeWeaponBar.ChangeMainWeaponBulletsCount(playerManager.playerWeaponManager.mainWeapon.bulletsCurrentCount, playerManager.playerWeaponManager.mainWeapon.bulletsMaxCount);
 
                 if (playerManager.playerWeaponManager.mainWeapon.bulletsCurrentCount == 0 && playerManager.playerWeaponManager.mainWeapon.bulletsMaxCount > 0)
                 {
                 // playerManager.playerWeaponManager.mainWeapon.needReload = true;
-                
+
              //   playerManager.playerWeaponManager.mainWeapon.reloadingStatus = PlayerWeaponManager.ReloadingStatus.NeedReload;
                 // StartCoroutine(reloadingCoroutine);
                 Reload();
@@ -181,7 +181,7 @@ public class MainWeaponShooting : MonoBehaviourPunCallbacks
              StartCoroutine(ShootGunShootIEnumerator());
          //   TestShootGun();
         }
-        
+
     }
 
 
@@ -251,8 +251,8 @@ public class MainWeaponShooting : MonoBehaviourPunCallbacks
 
             }
 
-            
-            
+
+
         }
     }
 
@@ -298,7 +298,7 @@ public class MainWeaponShooting : MonoBehaviourPunCallbacks
     {
         StopCoroutine(playerManager.changeWeaponBar.MainWeaponCooldownTimer());
         playerManager.changeWeaponBar.mainWeaponReloadingBarStatus = PlayerWeaponManager.ReloadingStatus.NeedReload;
-        playerManager.changeWeaponBar.MainWeaponBarReloadingStatus();       
+        playerManager.changeWeaponBar.MainWeaponBarReloadingStatus();
 
         CancelInvoke();
         playerManager.playerWeaponManager.mainWeapon.reloadingStatus = PlayerWeaponManager.ReloadingStatus.NeedReload;

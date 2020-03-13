@@ -31,7 +31,7 @@ public class PlayerAnimation : MonoBehaviour
                 playerManager.animator.SetBool("isMoving", false);
             }
         }
-        
+
     }
 
     //public void OnAnimatorIK(int index)

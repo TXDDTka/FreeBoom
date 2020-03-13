@@ -158,7 +158,7 @@ public class PlayerWeaponManager : MonoBehaviour, IPunObservable
                 return;
 
         }
-        
+
     }
 
     public void ChangeWeapon()
@@ -206,7 +206,7 @@ public class PlayerWeaponManager : MonoBehaviour, IPunObservable
                 ChangeCrosshairColor(Color.white);
             }
 
-            
+
 
         }
         else if (currentWeapon == WeaponData._WeaponGroup.SecondWeapon)
