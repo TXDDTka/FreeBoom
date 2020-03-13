@@ -118,12 +118,28 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		
 	}
 
+	void OnApplicationPause(bool pauseStatus)
+	{
+		if (pauseStatus)
+		{
+			// app moved to background
+			photonGame.ExitGame(false);
+		}
+		else
+		{
+			// app is foreground again
+		}
+	}
 
 	private void RemovePlayer()
 	{
 		if (playerInstantiate != null)
 		{
+			playerInstantiate.GetComponent<PhotonPlayerShooting>().Disable();
+			playerInstantiate.GetComponent<PlayerShootingTrajectory>().Disable();
 			photonChangeWeaponBar.HideBuff();
+			if (photonChangeWeaponBar.secondWeaponActive)
+				photonChangeWeaponBar.ChangeWeapon();
 			player.AddDeaths(1);
 			PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, player, 2);
 			PhotonNetwork.Destroy(playerInstantiate);
@@ -242,6 +258,6 @@ public class PhotonPlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 
 	private void ExitGame()
 	{
-		photonGame.ExitGame();
+		photonGame.ExitGame(true);
 	}
 }

@@ -7,12 +7,12 @@ public abstract class JoystickController : MonoBehaviour,
                                            IPointerDownHandler, IPointerUpHandler, IDragHandler,
                                            IBeginDragHandler, IEndDragHandler
 {
-    public bool smoothEnabled = true;
+   // public bool smoothEnabled = true;
     [SerializeField] private AnimationCurve smoothCurve = null;
     [SerializeField, Range(0.1f, 5)] private float transitionDuration = 0.5f;
 
     public RectTransform joystickBackground = null;
-    private RectTransform moveableJoytick = null;
+    public RectTransform moveableJoytick = null;
     public CanvasGroup canvasGroup = null;
     private Vector2 delta = Vector2.zero;
     public Vector2 startPosition = Vector2.zero;
@@ -42,12 +42,14 @@ public abstract class JoystickController : MonoBehaviour,
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        joystickBackground.position = eventData.position;
+        joystickBackground.position = eventData.position - moveableJoytick.anchoredPosition;
+       // joystickBackground.position = eventData.position;
 
-        if (smoothEnabled)
+
+       // if (smoothEnabled)
             InvokeJoytickRoutine(true);
-        else
-            canvasGroup.alpha = 1;
+      //  else
+       //     canvasGroup.alpha = 1;
     }
 
     public virtual void OnPointerUp(PointerEventData eventData)
@@ -55,15 +57,15 @@ public abstract class JoystickController : MonoBehaviour,
         direction = Vector2.zero;
         moveableJoytick.anchoredPosition = direction;
 
-        if (smoothEnabled)
-        {
+        //if (smoothEnabled)
+        //{
             InvokeJoytickRoutine(false);
-        }
-        else
-        {
-            canvasGroup.alpha = 0;
-            joystickBackground.anchoredPosition = startPosition;
-        }
+        //}
+        //else
+        //{
+        //    canvasGroup.alpha = 0;
+        //    joystickBackground.anchoredPosition = startPosition;
+        //}
     }
 
     public void OnDrag(PointerEventData eventData)

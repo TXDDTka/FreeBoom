@@ -16,7 +16,7 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
     /*[HideInInspector]*/ public bool canMove = false;
     public Vector3 lookPosition = Vector3.zero;
     /*[HideInInspector]*/public float forward = 0f;
-    [SerializeField] private bool isFacingRight = false;
+    public bool isFacingRight = false;
 
     [SerializeField] private CharactersSettingsDatabase charactersSettings = null;
 
@@ -24,19 +24,15 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
 
     private PhotonView PV;
     private MoveJoystick moveJoystick = null;
-    private PhotonPlayerShooting photonPlayerShooting;
-    // private Boom boom;
-   // public int direction = 0f;
+    private ShootJoystick shootJoystick = null;
 
     private Player player;
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         rb = GetComponent<Rigidbody>();
-        photonPlayerShooting = GetComponent<PhotonPlayerShooting>();
-     //   boom = Boom.Instance;
         moveJoystick = MoveJoystick.Instance;
-      //  shootJoystick = ShootJoystick.Instance;
+        shootJoystick = ShootJoystick.Instance;
 
 
         player = PhotonNetwork.LocalPlayer;
@@ -65,8 +61,8 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
         if (!isFacingRight)
             forward = -forward;
 
-        float a = isFacingRight ? 90 : 270;
-        transform.rotation = Quaternion.AngleAxis(a, Vector3.up);
+        float direction = isFacingRight ? 90 : 270;
+        transform.rotation = Quaternion.AngleAxis(direction, Vector3.up);
     }
 
     void FixedUpdate()
@@ -85,9 +81,9 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
         Vector3 aimPos = transform.position + Vector3.up * 1.3f;
 
 
-        if (photonPlayerShooting.shootJoystick.HasInput && canMove)
+        if (shootJoystick.HasInput && canMove)
         {
-            look = aimPos + photonPlayerShooting.shootJoystick.Direction.normalized * 2;
+            look = aimPos + shootJoystick.Direction.normalized * 2;
         }
         else
         {
@@ -106,9 +102,6 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
         isGrounded = false;
         rb.velocity = velocity;
         StartCoroutine(StartMoving());
-        //yield return new WaitForFixedUpdate();
-        //Debug.Log(1);
-        //canMove = true;
     }
 
     public IEnumerator StartMoving()
@@ -119,23 +112,15 @@ public class PhotonPlayerMovement : MonoBehaviourPun,IPunObservable
 
     private void CheckCharacterSpeed()
     {
-        //switch (player.GetCharacter())
-        //{
-        //    case PhotonCharacters.Character.Demoman:
-        //        speed = charactersSettings[0].Speed;
-        //        break;
-        //    case PhotonCharacters.Character.Soldier:
-        //        speed = charactersSettings[1].Speed;
-        //        break;
-        //    case PhotonCharacters.Character.Engineer:
-        //        speed = charactersSettings[2].Speed;
-        //        break;
-        //}
 
-        foreach(var character in charactersSettings.charactersList)
+        for(int i = 0; i < charactersSettings.charactersList.Count; i++)
         {
-            if (character.CharacterName == player.GetCharacter().ToString())
+            var character = charactersSettings.charactersList[i];
+            if(character.CharacterName == player.GetCharacter().ToString())
+            {
                 speed = character.Speed;
+                return;
+            }
         }
     }
 

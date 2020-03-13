@@ -138,6 +138,7 @@ public class WeaponData
         protected set { }
     }
 
+    [Tooltip("Префаб пули")]
     [SerializeField] private GameObject bulletPrefab = null;
     public GameObject BulletPrefab
     {
@@ -145,6 +146,7 @@ public class WeaponData
         protected set { }
     }
 
+    [Tooltip("Урон наносимый пулей")]
     [SerializeField] private float damage = 0f;
     public float Damage
     {
@@ -152,6 +154,7 @@ public class WeaponData
         protected set { }
     }
 
+    [Tooltip("Время через которое пуля уничтожится")]
     [SerializeField] private float lifeTime = 0f;
     public float LifeTime
     {
@@ -159,6 +162,7 @@ public class WeaponData
         protected set { }
     }
 
+    [Tooltip("Скорость полета пули")]
     [SerializeField] private float bulletSpeed = 0f;
     public float BulletSpeed
     {
@@ -190,10 +194,19 @@ public class WeaponData
         protected set { }
     }
 
+    [Tooltip("Время перезарядки")]
     [SerializeField] private float reloadTime = 0f;
     public float ReloadTime
     {
         get { return reloadTime; }
+        protected set { }
+    }
+
+    [Tooltip("Дальность стрельбы")]
+    [SerializeField] private float shootingDistance = 0f;
+    public float ShootingDistance
+    {
+        get { return shootingDistance; }
         protected set { }
     }
 

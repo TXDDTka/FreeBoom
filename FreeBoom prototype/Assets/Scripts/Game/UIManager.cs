@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour
     public float timer = 0f;
     [SerializeField] private float respawnTimer = 0f;
     private Coroutine timerCoroutine;
-    [SerializeField] private new Camera camera = null;
+    [SerializeField] private new Camera camera = new Camera();
     [SerializeField] private GameObject monitoringPanel = null;
     [SerializeField] private Image redRespawnBar = null;
     [SerializeField] private Image redLoadingBar = null;

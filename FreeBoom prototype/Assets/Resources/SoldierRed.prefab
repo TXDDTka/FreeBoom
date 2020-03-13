@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 9069589297750630752}
   - component: {fileID: 308991478466418560}
   - component: {fileID: 4641808333408332313}
+  - component: {fileID: 641411854875772142}
   m_Layer: 8
   m_Name: SoldierRed
   m_TagString: Player
@@ -182,27 +183,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6a6ea04bb243e0448d8834540f5c233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponHolder: {fileID: 3985513649156504403}
+  mainWeapon:
+    mainWeaponBulletPrefab: {fileID: 0}
+    mainWeaponBulletSpeed: 0
+    mainWeaponBulletDamage: 0
+    mainWeaponBulletsInClip: 0
+    mainWeaponBulletsMaxCount: 0
+    mainWeaponBulletDestroyTime: 0
+    mainWeaponShootingDistance: 0
+    mainWeaponGameobject: {fileID: 7543565778868620867}
+    mainWeaponShootPoint: {fileID: 9049191388376666773}
+    mainWeaponChoosen: 0
+  secondWeapon:
+    secondWeaponBulletPrefab: {fileID: 0}
+    secondWeaponBulletSpeed: 0
+    secondWeaponBulletDamage: 0
+    secondWeaponBulletsInClip: 0
+    secondWeaponBulletsMaxCount: 0
+    secondWeaponBulletDestroyTime: 0
+    secondWeaponShootingDistance: 0
+    secondWeaponGameobject: {fileID: 5372261465729099585}
+    secondWeaponShootPoint: {fileID: 4035727071644586492}
+    secondWeaponChoosen: 0
   weaponsSettingsDatabase: {fileID: 11400000, guid: 4cea5e08631fda54b9748db2fe8d1549,
     type: 2}
-  secondWeapon: 0
   currentWeapon: 0
-  mainWeapon: 0
-  mainWeaponBulletPrefab: {fileID: 0}
-  mainWeaponBulletSpeed: 0
-  mainWeaponBulletDamage: 0
-  mainWeaponBulletsInClip: 0
-  mainWeaponBulletsMaxCount: 0
-  mainWeaponBulletDestroyTime: 0
-  mainWeaponShootPoint: {fileID: 9049191388376666773}
-  secondWeaponBulletPrefab: {fileID: 0}
-  secondWeaponBulletSpeed: 0
-  secondWeaponBulletDamage: 0
-  secondWeaponBulletsInClip: 0
-  secondWeaponBulletsMaxCount: 0
-  secondWeaponBulletDestroyTime: 0
-  secondWeaponShootPoint: {fileID: 4035727071644586492}
-  shootJoystick: {fileID: 0}
 --- !u!114 &8177671858430915143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,6 +355,26 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &641411854875772142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2454850107092427485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d643ac45c30f6b4f915372d6c51d70b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 0
+  crosshairIndex: 0
+  trajectoryVelocity: {x: 5, y: 5}
+  crosshairPrefab: {fileID: 8408340472644753021, guid: 59391f2c2edbb3046b2cd87294d243d8,
+    type: 3}
+  pointPrefab: {fileID: 7027943101153551785, guid: adfb7431783c747438ed36cd6f03c54c,
+    type: 3}
+  points: []
 --- !u!1 &2454850107094292883
 GameObject:
   m_ObjectHideFlags: 0
@@ -2738,7 +2763,7 @@ GameObject:
   - component: {fileID: 8205146637023121199}
   - component: {fileID: 3175132798336935522}
   - component: {fileID: 1909694868191790421}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LaserRifle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2937,8 +2962,24 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: f9322f3eb3ee8b246b036528b9fbbcf2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2534866581884222612, guid: f9322f3eb3ee8b246b036528b9fbbcf2,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9322f3eb3ee8b246b036528b9fbbcf2, type: 3}
+--- !u!1 &5372261465729099585 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: f9322f3eb3ee8b246b036528b9fbbcf2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4156811738496515656}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8995169008912930130 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: f9322f3eb3ee8b246b036528b9fbbcf2,

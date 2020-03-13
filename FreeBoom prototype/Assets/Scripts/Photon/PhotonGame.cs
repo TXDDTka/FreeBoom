@@ -168,7 +168,6 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		if(character == "Random")
 		{
 			int characterNumber = Random.Range(0, 3);
-			Debug.Log(characterNumber);
 			switch (characterNumber)
 			{
 				case 0:
@@ -244,12 +243,13 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		PhotonLoading.Load(LoadingScene.Lobby);
 	}
 
-	public void ExitGame()
+	public void ExitGame(bool exitStatus)
 	{
-		exitGame = true;
+		exitGame = exitStatus;
 		PhotonNetwork.Disconnect();
 
 	}
+
 
 	public override void OnLeftRoom()
 	{
