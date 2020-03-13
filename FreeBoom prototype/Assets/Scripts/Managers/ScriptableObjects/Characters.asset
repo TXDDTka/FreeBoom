@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Characters
   m_EditorClassIdentifier: 
   charactersList:
-  - name: Demoman
+  - characterClass: 1
     speed: 2
     health: 200
-  - name: Soldier
+  - characterClass: 2
     speed: 3
     health: 160
-  - name: Engineer
+  - characterClass: 3
     speed: 4
     health: 120
   currentCharacter:
-    name: Demoman
+    characterClass: 1
     speed: 2
     health: 200

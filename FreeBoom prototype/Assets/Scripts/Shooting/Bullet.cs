@@ -3,87 +3,112 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviourPunCallbacks/*,IPunPrefabPool//,IPunInstantiateMagicCallback*/
+public class Bullet : MonoBehaviourPunCallbacks
 {
-    private PhotonView PV;
-    private Rigidbody rb = null;
-    private float damageAmount = 0f;
+    [SerializeField]private PhotonView _PV;
+    [SerializeField]private Rigidbody2D _rb = null;
+    private float _damage = 0f;
+    private float _distance = 0f;
+    private float _speed = 0f;
+    private Vector3 _direction;
+    private Vector3 _spawnPosition;
+    private Vector3 _playerVelocity;
 
-   // [SerializeField] private float timeToDestroyBullet = 0f;
-    private float distance = 0f;
-    private Vector3 spawnPosition;
 
-    private void Awake()
+    public void Set(Rigidbody2D playerVelocity, Vector2 direction,float speed, float damage, float distance)
     {
-        PV = GetComponent<PhotonView>();
-        rb = GetComponent<Rigidbody>();
-    }
-
-
-    public override void OnDisable()
-    {
-        base.OnDisable();
-        if (!PV.IsMine) return;
-        CancelInvoke();
-    }
-
-    //public void Set(Vector3 velocity, float damage, float destroyTime)
-    //public void Set(float speed, float damage, float destroyTime)
-    public void Set(Vector3 newSpawnPosition,float newDistance,float speed, float damage)//, float destroyTime)
-    {
-        spawnPosition = newSpawnPosition;
-        distance = newDistance;
-        //  rb.velocity = rb.transform.right * speed;
-        //rb.velocity = velocity;
-         rb.velocity = transform.TransformDirection(new Vector3(0, 0, speed));
-       // rb.velocity = transform.TransformDirection(Vector3.forward * speed);
-        //rb.AddForce(bulletForece * 150, ForceMode.Impulse);
-        //rb.AddRelativeForce(Vector2.right * 150, ForceMode.Impulse);
-        damageAmount = damage;
-       // timeToDestroyBullet = destroyTime;
-        //Invoke("DestoyBullet", timeToDestroyBullet);
+        _direction = direction;
+        _speed = speed;
+        _distance = distance;
+        _damage = damage;
+        _spawnPosition = transform.position;
+        _playerVelocity = playerVelocity.velocity;
     }
 
     private void FixedUpdate()
     {
-        float maxDistance = Vector3.Distance(spawnPosition, transform.position);
-        if (maxDistance > distance)
+        if (!_PV.IsMine) return;
+        //_rb.velocity = _playerVelocity + _direction * _speed;
+        _rb.velocity = _playerVelocity + transform.TransformDirection(new Vector3(_speed, 0, 0));
+        // _rb.velocity = transform.TransformDirection(_direction * _speed);
+        //  _rb.velocity = transform.TransformDirection(new Vector3(_speed, 0, 0));
+        // _rb.AddForce(_direction * _speed,ForceMode2D.Impulse);
+
+        float maxDistance = Vector2.Distance(_spawnPosition, transform.position);
+        if (maxDistance > _distance)
         {
-            //Debug.Log(maxDistance);
-            rb.velocity = Vector3.zero;
+             PhotonNetwork.Destroy(gameObject);
+            
         }
 
-        //var heading = spawnPosition - transform.position;
-
-        //if (heading.sqrMagnitude > distance * distance)
-        //{
-        //    Debug.Log(heading.sqrMagnitude);
-        //    rb.velocity = Vector3.zero;
-        //}
     }
 
-    private void OnTriggerEnter(Collider other)
+    //private void OnCollisionEnter2D(Collision2D other)
+    //{
+    //    if (!_PV.IsMine) return;
+
+
+    //    if (other.gameObject.tag == "Player")
+    //    { 
+    //        if (other.gameObject.GetComponent<PhotonView>().Owner.GetTeam() != PhotonNetwork.LocalPlayer.GetTeam())
+    //        {
+
+    //            other.gameObject.GetComponent<PhotonView>().RPC("GetDamage", RpcTarget.AllViaServer, _damageAmount, PhotonNetwork.LocalPlayer);
+    //            PhotonNetwork.Destroy(gameObject);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("else");
+    //        PhotonNetwork.Destroy(gameObject);
+    //    }
+    //}
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!PV.IsMine) return;
 
-
-        if (other.tag == "Player")
+        if(collision.TryGetComponent<PhotonView>(out PhotonView photonView))
         { 
-            if (other.GetComponent<PhotonView>().Owner.GetTeam() != PhotonNetwork.LocalPlayer.GetTeam())
+        //if (collision.tag == "Player")
+        //{
+        //    PhotonView photonView = collision.GetComponent<PhotonView>();
+
+            if (photonView.Owner.GetTeam() != PhotonNetwork.LocalPlayer.GetTeam() && _PV.IsMine)
             {
-            
-                other.GetComponent<PhotonView>().RPC("GetDamage", RpcTarget.AllViaServer, damageAmount, PhotonNetwork.LocalPlayer);
+
+                photonView.RPC("GetDamage", RpcTarget.AllViaServer, _damage, PhotonNetwork.LocalPlayer);
                 PhotonNetwork.Destroy(gameObject);
             }
-      }
+        }
+        else if (collision.TryGetComponent<BankHealthHandler>(out BankHealthHandler bankHandler))
+        //  else if(collision.tag == "BankDoor")
+        {
+           // BankHealthHandler bankHandler = collision.GetComponent<BankHealthHandler>();
+            if (bankHandler.bankTeam != PhotonNetwork.LocalPlayer.GetTeam() && _PV.IsMine)
+            {
+                //_PV.RPC("RPC_HandleDamage", RpcTarget.AllBuffered, _damage, collision.GetComponent<PhotonView>());
+                bankHandler._PV.RPC("RPC_HandleDamage", RpcTarget.AllBufferedViaServer, _damage);
+                PhotonNetwork.Destroy(gameObject);
+            }
+        }
         else
         {
+            if(_PV.IsMine)
             PhotonNetwork.Destroy(gameObject);
         }
     }
 
-    public void DestoyBullet()
-    { 
-        PhotonNetwork.Destroy(gameObject);
-    }
+
+
+    //[PunRPC]
+    //public void RPC_HandleDamageMasterClient(float damage, PhotonView bankHandler)
+    //{
+    //    bankHandler.RPC("RPC_HandleDamage", RpcTarget.AllBuffered, damage);
+    //}
+
+    //[PunRPC]
+    //public void RPC_HandleDamage(float damage, BankHandler bankHandler)
+    //{
+    //    bankHandler.HandleDamage(damage);
+    //}
 }

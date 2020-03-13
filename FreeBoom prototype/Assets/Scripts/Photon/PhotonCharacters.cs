@@ -11,16 +11,12 @@ using UnityEngine.UI;
 
 public class PhotonCharacters : MonoBehaviourPunCallbacks
 {
-    public enum Character : byte { None, Demoman, Engineer, Soldier };
+    public enum Character : byte { None, Demoman, Engineer, Soldier, Random, All };
+  //  public WeaponData._CharacterClass сharacterClass;
+    //public CharacterData._CharacterClass character;
     public static Dictionary<Character, List<Player>> PlayersChoosedCharacter;
     public const string CharacterPlayerProp = "Character";
 
-    //public Text playersInReadTeam;
-    //public Text playersInBlueTeam;
-    //public Text spectators;
-    //public Text playersInRoom;
-
-    #region Events by Unity and Photon
 
     public void Start()
     {
@@ -43,7 +39,7 @@ public class PhotonCharacters : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
 
-        this.UpdateCharacters();
+        UpdateCharacters();
     }
 
     public override void OnLeftRoom()
@@ -55,20 +51,18 @@ public class PhotonCharacters : MonoBehaviourPunCallbacks
     /// <remarks>Called by PUN. See enum MonoBehaviourPunCallbacks for an explanation.</remarks>
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
     {
-        this.UpdateCharacters();
+        UpdateCharacters();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        this.UpdateCharacters();
+        UpdateCharacters();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        this.UpdateCharacters();
+        UpdateCharacters();
     }
-
-    #endregion
 
     public void UpdateCharacters()
     {
