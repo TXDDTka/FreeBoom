@@ -6,7 +6,7 @@ public class ShootJoystick : JoystickController/*, IPointerDownHandler*/
 {
     public static ShootJoystick Instance { get; private set; }
 
-    
+
 
     private void InitializeSingleton()
     {
@@ -18,7 +18,7 @@ public class ShootJoystick : JoystickController/*, IPointerDownHandler*/
 
     public override float Horizontal => base.Horizontal;
     public override float Vertical => base.Vertical;
-    public Vector3 Direction => new Vector3(Horizontal, Vertical);
+    public Vector2 Direction => new Vector2(Horizontal, Vertical);
 
     public event Action OnUpEvent;
     public event Action<bool> OnBeginDragEvent;
@@ -28,7 +28,8 @@ public class ShootJoystick : JoystickController/*, IPointerDownHandler*/
         InitializeSingleton();
     }
 
-    public void ResetPosition()
+    //Вызывается когда отпускаем стик
+    public new void OnPointerDown(PointerEventData eventData)
     {
         direction = Vector2.zero;
         moveableJoytick.anchoredPosition = direction;
@@ -64,6 +65,21 @@ public class ShootJoystick : JoystickController/*, IPointerDownHandler*/
 
     public override void OnBeginDrag(PointerEventData eventData)
     {
+
         OnBeginDragEvent?.Invoke(true);
     }
+
+    public void ShootJoystickPointerUp()
+    {
+
+        OnBeginDragEvent?.Invoke(false);
+        OnBeginDragEvent?.Invoke(false); //Событие перемещение джойстиком
+        OnUpEvent?.Invoke(); //События нажатия на джойстик
+
+        canvasGroup.alpha = 0;
+
+        direction = Vector2.zero;
+        moveableJoytick.anchoredPosition = direction;
+    }
+
 }

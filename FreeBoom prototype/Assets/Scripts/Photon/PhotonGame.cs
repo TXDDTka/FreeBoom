@@ -37,7 +37,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	private bool exitGame = false;
 
-	[SerializeField] private UIManager uiManager = null;
+	private UIManager uiManager = null;
 
 	public void Awake()
 	{
@@ -60,24 +60,20 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 				player.SetTeam(PhotonTeams.Team.Red);
 				photonTeams.UpdateTeams();
 
-				//ButtonsActive("Red");
 
-				if (player.GetCharacter() != PhotonCharacters.Character.None)
+				if (player.GetCharacter() != CharacterData._CharacterClass.None)
 				{
-					player.SetCharacter(PhotonCharacters.Character.None);
-					//ChangeCharacterButtonActive(player);
+					player.SetCharacter(CharacterData._CharacterClass.None);
 				}
 				break;
 			case "Blue":
 				player.SetTeam(PhotonTeams.Team.Blue);
 				photonTeams.UpdateTeams();
 
-				//ButtonsActive("Blue");
 
-				if (player.GetCharacter() != PhotonCharacters.Character.None)
+				if (player.GetCharacter() != CharacterData._CharacterClass.None)
 				{
-					player.SetCharacter(PhotonCharacters.Character.None);
-					//ChangeCharacterButtonActive(player);
+					player.SetCharacter(CharacterData._CharacterClass.None);
 				}
 				break;
 			case "Random":
@@ -90,14 +86,12 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 						player.SetTeam(PhotonTeams.Team.Red);
 						photonTeams.UpdateTeams();
 
-						//ButtonsActive("Red");
 					}
 					else
 					{
 						player.SetTeam(PhotonTeams.Team.Blue);
 						photonTeams.UpdateTeams();
 
-						//ButtonsActive("Blue");
 					}
 				}
 				else
@@ -108,17 +102,11 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 						photonTeams.UpdateTeams();
 
 
-						//ButtonsActive("Red");
 					}
 					if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count > PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count)
 					{
 						player.SetTeam(PhotonTeams.Team.Blue);
 						photonTeams.UpdateTeams();
-
-						//buttons[1].interactable = false;
-						//if (!buttons[0].interactable)
-						//	buttons[0].interactable = true;
-						//buttons[2].interactable = false;
 					}
 				}
 
@@ -129,10 +117,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					player.SetTeam(PhotonTeams.Team.Blue);
 					photonTeams.UpdateTeams();
 
-					if (player.GetCharacter() != PhotonCharacters.Character.None)
+					if (player.GetCharacter() != CharacterData._CharacterClass.None)
 					{
-						player.SetCharacter(PhotonCharacters.Character.None);
-						//ChangeCharacterButtonActive(player);
+						player.SetCharacter(CharacterData._CharacterClass.None);
 					}
 				}
 				else if (player.GetTeam() == PhotonTeams.Team.Blue)
@@ -140,10 +127,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					player.SetTeam(PhotonTeams.Team.Red);
 					photonTeams.UpdateTeams();
 
-					if (player.GetCharacter() != PhotonCharacters.Character.None)
+					if (player.GetCharacter() != CharacterData._CharacterClass.None)
 					{
-						player.SetCharacter(PhotonCharacters.Character.None);
-						//ChangeCharacterButtonActive(player);
+						player.SetCharacter(CharacterData._CharacterClass.None);
 					}
 				}
 				break;
@@ -161,7 +147,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == maxPlayersInTeam && PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count == maxPlayersInTeam)
 			uiManager.panelsLists[3].panelButtons[0].interactable = false;
 
-	}		
+	}
 
 	public void ChooseCharacter(string character, Player player)
 	{
@@ -172,7 +158,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 			{
 				case 0:
 
-					if (player.GetCharacter() != PhotonCharacters.Character.Demoman)
+					if (player.GetCharacter() != CharacterData._CharacterClass.Demoman)
 						character = "Demoman";
 					else
 					{
@@ -184,7 +170,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					}
 					break;
 				case 1:
-					if (player.GetCharacter() != PhotonCharacters.Character.Engineer)
+					if (player.GetCharacter() != CharacterData._CharacterClass.Engineer)
 						character = "Engineer";
 					else
 					{
@@ -196,7 +182,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					}
 					break;
 				case 2:
-					if (player.GetCharacter() != PhotonCharacters.Character.Soldier)
+					if (player.GetCharacter() != CharacterData._CharacterClass.Soldier)
 						character = "Soldier";
 					else
 					{
@@ -212,19 +198,19 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		switch (character)
 		{
 			case "Demoman":
-				player.SetCharacter(PhotonCharacters.Character.Demoman);
+				player.SetCharacter(CharacterData._CharacterClass.Demoman);
 				photonCharacters.UpdateCharacters();
 				break;
 			case "Engineer":
-				player.SetCharacter(PhotonCharacters.Character.Engineer);
+				player.SetCharacter(CharacterData._CharacterClass.Engineer);
 				photonCharacters.UpdateCharacters();
 				break;
 			case "Soldier":
-				player.SetCharacter(PhotonCharacters.Character.Soldier);
+				player.SetCharacter(CharacterData._CharacterClass.Soldier);
 				photonCharacters.UpdateCharacters();
 				break;
 			case "None":
-				player.SetCharacter(PhotonCharacters.Character.None);
+				player.SetCharacter(CharacterData._CharacterClass.None);
 				photonCharacters.UpdateCharacters();
 				break;
 		}
@@ -236,7 +222,6 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	public void LeaveGame(Player player)
 	{
-		//player.CustomProperties.Clear();
 
 		PhotonNetwork.LeaveRoom();
 		PhotonNetwork.JoinLobby();
@@ -253,14 +238,14 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	public override void OnLeftRoom()
 	{
-		//Debug.Log(PhotonNetwork.LocalPlayer.NickName + " локальный игрок покинул игру");
+		//Debug.Log(PhotonNetwork.LocalPlayer.NickName + " пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
 		//PhotonNetwork.LocalPlayer.CustomProperties.Clear();
 
 	}
 
 	public override void OnPlayerLeftRoom(Player otherPlayer)
 	{
-		//Debug.Log(otherPlayer.NickName + " покинул игру");
+		//Debug.Log(otherPlayer.NickName + " пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ");
 		//otherPlayer.CustomProperties.Clear();
 	}
 

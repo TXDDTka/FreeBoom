@@ -2,35 +2,30 @@ using Photon.Pun;
 using Photon.Realtime;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PhotonLobby : MonoBehaviourPunCallbacks
 {
 	private bool exitGame = false;
+	[SerializeField]private InputField roomName = null;
 
-	//public override void OnEnable()
-	//{
-	//	//PhotonNetwork.LocalPlayer.CustomProperties.Clear();
-	//	//Debug.LogWarning("Cleared");
-	//}
-	//public GameObject photonNetworkPlayer;
-	//public override void OnEnable()
-	//{
-	//	base.OnEnable();
-	//	PhotonNetwork.LocalPlayer.CustomProperties.Clear();
 
-	//	//	//Debug.LogWarning("Cleared");
-	//}
-
-	public override void OnJoinedLobby()
+	public  void CreateRoom()
 	{
-		base.OnJoinedLobby();
-		PhotonNetwork.LocalPlayer.CustomProperties.Clear();
-		//PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
-		//Instantiate(photonNetworkPlayer);
+		if (string.IsNullOrEmpty(roomName.text))
+		{
+			int value = Environment.TickCount % 99;
+			roomName.text = "Room ¹  " + value.ToString();
+		}
+
+		PhotonLoading.Load(LoadingScene.Game);
+		PhotonNetwork.CreateRoom(roomName.text, new RoomOptions { MaxPlayers = 1 });
+
 	}
+
 	public void JoinRandomRoom()
 	{
-		//PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+		PhotonNetwork.LocalPlayer.CustomProperties.Clear();
 		PhotonNetwork.JoinRandomRoom();
 	}
 
@@ -41,14 +36,15 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 	}
 
 	public override void OnJoinedRoom()
-	{	
-		StartGame();
-	}
-
-	private void StartGame()
 	{
+		//StartGame();
 		PhotonLoading.Load(LoadingScene.Game);
 	}
+
+	//private void StartGame()
+	//{
+	//	PhotonLoading.Load(LoadingScene.Game);
+	//}
 
 	public void LoginMenu()
 	{

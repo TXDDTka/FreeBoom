@@ -11,30 +11,34 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01244d00e089a7541b607d4dcb460497, type: 3}
   m_Name: Weapons
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   weaponsList:
   - weaponGroup: 1
-    mainWeaponName: 1
-    secondWeaponName: 0
+    weaponName: 1
     characterClass: 2
-    damageType: 1
+    damageType: 2
+    crosshairType: 1
     bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
       type: 3}
     damage: 50
-    lifeTime: 5
-    bulletSpeed: 8
-    bulletsCountInClip: 1
+    bulletSpeed: 10
+    bulletsCountInClip: 4
     bulletsMaxCount: 12
     shootDelay: 0
     reloadTime: 0
     shootingDistance: 12
     weaponWeight: 0
     weaponSprite: {fileID: 21300000, guid: 621946783fc060b4db88f13637e543eb, type: 3}
+    bulletsPerShoot: 1
+    shoot: {fileID: 0}
+    reloading: {fileID: 0}
+    noAmmo: {fileID: 0}
+    shootParticle: {fileID: 0}
   - weaponGroup: 2
-    mainWeaponName: 0
-    secondWeaponName: 1
+    weaponName: 4
     characterClass: 1
-    damageType: 0
+    damageType: 1
+    crosshairType: 1
     bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
       type: 3}
     damage: 25
@@ -47,11 +51,16 @@ MonoBehaviour:
     shootingDistance: 8
     weaponWeight: 0
     weaponSprite: {fileID: 21300000, guid: a947536f74054cc4293456ae1ed31d29, type: 3}
+    bulletsPerShoot: 1
+    shoot: {fileID: 0}
+    reloading: {fileID: 0}
+    noAmmo: {fileID: 0}
+    shootParticle: {fileID: 0}
   - weaponGroup: 1
-    mainWeaponName: 3
-    secondWeaponName: 0
+    weaponName: 3
     characterClass: 4
-    damageType: 0
+    damageType: 1
+    crosshairType: 1
     bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
       type: 3}
     damage: 35
@@ -64,11 +73,16 @@ MonoBehaviour:
     shootingDistance: 15
     weaponWeight: 0
     weaponSprite: {fileID: 21300000, guid: 159deeed636b4f74c808fa35ea5d308f, type: 3}
+    bulletsPerShoot: 3
+    shoot: {fileID: 0}
+    reloading: {fileID: 0}
+    noAmmo: {fileID: 0}
+    shootParticle: {fileID: 0}
   - weaponGroup: 1
-    mainWeaponName: 2
-    secondWeaponName: 0
+    weaponName: 2
     characterClass: 3
-    damageType: 0
+    damageType: 1
+    crosshairType: 2
     bulletPrefab: {fileID: 443627740458868354, guid: 4da44595f0955e742938b81f220d9519,
       type: 3}
     damage: 30
@@ -81,6 +95,11 @@ MonoBehaviour:
     shootingDistance: 13
     weaponWeight: 0
     weaponSprite: {fileID: 21300000, guid: db3daa13faf14c54a94a7269863fc39d, type: 3}
+    bulletsPerShoot: 3
+    shoot: {fileID: 0}
+    reloading: {fileID: 0}
+    noAmmo: {fileID: 0}
+    shootParticle: {fileID: 0}
   currentWeapon:
     weaponGroup: 1
     mainWeaponName: 1

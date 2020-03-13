@@ -9,7 +9,7 @@ public class BoomJump : MonoBehaviour, IPointerDownHandler
 {
 
     public static BoomJump Instance { get; private set; }
-    private PhotonPlayerMovement photonPlayerMovement;
+    private PlayerMovement playerMovement;
     private void InitializeSingleton()
     {
         if (Instance == null)
@@ -32,9 +32,7 @@ public class BoomJump : MonoBehaviour, IPointerDownHandler
   //  public bool canJump = false;
     [SerializeField] private Vector3[] positions = null;
 
-  //  public Button jumpButton;
 
-   // public int team = 0;
     private void Awake()
     {
         InitializeSingleton();
@@ -42,35 +40,23 @@ public class BoomJump : MonoBehaviour, IPointerDownHandler
 
     private void FixedUpdate()
     {
-        //
-           // if (canJump)
-          //  {
+
                 amount += 1 / duration * Time.deltaTime;
                 amount %= 1;
                 Calculate();
                 
-          //  }
 
     }
 
-    public void Activate(PhotonPlayerMovement playerMovement, int newAngle)//(Transform playerPosition, int newAngle)
+    public void Activate(PlayerMovement getPlayerMovement, int newAngle)
     {
-        photonPlayerMovement = playerMovement;
+        playerMovement = getPlayerMovement;
         angle = newAngle;
         amount = 0;
-        spawnPoint = playerMovement.transform;//playerPosition;
-        //bar.SetActive(isStart);
-        //  canJump = true;
-        //img.transform.parent.gameObject.SetActive(true);
-        // jumpButton.gameObject.SetActive(true);
+        spawnPoint = playerMovement.transform;
+
     }
 
-    //public void Deactivate()
-    //{
-    //    canJump = false;
-    //    //img.transform.parent.gameObject.SetActive(false);
-    //   // jumpButton.gameObject.SetActive(false);
-    //}
 
     private void Calculate()
     {
@@ -78,7 +64,7 @@ public class BoomJump : MonoBehaviour, IPointerDownHandler
         img.fillAmount = smoothAmount;
         float forceAmount = (smoothAmount + 1) * launchForce;
         finalVelocity = GetDirection().normalized * forceAmount;
-        CalculateTrajectory(spawnPoint.position, finalVelocity, spawnPoint.position.y);//trajectory visual debug
+        CalculateTrajectory(spawnPoint.position, finalVelocity, spawnPoint.position.y);
     }
 
     private void CalculateTrajectory(Vector3 origin, Vector3 velocity, float verticalTreshold = 0, int pointsCount = 30, float delay = 0.1f)
@@ -102,16 +88,16 @@ public class BoomJump : MonoBehaviour, IPointerDownHandler
             return new Vector3(x, y);
     }
 
-    public void SetTarger(PhotonPlayerMovement playerMovement)
+    public void SetTarger(PlayerMovement setPlayerMovement)
     {
-        photonPlayerMovement = playerMovement;
+        playerMovement = setPlayerMovement;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         //boom.Deactivate(); //Отключаем возможность прыжка
      //   canJump = false;
-        photonPlayerMovement.MakeBoom(finalVelocity); //Совершаем прыжек
+        playerMovement.MakeBoom(finalVelocity); //Совершаем прыжек
         gameObject.SetActive(false);
     }
 }

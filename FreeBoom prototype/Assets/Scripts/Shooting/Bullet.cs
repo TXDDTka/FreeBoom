@@ -3,27 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviourPunCallbacks/*,IPunPrefabPool//,IPunInstantiateMagicCallback*/
+public class Bullet : MonoBehaviourPunCallbacks
 {
-    private PhotonView PV;
-    private Rigidbody rb = null;
-    private float damageAmount = 0f;
-    // private Coroutine lastRoutine = null;
-    // private Coroutine bulletRoutine = null;
-    [SerializeField] private float timeToDestroyBullet = 0f;
-    // [SerializeField] private float timeToDeactivateBullet = 0f;
-    private void Awake()
-    {
-        PV = GetComponent<PhotonView>();
-        rb = GetComponent<Rigidbody>();
-    }
+    [SerializeField]private PhotonView _PV;
+    [SerializeField]private Rigidbody2D _rb = null;
+    private float _damageAmount = 0f;
+    private float _distance = 0f;
+    private float _speed = 0f;
+    private Vector3 _direction;
+    private Vector3 _spawnPosition;
 
 
     public override void OnDisable()
     {
-        base.OnDisable();
-        if (!PV.IsMine) return;
-        CancelInvoke();
+        _direction = direction;
+        _speed = speed;
+        _distance = distance;
+        _damageAmount = damage;
+        _spawnPosition = transform.position;
     }
 
     //public void Set(Vector3 velocity, float damage, float destroyTime)
@@ -37,20 +34,20 @@ public class Bullet : MonoBehaviourPunCallbacks/*,IPunPrefabPool//,IPunInstantia
         Invoke("DestoyBullet", timeToDestroyBullet);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        if (!PV.IsMine) return;
+        if (!_PV.IsMine) return;
 
 
-        if (other.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
-            if (other.GetComponent<PhotonView>().Owner.GetTeam() != PhotonNetwork.LocalPlayer.GetTeam())
+            if (other.gameObject.GetComponent<PhotonView>().Owner.GetTeam() != PhotonNetwork.LocalPlayer.GetTeam())
             {
-            
+
                 other.GetComponent<PhotonView>().RPC("GetDamage", RpcTarget.AllViaServer, damageAmount, PhotonNetwork.LocalPlayer);
                 PhotonNetwork.Destroy(gameObject);
             }
-      }
+        }
         else
         {
             PhotonNetwork.Destroy(gameObject);
@@ -58,7 +55,7 @@ public class Bullet : MonoBehaviourPunCallbacks/*,IPunPrefabPool//,IPunInstantia
     }
 
     public void DestoyBullet()
-    { 
+    {
         PhotonNetwork.Destroy(gameObject);
     }
 }

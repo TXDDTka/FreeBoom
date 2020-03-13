@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   AppSettings:
     AppIdRealtime: 080596a0-836b-476a-b684-247ed2164916
-    AppIdChat: 
-    AppIdVoice: 
-    AppVersion: 
+    AppIdChat:
+    AppIdVoice:
+    AppVersion:
     UseNameServer: 1
-    FixedRegion: 
-    Server: 
+    FixedRegion:
+    Server:
     Port: 0
     Protocol: 0
     EnableLobbyStatistics: 0

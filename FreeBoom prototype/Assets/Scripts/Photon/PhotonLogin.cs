@@ -26,7 +26,6 @@ public void Connect()
 
 	public override void OnConnectedToMaster()
 	{
-		Debug.Log("Локальный игрок " + PhotonNetwork.NickName + " подключился к Master Server");
 		PhotonNetwork.AutomaticallySyncScene = true;
 		PhotonNetwork.JoinLobby();
 		PhotonLoading.Load(LoadingScene.Lobby);

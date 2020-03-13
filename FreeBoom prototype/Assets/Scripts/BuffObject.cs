@@ -8,5 +8,3 @@ public class BuffObject : MonoBehaviour
     public enum BuffType { None, FirstAid, Shield, Potions }
     public BuffType buffType = BuffType.None;
 }
-
-
