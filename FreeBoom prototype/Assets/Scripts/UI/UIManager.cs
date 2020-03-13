@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,26 +19,26 @@ public class UIManager : MonoBehaviour
         ChooseTeamPanel,
         ChooseCharacterPanel,
         GamePanel,
-        MenuPanel
+        MenuPanel,
     }
+
+    public PhotonTeams.Team team = PhotonTeams.Team.None;
 
     public CurrentPanel currentPanel = CurrentPanel.ChooseTeamPanel;
 
     public float timer = 0f;
-    [SerializeField] private float respawnTimer = 0f;
-    private Coroutine timerCoroutine;
-    [SerializeField] private new Camera camera = new Camera();
-    [SerializeField] private GameObject monitoringPanel = null;
-    [SerializeField] private Image redRespawnBar = null;
-    [SerializeField] private Image redLoadingBar = null;
+    [SerializeField] private float _respawnTimer = 0f;
+    private Coroutine _timerCoroutine;
+    [SerializeField] private Camera _mainCamera = new Camera();
+    [SerializeField] private GameObject _monitoringPanel = null;
+    [SerializeField] private Image _redRespawnBar = null;
+    [SerializeField] private Image _redLoadingBar = null;
 
-    [SerializeField] private Image blueRespawnBar = null;
-    [SerializeField] private Image blueLoadingBar = null;
+    [SerializeField] private Image _blueRespawnBar = null;
+    [SerializeField] private Image _blueLoadingBar = null;
 
-    [SerializeField] private Text redRespawnText = null;
-    [SerializeField] private Text blueRespawnText = null;
-
-    public string team = null;
+    [SerializeField] private Text _redRespawnText = null;
+    [SerializeField] private Text _blueRespawnText = null;
 
     public Button leaveGameBtn;
     public Button exitGameBtn;
@@ -48,10 +49,11 @@ public class UIManager : MonoBehaviour
     [Serializable]
     public class PanelsList
     {
-        public string panelName;
+        public CurrentPanel panelName;
         public GameObject[] panelObjects;
         public Button[] panelButtons;
-        public string[] buttonValue;
+    //    public string[] buttonValue;
+    //    public PhotonTeams.Team photonTeams;
     }
 
     public List<PanelsList> panelsLists = new List<PanelsList>();
@@ -67,7 +69,7 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         InitializeSingleton();
-         timer = respawnTimer;
+         timer = _respawnTimer;
     }
 
     public void ChangePanel()
@@ -77,13 +79,13 @@ public class UIManager : MonoBehaviour
 
             case CurrentPanel.ChooseTeamPanel:
                 {
-                    if (timer < respawnTimer && timer > 0)
+                    if (timer < _respawnTimer && timer > 0)
                     {
                         RespawnPanelOff();
                     }
                     foreach (var panel in panelsLists)
                     {
-                        if (panel.panelName == currentPanel.ToString())
+                        if (panel.panelName == currentPanel)
                         {
                             panel.panelObjects[0].SetActive(true);
                         }
@@ -94,17 +96,17 @@ public class UIManager : MonoBehaviour
                 }
             case CurrentPanel.ChooseCharacterPanel:
                 {
-                    if (monitoringPanel.activeSelf == true)
-                        monitoringPanel.SetActive(false);
+                    if (_monitoringPanel.activeSelf == true)
+                        _monitoringPanel.SetActive(false);
 
-                    if (timer < respawnTimer && timer > 0)
+                    if (timer < _respawnTimer && timer > 0)
                     {
                         RespawnPanelOff();
                     }
 
                     foreach (var panel in panelsLists)
                     {
-                        if (panel.panelName == currentPanel.ToString())
+                        if (panel.panelName == currentPanel)
                         {
                             panel.panelObjects[0].SetActive(false);
                             panel.panelObjects[1].SetActive(true);
@@ -118,12 +120,12 @@ public class UIManager : MonoBehaviour
                 {
                     foreach (var panel in panelsLists)
                     {
-                        if (panel.panelName == currentPanel.ToString())
+                        if (panel.panelName == currentPanel)
                         {
                             panel.panelObjects[0].SetActive(false);
                             panel.panelObjects[1].SetActive(false);
                             panel.panelObjects[2].SetActive(true);
-                            camera.cullingMask = -1;
+                            _mainCamera.cullingMask = -1;
                         }
                     }
 
@@ -133,7 +135,7 @@ public class UIManager : MonoBehaviour
                 {
                     foreach (var panel in panelsLists)
                     {
-                        if (panel.panelName == currentPanel.ToString())
+                        if (panel.panelName == currentPanel)
                         {
                             if(respawn)
                             {
@@ -144,7 +146,7 @@ public class UIManager : MonoBehaviour
                             panel.panelObjects[0].SetActive(false);
                             panel.panelObjects[1].SetActive(true);
                             panel.panelObjects[2].SetActive(true);
-                            camera.cullingMask = 0;
+                            _mainCamera.cullingMask = 0;
                         }
                     }
 
@@ -156,8 +158,8 @@ public class UIManager : MonoBehaviour
    private void RespawnPanelOff()
     {
         respawn = false;
-        StopCoroutine(timerCoroutine);
-        timer = respawnTimer;
+        StopCoroutine(_timerCoroutine);
+        timer = _respawnTimer;
         RespawnStatus(false);
 
     }
@@ -168,7 +170,7 @@ public class UIManager : MonoBehaviour
         currentPanel = CurrentPanel.MenuPanel;
         ChangePanel();
         RespawnStatus(true);
-        timerCoroutine = StartCoroutine(RespawnTimer());
+        _timerCoroutine = StartCoroutine(RespawnTimer());
     }
 
 
@@ -180,15 +182,15 @@ public class UIManager : MonoBehaviour
         {
             timer -= Time.deltaTime;
 
-            if (team == "Red")
+            if (team == PhotonTeams.Team.Red)
             {
-                redRespawnText.text = string.Format("{0:0}", timer);
-                redLoadingBar.fillAmount = timer/ respawnTimer;
+                _redRespawnText.text = string.Format("{0:0}", timer);
+                _redLoadingBar.fillAmount = timer/ _respawnTimer;
             }
-            else
+            else if (team == PhotonTeams.Team.Blue)
             {
-                blueRespawnText.text = string.Format("{0:0}", timer);
-                blueLoadingBar.fillAmount = timer / respawnTimer;
+                _blueRespawnText.text = string.Format("{0:0}", timer);
+                _blueLoadingBar.fillAmount = timer / _respawnTimer;
             }
             
 
@@ -197,28 +199,28 @@ public class UIManager : MonoBehaviour
 
         if (timer < 0)
         {
-            Camera.main.cullingMask = -1;
+            _mainCamera.cullingMask = -1;
 
             RespawnStatus(false);
             currentPanel = CurrentPanel.GamePanel;
             ChangePanel();
-            timer = respawnTimer;
+            timer = _respawnTimer;
         }
     }
 
     private void RespawnStatus(bool active)
     {
-        if (team == "Red")
+        if (team == PhotonTeams.Team.Red)
         {
-            redRespawnBar.gameObject.SetActive(active);
-            redLoadingBar.gameObject.SetActive(active);
-            redRespawnText.gameObject.SetActive(active);
+            _redRespawnBar.gameObject.SetActive(active);
+            _redLoadingBar.gameObject.SetActive(active);
+            _redRespawnText.gameObject.SetActive(active);
         }
-        else
+        else if (team == PhotonTeams.Team.Blue)
         {
-            blueRespawnBar.gameObject.SetActive(active);
-            blueLoadingBar.gameObject.SetActive(active);
-            blueRespawnText.gameObject.SetActive(active);
+            _blueRespawnBar.gameObject.SetActive(active);
+            _blueLoadingBar.gameObject.SetActive(active);
+            _blueRespawnText.gameObject.SetActive(active);
         }
     }
 

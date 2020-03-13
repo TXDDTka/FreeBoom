@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Buff
+  - BankDoor
   layers:
   - Default
   - TransparentFX
@@ -20,10 +21,10 @@ TagManager:
   - Ground
   - Wall
   - Buff
-  - JumperGround
-  - 
-  - 
-  - 
+  - Bullet
+  - Jumper
+  - BankDoor
+  - Roof
   - 
   - 
   - 

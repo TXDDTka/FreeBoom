@@ -5,22 +5,23 @@ using UnityEngine;
 public class CrosshairManager : MonoBehaviour {
 
     [Header("CrosshairParameters :")]
-    [SerializeField] private LineRenderer LineRendererObject;
-    public enum CrosshairType { None, LineCrosshair, ShotgunСrosshair }
-    public CrosshairType currentCrosshair = CrosshairType.None;
+    
 
-    public CrosshairType mainWeaponCrosshair = CrosshairType.None;
-    public CrosshairType secondWeaponCrosshair = CrosshairType.None;
+    public WeaponData._CrosshairType currentCrosshair = WeaponData._CrosshairType.None;
+
+    public WeaponData._CrosshairType mainWeaponCrosshair = WeaponData._CrosshairType.None;
+    public WeaponData._CrosshairType secondWeaponCrosshair = WeaponData._CrosshairType.None;
 
     private Vector3 origin = Vector3.zero;
     private Vector3 direction = Vector3.zero;
     public float distance = 0f;
 
     public bool crosshairActive = false;
-
+    [SerializeField] private LayerMask layerMask;
     public static CrosshairManager Instance { get; private set; }
 
     [Header("LineCrosshairParameters :")]
+    [SerializeField] private LineRenderer LineRendererObject;
     [SerializeField] private float StartWidth = 0f;
     [SerializeField] private float EndWidth = 0f;
 
@@ -29,7 +30,7 @@ public class CrosshairManager : MonoBehaviour {
     [SerializeField] private int rayCount = 50;
    // [SerializeField] private float viewDistance = 8f;
 
-    [SerializeField] private LayerMask layerMask;
+    
     private Mesh mesh;
     private float startingAngle;
     [SerializeField] private MeshRenderer meshRenderer;
@@ -50,11 +51,12 @@ public class CrosshairManager : MonoBehaviour {
 
     void Start () 
     {
-                LineRendererObject.startWidth = StartWidth;
-                LineRendererObject.endWidth = EndWidth;
+        LineRendererObject.startWidth = StartWidth;
+        LineRendererObject.endWidth = EndWidth;
 
-                mesh = new Mesh();
-                meshFilter.mesh = mesh;
+        mesh = new Mesh();
+        meshFilter.mesh = mesh;
+
     }
 
    
@@ -64,16 +66,17 @@ public class CrosshairManager : MonoBehaviour {
         {
             switch (currentCrosshair)
             {
-                case CrosshairType.LineCrosshair:
+                case WeaponData._CrosshairType.LineCrosshair:
                     CrosshairLine();
                     break;
-            case CrosshairType.ShotgunСrosshair:
+            case WeaponData._CrosshairType.ShotgunСrosshair:
                 CrosshairShootGun();
                 break;
         }
 
         }
     }
+
 
     private void CrosshairShootGun()
     {
@@ -96,19 +99,16 @@ public class CrosshairManager : MonoBehaviour {
             RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, direction, distance, layerMask);
             if (raycastHit2D.collider == null)
             {
-                //No hit
-                Debug.Log("No hit");
+               // Debug.DrawRay(origin, direction * distance, Color.red);
+                //Не попал в объект
                 vertex = origin + GetVectorFromAngle(angle) * distance;
             }
             else
             {
-                Debug.DrawRay(origin, direction * raycastHit2D.distance, Color.yellow);
-                //Hit object
-                Debug.Log("Hit object");
-                vertex = origin + GetVectorFromAngle(angle) * raycastHit2D.distance;//raycastHit2D.point;
+                //Debug.DrawRay(origin, direction * raycastHit2D.distance, Color.yellow);
+                //Попал в объект
+                vertex = origin + GetVectorFromAngle(angle) * raycastHit2D.distance;
             }
-
-           // vertex = origin + GetVectorFromAngle(angle) * distance;
 
             vertices[vertexIndex] = vertex;
 
@@ -155,7 +155,7 @@ public class CrosshairManager : MonoBehaviour {
         this.direction = direction;
         this.distance = distance;
 
-        if(currentCrosshair == CrosshairType.ShotgunСrosshair)
+        if(currentCrosshair == WeaponData._CrosshairType.ShotgunСrosshair)
         startingAngle = GetAngleFromVectorFloat(this.direction) - fov / 2f;
 
     }
@@ -165,10 +165,10 @@ public class CrosshairManager : MonoBehaviour {
         switch (currentCrosshair)
         {
             
-            case CrosshairType.LineCrosshair:
+            case WeaponData._CrosshairType.LineCrosshair:
                 LineRendererObject.material.color = color;
                 break;
-            case CrosshairType.ShotgunСrosshair:
+            case WeaponData._CrosshairType.ShotgunСrosshair:
                 meshRenderer.material.color = color;
                 break;
         }
@@ -177,8 +177,8 @@ public class CrosshairManager : MonoBehaviour {
     public static Vector3 GetVectorFromAngle(float angle)
     {
         // angle = 0 -> 360
-        //float angleRad = angle * Mathf.Deg2Rad;//(Mathf.PI / 180f122200 ,   );
-        float angleRad =                                          1* (Mathf.PI / 180f);
+        //float angleRad = angle * (Mathf.PI / 180f);
+        float angleRad = angle * Mathf.Deg2Rad;
         return new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad));
     }
 
@@ -195,10 +195,10 @@ public class CrosshairManager : MonoBehaviour {
     {
         switch (currentCrosshair)
         {
-            case CrosshairType.LineCrosshair:
+            case WeaponData._CrosshairType.LineCrosshair:
                 LineRendererObject.enabled = enable;
                 break;
-            case CrosshairType.ShotgunСrosshair:
+            case WeaponData._CrosshairType.ShotgunСrosshair:
                 meshRenderer.enabled = enable;
                 break;
         }

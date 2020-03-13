@@ -39,6 +39,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	private UIManager uiManager = null;
 
+
 	public void Awake()
 	{
 		InitializeSingleton();
@@ -51,12 +52,11 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		PhotonNetwork.Instantiate(photonNetworkPlayer.name, transform.position, Quaternion.identity, 0, null);
 	}
 
-	public void ChooseTeam(string team, Player player)
+	public void ChooseTeam(PhotonTeams.Team currentTeam, Player player)
 	{
-
-		switch (team)
+		switch (currentTeam)
 		{
-			case "Red":
+			case PhotonTeams.Team.Red:
 				player.SetTeam(PhotonTeams.Team.Red);
 				photonTeams.UpdateTeams();
 
@@ -66,7 +66,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					player.SetCharacter(PhotonCharacters.Character.None);
 				}
 				break;
-			case "Blue":
+			case PhotonTeams.Team.Blue:
 				player.SetTeam(PhotonTeams.Team.Blue);
 				photonTeams.UpdateTeams();
 
@@ -76,7 +76,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					player.SetCharacter(PhotonCharacters.Character.None);
 				}
 				break;
-			case "Random":
+			case PhotonTeams.Team.Random:
 
 				if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count)
 				{
@@ -111,7 +111,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 				}
 
 				break;
-			case "AutoChoose":
+			case PhotonTeams.Team.AutoChoose:
 				if (player.GetTeam() == PhotonTeams.Team.Red)
 				{
 					player.SetTeam(PhotonTeams.Team.Blue);
@@ -147,11 +147,108 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 		if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == maxPlayersInTeam && PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count == maxPlayersInTeam)
 			uiManager.panelsLists[3].panelButtons[0].interactable = false;
 
-	}		
+	}
+	//public void ChooseTeam(string team, Player player)
+	//{
 
-	public void ChooseCharacter(string character, Player player)
+	//	switch (team)
+	//	{
+	//		case "Red":
+	//			player.SetTeam(PhotonTeams.Team.Red);
+	//			photonTeams.UpdateTeams();
+
+
+	//			if (player.GetCharacter() != PhotonCharacters.Character.None)
+	//			{
+	//				player.SetCharacter(PhotonCharacters.Character.None);
+	//			}
+	//			break;
+	//		case "Blue":
+	//			player.SetTeam(PhotonTeams.Team.Blue);
+	//			photonTeams.UpdateTeams();
+
+
+	//			if (player.GetCharacter() != PhotonCharacters.Character.None)
+	//			{
+	//				player.SetCharacter(PhotonCharacters.Character.None);
+	//			}
+	//			break;
+	//		case "Random":
+
+	//			if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count)
+	//			{
+	//				int random = Random.Range(0, 2);
+	//				if (random == 0)
+	//				{
+	//					player.SetTeam(PhotonTeams.Team.Red);
+	//					photonTeams.UpdateTeams();
+
+	//				}
+	//				else
+	//				{
+	//					player.SetTeam(PhotonTeams.Team.Blue);
+	//					photonTeams.UpdateTeams();
+
+	//				}
+	//			}
+	//			else
+	//			{
+	//				if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count < PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count)
+	//				{
+	//					player.SetTeam(PhotonTeams.Team.Red);
+	//					photonTeams.UpdateTeams();
+
+
+	//				}
+	//				if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count > PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count)
+	//				{
+	//					player.SetTeam(PhotonTeams.Team.Blue);
+	//					photonTeams.UpdateTeams();
+	//				}
+	//			}
+
+	//			break;
+	//		case "AutoChoose":
+	//			if (player.GetTeam() == PhotonTeams.Team.Red)
+	//			{
+	//				player.SetTeam(PhotonTeams.Team.Blue);
+	//				photonTeams.UpdateTeams();
+
+	//				if (player.GetCharacter() != PhotonCharacters.Character.None)
+	//				{
+	//					player.SetCharacter(PhotonCharacters.Character.None);
+	//				}
+	//			}
+	//			else if (player.GetTeam() == PhotonTeams.Team.Blue)
+	//			{
+	//				player.SetTeam(PhotonTeams.Team.Red);
+	//				photonTeams.UpdateTeams();
+
+	//				if (player.GetCharacter() != PhotonCharacters.Character.None)
+	//				{
+	//					player.SetCharacter(PhotonCharacters.Character.None);
+	//				}
+	//			}
+	//			break;
+	//	}
+	//	if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == maxPlayersInTeam)
+	//	{
+	//		uiManager.panelsLists[0].panelButtons[0].interactable = false;
+	//		uiManager.panelsLists[0].panelButtons[2].interactable = false;
+	//	}
+	//	if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count == maxPlayersInTeam)
+	//	{
+	//		uiManager.panelsLists[0].panelButtons[1].interactable = false;
+	//		uiManager.panelsLists[0].panelButtons[2].interactable = false;
+	//	}
+	//	if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == maxPlayersInTeam && PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count == maxPlayersInTeam)
+	//		uiManager.panelsLists[3].panelButtons[0].interactable = false;
+
+	//}		
+
+	public void ChooseCharacter(PhotonCharacters.Character character, Player player)
 	{
-		if(character == "Random")
+		if(character == PhotonCharacters.Character.Random)
 		{
 			int characterNumber = Random.Range(0, 3);
 			switch (characterNumber)
@@ -159,61 +256,63 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 				case 0:
 
 					if (player.GetCharacter() != PhotonCharacters.Character.Demoman)
-						character = "Demoman";
+						character = PhotonCharacters.Character.Demoman;
 					else
 					{
 						int newCharacterNumber = Random.Range(0, 2);
 						if(newCharacterNumber == 0)
-							character = "Engineer";
+							character = PhotonCharacters.Character.Engineer;
 						else
-							character = "Soldier";
+							character = PhotonCharacters.Character.Soldier;
 					}
 					break;
 				case 1:
 					if (player.GetCharacter() != PhotonCharacters.Character.Engineer)
-						character = "Engineer";
+						character = PhotonCharacters.Character.Engineer;
 					else
 					{
 						int newCharacterNumber = Random.Range(0, 2);
 						if (newCharacterNumber == 0)
-							character = "Demoman";
+							character = PhotonCharacters.Character.Demoman;
 						else
-							character = "Soldier";
+							character = PhotonCharacters.Character.Soldier;
 					}
 					break;
 				case 2:
 					if (player.GetCharacter() != PhotonCharacters.Character.Soldier)
-						character = "Soldier";
+						character = PhotonCharacters.Character.Soldier;
 					else
 					{
 						int newCharacterNumber = Random.Range(0, 2);
 						if (newCharacterNumber == 0)
-							character = "Demoman";
+							character = PhotonCharacters.Character.Demoman;
 						else
-							character = "Engineer";
+							character = PhotonCharacters.Character.Engineer;
 					}
 					break;
 			}
 		}
-		switch (character)
-		{
-			case "Demoman":
-				player.SetCharacter(PhotonCharacters.Character.Demoman);
-				photonCharacters.UpdateCharacters();
-				break;
-			case "Engineer":
-				player.SetCharacter(PhotonCharacters.Character.Engineer);
-				photonCharacters.UpdateCharacters();
-				break;
-			case "Soldier":
-				player.SetCharacter(PhotonCharacters.Character.Soldier);
-				photonCharacters.UpdateCharacters();
-				break;
-			case "None":
-				player.SetCharacter(PhotonCharacters.Character.None);
-				photonCharacters.UpdateCharacters();
-				break;
-		}
+
+		player.SetCharacter(character);
+		//switch (character)
+		//{
+		//	case PhotonCharacters.Character.Demoman:
+		//		player.SetCharacter(PhotonCharacters.Character.Demoman);
+		//		photonCharacters.UpdateCharacters();
+		//		break;
+		//	case PhotonCharacters.Character.Engineer:
+		//		player.SetCharacter(PhotonCharacters.Character.Engineer);
+		//		photonCharacters.UpdateCharacters();
+		//		break;
+		//	case PhotonCharacters.Character.Soldier:
+		//		player.SetCharacter(PhotonCharacters.Character.Soldier);
+		//		photonCharacters.UpdateCharacters();
+		//		break;
+		//	case PhotonCharacters.Character.None:
+		//		player.SetCharacter(PhotonCharacters.Character.None);
+		//		photonCharacters.UpdateCharacters();
+		//		break;
+		//}
 	}
 
 
