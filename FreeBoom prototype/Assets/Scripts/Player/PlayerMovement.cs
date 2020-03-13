@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour, IPunObservable
 {
 
     private float speed = 0;
-    
+
     [SerializeField] private LayerMask[] layers = null;
     public float horizontal = 0f;
    // public float forward = 0f;
@@ -68,7 +68,7 @@ public class PlayerMovement : MonoBehaviour, IPunObservable
                 playerManager.rb.velocity = new Vector2(horizontal * speed, playerManager.rb.velocity.y);
             }
         }
-        
+
     }
 
 
@@ -96,10 +96,10 @@ public class PlayerMovement : MonoBehaviour, IPunObservable
         return raycastHit.collider != null;
     }
 
-    public void MakeBoom(Vector3 velocity)
+    public bool IsJumperGrounded()
     {
         playerManager.rb.velocity = velocity;
-        Invoke("MoveAllow",1f); 
+        Invoke("MoveAllow",1f);
     }
 
     private void MoveAllow()
@@ -122,7 +122,7 @@ public class PlayerMovement : MonoBehaviour, IPunObservable
             var character = charactersSettings.charactersList[i];
             if(character.CharacterClass == playerManager.player.GetCharacter())
             {
-               
+
                 speed = character.Speed;
                 return;
             }

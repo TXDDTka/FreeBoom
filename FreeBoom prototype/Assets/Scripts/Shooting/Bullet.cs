@@ -25,7 +25,7 @@ public class Bullet : MonoBehaviourPunCallbacks
         _playerVelocity = playerVelocity.velocity;
     }
 
-    private void FixedUpdate()
+    private void OnCollisionEnter2D(Collision2D other)
     {
         if (!_PV.IsMine) return;
         //_rb.velocity = _playerVelocity + _direction * _speed;
@@ -38,7 +38,7 @@ public class Bullet : MonoBehaviourPunCallbacks
         if (maxDistance > _distance)
         {
              PhotonNetwork.Destroy(gameObject);
-            
+
         }
 
     }
@@ -49,7 +49,7 @@ public class Bullet : MonoBehaviourPunCallbacks
 
 
     //    if (other.gameObject.tag == "Player")
-    //    { 
+    //    {
     //        if (other.gameObject.GetComponent<PhotonView>().Owner.GetTeam() != PhotonNetwork.LocalPlayer.GetTeam())
     //        {
 
@@ -68,7 +68,7 @@ public class Bullet : MonoBehaviourPunCallbacks
     {
 
         if(collision.TryGetComponent<PhotonView>(out PhotonView photonView))
-        { 
+        {
         //if (collision.tag == "Player")
         //{
         //    PhotonView photonView = collision.GetComponent<PhotonView>();

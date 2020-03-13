@@ -154,7 +154,7 @@ public class UIManager : MonoBehaviour
                 }
         }
     }
-            
+
    private void RespawnPanelOff()
     {
         respawn = false;
@@ -192,7 +192,7 @@ public class UIManager : MonoBehaviour
                 _blueRespawnText.text = string.Format("{0:0}", timer);
                 _blueLoadingBar.fillAmount = timer / _respawnTimer;
             }
-            
+
 
             yield return null;
         }
@@ -225,5 +225,3 @@ public class UIManager : MonoBehaviour
     }
 
 }
-
-

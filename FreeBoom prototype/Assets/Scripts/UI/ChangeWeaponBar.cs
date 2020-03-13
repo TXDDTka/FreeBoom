@@ -45,8 +45,41 @@ public class ChangeWeaponBar : MonoBehaviour
     [Header("MainWeapon")]
     public Button mainWeaponButton = null;
     public Image mainWeaponImage = null;
-    public Text mainWeaponCurrentBulletCountText = null;
+    public Text mainWeaponBulletCountText = null;
+    // private int mainWeaponCurrentBulletCount = 0;
+    // private int mainWeaponMaxBulletCount = 0;
     [SerializeField] private bool mainWeaponActive = true;
+
+
+    [Tooltip("Ячейка со вторым оружием")]
+    [Header("SeconWeapon")]
+    public Button secondWeaponButton = null;
+    public Image secondWeaponImage = null;
+    public Text secondWeaponCurrentBulletCountText = null;
+    //private int secondWeaponCurrentBulletCount = 0;
+    //private int secondWeaponMaxBulletCount = 0;
+    public bool secondWeaponActive = false;
+
+    [Tooltip("Доп параметры оружия")]
+    [Header("WeaponParametrs")]
+    // [SerializeField] private bool firstChoose = false;
+    [SerializeField] private int yPosition = 0;
+
+    [Tooltip("Ячейка с бафами")]
+    [Header("Buffs")]
+    public bool firstAid = false;
+    public bool shield = false;
+    public bool potions = false;
+    private bool firstElementExitst = false;
+    private int buffIndex = 0;
+    public BuffsSettingsDatabase buffsSettingsDatabase;
+    [SerializeField] private Image buffSprite = null;
+    [SerializeField] private Text buffCountText = null;
+
+    public Button chooseButton = null;
+    public Button changeButton = null;
+    [SerializeField] private Image buffSprite = null;
+    [SerializeField] private Text buffCountText = null;
 
 
     [Tooltip("Ячейка со вторым оружием")]
@@ -56,22 +89,6 @@ public class ChangeWeaponBar : MonoBehaviour
     public Text secondWeaponCurrentBulletCountText = null;
     public bool secondWeaponActive = false;
 
-    [Tooltip("Доп параметры оружия")]
-    [Header("WeaponParametrs")]
-    [SerializeField] private int yPosition = 0;
-    public Button chooseButton = null;
-    public Button changeButton = null;
-
-    [Tooltip("КулдаунБар")]
-    [Header("MainWeaponСooldownBar")]
-    public GameObject cooldownBarMainWeapon = null;
-    public Image cooldownImageMainWeapon = null;
-    public Text cooldownTextMainWeapon = null;
-
-    [Header("SecondWeaponСooldownBar")]
-    public GameObject cooldownBarSecondWeapon = null;
-    public Image cooldownImageSecondWeapon = null;
-    public Text cooldownTextSecondWeapon = null;
 
     private float cooldownTimer = 0f;
     public float reloadingTime = 0f;
@@ -100,13 +117,7 @@ public class ChangeWeaponBar : MonoBehaviour
     public void ChooseMainWeapon(Sprite mainWeaponSprite, int mainWeaponBulletsInClip, int mainWeaponBulletsMaxCount)
     {
         mainWeaponImage.sprite = mainWeaponSprite;
-        mainWeaponCurrentBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
-    }
-    public void ChooseSecondWeapon(Sprite secondWeaponSprite, int secondWeaponBulletsInClip, int secondWeaponBulletsMaxCount)
-    {
-        secondWeaponImage.sprite = secondWeaponSprite;
-        secondWeaponCurrentBulletCountText.text = $"{secondWeaponBulletsInClip} / {secondWeaponBulletsMaxCount}";
-    }
+        mainWeaponBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
 
 
     public void ReloadingTime(float reloadingTime)
@@ -377,4 +388,3 @@ public class ChangeWeaponBar : MonoBehaviour
         }
     }
 }
-

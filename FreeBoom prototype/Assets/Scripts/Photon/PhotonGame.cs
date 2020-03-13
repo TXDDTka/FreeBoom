@@ -61,9 +61,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 				photonTeams.UpdateTeams();
 
 
-				if (player.GetCharacter() != PhotonCharacters.Character.None)
+				if (player.GetCharacter() != CharacterData._CharacterClass.None)
 				{
-					player.SetCharacter(PhotonCharacters.Character.None);
+					player.SetCharacter(CharacterData._CharacterClass.None);
 				}
 				break;
 			case PhotonTeams.Team.Blue:
@@ -71,9 +71,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 				photonTeams.UpdateTeams();
 
 
-				if (player.GetCharacter() != PhotonCharacters.Character.None)
+				if (player.GetCharacter() != CharacterData._CharacterClass.None)
 				{
-					player.SetCharacter(PhotonCharacters.Character.None);
+					player.SetCharacter(CharacterData._CharacterClass.None);
 				}
 				break;
 			case PhotonTeams.Team.Random:
@@ -117,9 +117,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					player.SetTeam(PhotonTeams.Team.Blue);
 					photonTeams.UpdateTeams();
 
-					if (player.GetCharacter() != PhotonCharacters.Character.None)
+					if (player.GetCharacter() != CharacterData._CharacterClass.None)
 					{
-						player.SetCharacter(PhotonCharacters.Character.None);
+						player.SetCharacter(CharacterData._CharacterClass.None);
 					}
 				}
 				else if (player.GetTeam() == PhotonTeams.Team.Blue)
@@ -127,9 +127,9 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 					player.SetTeam(PhotonTeams.Team.Red);
 					photonTeams.UpdateTeams();
 
-					if (player.GetCharacter() != PhotonCharacters.Character.None)
+					if (player.GetCharacter() != CharacterData._CharacterClass.None)
 					{
-						player.SetCharacter(PhotonCharacters.Character.None);
+						player.SetCharacter(CharacterData._CharacterClass.None);
 					}
 				}
 				break;
@@ -244,7 +244,7 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 	//	if (PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Red].Count == maxPlayersInTeam && PhotonTeams.PlayersPerTeam[PhotonTeams.Team.Blue].Count == maxPlayersInTeam)
 	//		uiManager.panelsLists[3].panelButtons[0].interactable = false;
 
-	//}		
+	//}
 
 	public void ChooseCharacter(PhotonCharacters.Character character, Player player)
 	{
@@ -334,6 +334,19 @@ public class PhotonGame : MonoBehaviourPunCallbacks
 
 	}
 
+
+	public override void OnLeftRoom()
+	{
+		//Debug.Log(PhotonNetwork.LocalPlayer.NickName + " ��������� ����� ������� ����");
+		//PhotonNetwork.LocalPlayer.CustomProperties.Clear();
+
+	}
+
+	public override void OnPlayerLeftRoom(Player otherPlayer)
+	{
+		//Debug.Log(otherPlayer.NickName + " ������� ����");
+		//otherPlayer.CustomProperties.Clear();
+	}
 
 
 	public override void OnDisconnected(DisconnectCause cause)

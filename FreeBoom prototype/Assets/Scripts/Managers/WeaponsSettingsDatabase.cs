@@ -12,7 +12,7 @@ public class WeaponsSettingsDatabase : ScriptableObject
 
     private int currentIndex = 0; //Что бы было удобней следить за номером текущего элемента
 
-    //Метод добавления в лист нового пустого элемента и удаление текущего. 
+    //Метод добавления в лист нового пустого элемента и удаление текущего.
     public void AddElement()
     {
         if (weaponsList == null) // Необходимо будет проверить наличие листа в памяти что бы его инициализировать
@@ -79,7 +79,7 @@ public class WeaponsSettingsDatabase : ScriptableObject
             if (weaponsList != null && index >= 0 && index < weaponsList.Count)
                 return weaponsList[index];
             return null;
-        } 
+        }
 
         set
         {
@@ -133,7 +133,7 @@ public class WeaponData
         protected set { }
     }
 
-    
+
     public enum _CrosshairType { None, LineCrosshair, ShotgunСrosshair }
     [Tooltip("Тип прицела")]
     [SerializeField] private _CrosshairType crosshairType = _CrosshairType.None;
@@ -156,6 +156,14 @@ public class WeaponData
     public float Damage
     {
         get { return damage; }
+        protected set { }
+    }
+
+    [Tooltip("Время через которое пуля уничтожится")]
+    [SerializeField] private float lifeTime = 0f;
+    public float LifeTime
+    {
+        get { return lifeTime; }
         protected set { }
     }
 

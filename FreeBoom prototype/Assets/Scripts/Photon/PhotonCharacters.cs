@@ -20,11 +20,11 @@ public class PhotonCharacters : MonoBehaviourPunCallbacks
 
     public void Start()
     {
-        PlayersChoosedCharacter = new Dictionary<Character, List<Player>>();
-        Array enumVals = Enum.GetValues(typeof(Character));
+        PlayersChoosedCharacter = new Dictionary<CharacterData._CharacterClass, List<Player>>();
+        Array enumVals = Enum.GetValues(typeof(CharacterData._CharacterClass));
         foreach (var enumVal in enumVals)
         {
-            PlayersChoosedCharacter[(Character)enumVal] = new List<Player>();
+            PlayersChoosedCharacter[(CharacterData._CharacterClass)enumVal] = new List<Player>();
         }
     }
 
@@ -66,16 +66,16 @@ public class PhotonCharacters : MonoBehaviourPunCallbacks
 
     public void UpdateCharacters()
     {
-        Array enumVals = Enum.GetValues(typeof(Character));
+        Array enumVals = Enum.GetValues(typeof(CharacterData._CharacterClass));
         foreach (var enumVal in enumVals)
         {
-            PlayersChoosedCharacter[(Character)enumVal].Clear();
+            PlayersChoosedCharacter[(CharacterData._CharacterClass)enumVal].Clear();
         }
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             Player player = PhotonNetwork.PlayerList[i];
-            Character playerCharacter = player.GetCharacter();
+            CharacterData._CharacterClass playerCharacter = player.GetCharacter();
             PlayersChoosedCharacter[playerCharacter].Add(player);
         }
     }
@@ -86,22 +86,22 @@ public static class CharacterChange
 {
     /// <summary>Extension for Player class to wrap up access to the player's custom property.</summary>
     /// <returns>PunTeam.Team.none if no team was found (yet).</returns>
-    public static PhotonCharacters.Character GetCharacter(this Player player)
+    public static CharacterData._CharacterClass GetCharacter(this Player player)
     {
         object characterId;
         if (player.CustomProperties.TryGetValue(PhotonCharacters.CharacterPlayerProp, out characterId))
         {
-            return (PhotonCharacters.Character)characterId;
+            return (CharacterData._CharacterClass)characterId;
         }
 
-        return PhotonCharacters.Character.None;
+        return CharacterData._CharacterClass.None;
     }
 
     /// <summary>Switch that player's team to the one you assign.</summary>
     /// <remarks>Internally checks if this player is in that team already or not. Only team switches are actually sent.</remarks>
     /// <param name="player"></param>
     /// <param name="character"></param>
-    public static void SetCharacter(this Player player, PhotonCharacters.Character character)
+    public static void SetCharacter(this Player player, CharacterData._CharacterClass character)
     {
         if (!PhotonNetwork.IsConnectedAndReady)
         {
@@ -109,7 +109,7 @@ public static class CharacterChange
             return;
         }
 
-        PhotonCharacters.Character currentCharacter = player.GetCharacter();
+        CharacterData._CharacterClass currentCharacter = player.GetCharacter();
         if (currentCharacter != character)
         {
             player.SetCustomProperties(new Hashtable() { { PhotonCharacters.CharacterPlayerProp, (byte)character } });

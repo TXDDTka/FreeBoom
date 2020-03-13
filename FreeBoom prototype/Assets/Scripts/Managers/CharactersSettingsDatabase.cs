@@ -11,7 +11,7 @@ public class CharactersSettingsDatabase : ScriptableObject
 
     private int currentIndex = 0; //Что бы было удобней следить за номером текущего элемента
 
-    //Метод добавления в лист нового пустого элемента и удаление текущего. 
+    //Метод добавления в лист нового пустого элемента и удаление текущего.
     public void AddElement()
     {
         if (charactersList == null) // Необходимо будет проверить наличие листа в памяти что бы его инициализировать
@@ -78,7 +78,7 @@ public class CharactersSettingsDatabase : ScriptableObject
             if (charactersList != null && index >= 0 && index < charactersList.Count)
                 return charactersList[index];
             return null;
-        } 
+        }
 
         set
         {

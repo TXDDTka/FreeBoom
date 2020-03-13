@@ -217,12 +217,12 @@ public class Hassle : MonoBehaviour
         //    }
         }
         }
- 
+
     //[PunRPC]
     //public void FreezePlayer(RigidbodyConstraints2D constraints2D, bool colliderOn, bool isKinematic)
     //{
     //    playerManager.rb.constraints = constraints2D;// Замораживаем игрока
-    //    playerManager.boxCollider.enabled = colliderOn; 
+    //    playerManager.boxCollider.enabled = colliderOn;
     //    playerManager.rb.isKinematic = isKinematic;
     //}
 
