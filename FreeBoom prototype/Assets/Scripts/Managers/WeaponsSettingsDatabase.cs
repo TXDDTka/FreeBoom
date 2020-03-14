@@ -99,6 +99,7 @@ public class WeaponData
 {
 
     public enum _WeaponGroup { None, MainWeapon, SecondWeapon, Tool }
+    [Tooltip("Категория оружия")]
     [SerializeField] private _WeaponGroup weaponGroup = _WeaponGroup.None;
     public _WeaponGroup WeaponGroup
     {
@@ -106,31 +107,25 @@ public class WeaponData
         protected set { }
     }
 
-    public enum _MainWeaponName { None, Bazuka , Rifle, Lazer }
-    [SerializeField] private _MainWeaponName mainWeaponName = _MainWeaponName.None;
-    public _MainWeaponName MainWeaponName
+    public enum _WeaponName { None, Bazuka , ShotGun, AutomaticRifle, USP }
+    [SerializeField] private _WeaponName weaponName = _WeaponName.None;
+    public _WeaponName WeaponName
     {
-        get { return mainWeaponName; }
+        get { return weaponName; }
         protected set { }
     }
 
-    public enum _SecondWeaponName { None, Pistol }
-    [SerializeField] private _SecondWeaponName secondWeaponName = _SecondWeaponName.None;
-    public _SecondWeaponName SecondWeaponName
-    {
-        get { return secondWeaponName; }
-        protected set { }
-    }
 
-    public enum _CharacterClass { None, All, Demoman, Engineer, Soldier }
-    [SerializeField] private _CharacterClass characterClass = _CharacterClass.None;
-    public _CharacterClass CharacterClass
+    [Tooltip("Класс персонажа")]
+    [SerializeField] private PhotonCharacters.Character characterClass = PhotonCharacters.Character.None;
+    public PhotonCharacters.Character CharacterClass
     {
         get { return characterClass; }
         protected set { }
     }
 
     public enum _DamageType { None, Unit, Mass }
+    [Tooltip("Тип урона")]
     [SerializeField] private _DamageType damageType = _DamageType.Unit;
     public _DamageType DamageType
     {
@@ -138,7 +133,9 @@ public class WeaponData
         protected set { }
     }
 
+    
     public enum _CrosshairType { None, LineCrosshair, ShotgunСrosshair }
+    [Tooltip("Тип прицела")]
     [SerializeField] private _CrosshairType crosshairType = _CrosshairType.None;
     public _CrosshairType CrosshairType
     {
@@ -186,6 +183,14 @@ public class WeaponData
         protected set { }
     }
 
+    [Tooltip("Задержка между вылетом пуль")]
+    [SerializeField] private float shootDelayPerShoot = 0f;
+    public float ShootDelayPerShoot
+    {
+        get { return shootDelayPerShoot; }
+        protected set { }
+    }
+
     [Tooltip("Задержка между выстрелами")]
     [SerializeField] private float shootDelay = 0f;
     public float ShotDelay
@@ -225,5 +230,47 @@ public class WeaponData
         get { return weaponSprite; }
         protected set { }
 
+    }
+
+    [Tooltip("Количество выстрелов за раз")]
+    [SerializeField] private int bulletsPerShoot = 0;
+    public int BulletsPerShoot
+    {
+        get { return bulletsPerShoot; }
+        protected set { }
+    }
+
+    [Tooltip("Звук выстрела")]
+    [SerializeField] private AudioClip shoot = null;
+    public AudioClip Shoot
+    {
+        get { return shoot; }
+        protected set { }
+    }
+
+
+    [Tooltip("Звук перезарядки")]
+    [SerializeField] private AudioClip reloading = null;
+    public AudioClip Reloading
+    {
+        get { return reloading; }
+        protected set { }
+    }
+
+
+    [Tooltip("Звук затвора (нет патронов)")]
+    [SerializeField] private AudioClip noAmmo = null;
+    public AudioClip NoAmmo
+    {
+        get { return noAmmo; }
+        protected set { }
+    }
+
+    [Tooltip("Объект (частицы) выстрела")]
+    [SerializeField] private GameObject shootParticle = null;
+    public GameObject ShootParticle
+    {
+        get { return shootParticle; }
+        protected set { }
     }
 }
