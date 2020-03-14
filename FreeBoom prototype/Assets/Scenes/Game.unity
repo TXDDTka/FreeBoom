@@ -5924,7 +5924,7 @@ MonoBehaviour:
     type: 3}
   botTeam: 2
   firstWave: 1
-  regularWave: 20
+  regularWave: 7.2
   timeBetweenCreep: 5
 --- !u!4 &795856592
 Transform:
@@ -7589,7 +7589,7 @@ MonoBehaviour:
     type: 3}
   botTeam: 1
   firstWave: 1
-  regularWave: 20
+  regularWave: 8.5
   timeBetweenCreep: 5
 --- !u!1 &1053962767
 GameObject:
