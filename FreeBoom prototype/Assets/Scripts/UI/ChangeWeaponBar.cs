@@ -6,9 +6,13 @@ using UnityEngine.UI;
 using System.Timers;
 public class ChangeWeaponBar : MonoBehaviour
 {
-
-    public enum ReloadingBarStatus { NoReloadNeeded, Reloading, Stopped }
-    public enum Buff { None, FirstAid, Shield, Potions }
+    public enum Buff
+    {
+        None,
+        FirstAid,
+        Shield,
+        Potions
+    }
 
     [Serializable]
     public class BuffsList
@@ -18,17 +22,13 @@ public class ChangeWeaponBar : MonoBehaviour
         public Buff currentBuff;
     }
 
-    public PlayerWeaponManager.ReloadingStatus mainWeaponReloadingBarStatus = PlayerWeaponManager.ReloadingStatus.NoReloadNeeded;
-    public PlayerWeaponManager.ReloadingStatus secondWeaponReloadingBarStatus = PlayerWeaponManager.ReloadingStatus.NoReloadNeeded;
-
     public List<BuffsList> buffsList = new List<BuffsList>();
 
     public Buff currentBuff = Buff.None;
     private Buff addedBuff = Buff.None;
     public static ChangeWeaponBar Instance { get; private set; }
 
-   // public IEnumerator mainWeaponCooldownCoroutine;
-  //  public IEnumerator secondWeaponCooldownCoroutine;
+    
 
     [Tooltip("Ячейка с бафами")]
     [Header("Buffs")]
@@ -45,9 +45,7 @@ public class ChangeWeaponBar : MonoBehaviour
     [Header("MainWeapon")]
     public Button mainWeaponButton = null;
     public Image mainWeaponImage = null;
-    public Text mainWeaponBulletCountText = null;
-    // private int mainWeaponCurrentBulletCount = 0;
-    // private int mainWeaponMaxBulletCount = 0;
+    public Text mainWeaponCurrentBulletCountText = null;
     [SerializeField] private bool mainWeaponActive = true;
 
 
@@ -56,42 +54,26 @@ public class ChangeWeaponBar : MonoBehaviour
     public Button secondWeaponButton = null;
     public Image secondWeaponImage = null;
     public Text secondWeaponCurrentBulletCountText = null;
-    //private int secondWeaponCurrentBulletCount = 0;
-    //private int secondWeaponMaxBulletCount = 0;
     public bool secondWeaponActive = false;
 
     [Tooltip("Доп параметры оружия")]
     [Header("WeaponParametrs")]
-    // [SerializeField] private bool firstChoose = false;
     [SerializeField] private int yPosition = 0;
-
-    [Tooltip("Ячейка с бафами")]
-    [Header("Buffs")]
-    public bool firstAid = false;
-    public bool shield = false;
-    public bool potions = false;
-    private bool firstElementExitst = false;
-    private int buffIndex = 0;
-    public BuffsSettingsDatabase buffsSettingsDatabase;
-    [SerializeField] private Image buffSprite = null;
-    [SerializeField] private Text buffCountText = null;
-
     public Button chooseButton = null;
     public Button changeButton = null;
-    [SerializeField] private Image buffSprite = null;
-    [SerializeField] private Text buffCountText = null;
 
+    [Tooltip("КулдаунБар")]
+    [Header("MainWeaponСooldownBar")]
+    public GameObject cooldownBarMainWeapon = null;
+    public Image cooldownImageMainWeapon = null;
+    public Text cooldownTextMainWeapon = null;
 
-    [Tooltip("Ячейка со вторым оружием")]
-    [Header("SeconWeapon")]
-    public Button secondWeaponButton = null;
-    public Image secondWeaponImage = null;
-    public Text secondWeaponCurrentBulletCountText = null;
-    public bool secondWeaponActive = false;
-
+    [Header("SecondWeaponСooldownBar")]
+    public GameObject cooldownBarSecondWeapon = null;
+    public Image cooldownImageSecondWeapon = null;
+    public Text cooldownTextSecondWeapon = null;
 
     private float cooldownTimer = 0f;
-    public float reloadingTime = 0f;
     public bool mainWeaponCooldown = false;
     public bool secondWeaponCooldown = false;
     private void InitializeSingleton()
@@ -111,59 +93,58 @@ public class ChangeWeaponBar : MonoBehaviour
     {
         mainWeaponButton.interactable = false;
         mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
-     //   mainWeaponCooldownCoroutine = MainWeaponCooldownTimer();
     }
 
     public void ChooseMainWeapon(Sprite mainWeaponSprite, int mainWeaponBulletsInClip, int mainWeaponBulletsMaxCount)
     {
         mainWeaponImage.sprite = mainWeaponSprite;
-        mainWeaponBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
-
-
-    public void ReloadingTime(float reloadingTime)
+        mainWeaponCurrentBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
+    }
+    public void ChooseSecondWeapon(Sprite secondWeaponSprite, int secondWeaponBulletsInClip, int secondWeaponBulletsMaxCount)
     {
-        this.reloadingTime = reloadingTime;
+        secondWeaponImage.sprite = secondWeaponSprite;
+        secondWeaponCurrentBulletCountText.text = $"{secondWeaponBulletsInClip} / {secondWeaponBulletsMaxCount}";
+    }
+
+    public void MainWeaponCooldownBar(bool active, float reloadingTime)
+    {
+       // cooldown = active;
+        cooldownBarMainWeapon.SetActive(active);
+
+        if (mainWeaponCooldown)
+            mainWeaponCurrentBulletCountText.gameObject.SetActive(false);
+        else
+            mainWeaponCurrentBulletCountText.gameObject.SetActive(true);
+
         cooldownTimer = reloadingTime;
+
+        if(active)
+        StartCoroutine(MainWeaponCooldownTimer(reloadingTime));
+        else
+            StopAllCoroutines();
     }
 
-    public void MainWeaponBarReloadingStatus()
+    public void SecondWeaponCooldownBar(bool active, float reloadingTime)
     {
-        switch(mainWeaponReloadingBarStatus)
-        {
-            case PlayerWeaponManager.ReloadingStatus.NoReloadNeeded:
-                cooldownBarMainWeapon.SetActive(false);
-                mainWeaponCurrentBulletCountText.gameObject.SetActive(true);
-                break;
-            case PlayerWeaponManager.ReloadingStatus.NeedReload:
-                cooldownBarMainWeapon.SetActive(false);
-                break;
-            case PlayerWeaponManager.ReloadingStatus.Reloading:
-                mainWeaponCurrentBulletCountText.gameObject.SetActive(false);
-                cooldownBarMainWeapon.SetActive(true);
-                break;
-        }
+        cooldownBarSecondWeapon.SetActive(active);
+
+        if(secondWeaponCooldown)
+        secondWeaponCurrentBulletCountText.gameObject.SetActive(false);
+        else
+        secondWeaponCurrentBulletCountText.gameObject.SetActive(true);
+
+        cooldownTimer = reloadingTime;
+
+        if (active)
+            StartCoroutine(SecondWeaponCooldownTimer(reloadingTime));
+        else
+            StopAllCoroutines();
     }
 
-    public void SecondWeaponBarReloadingStatus()
-    {
-        switch (secondWeaponReloadingBarStatus)
-        {
-            case PlayerWeaponManager.ReloadingStatus.NoReloadNeeded:
-                cooldownBarSecondWeapon.SetActive(false);
-                secondWeaponCurrentBulletCountText.gameObject.SetActive(true);
-                break;
-            case PlayerWeaponManager.ReloadingStatus.NeedReload:
-                cooldownBarSecondWeapon.SetActive(false);
-                break;
-            case PlayerWeaponManager.ReloadingStatus.Reloading:
-                secondWeaponCurrentBulletCountText.gameObject.SetActive(false);
-                cooldownBarSecondWeapon.SetActive(true);
-                break;
-        }
-    }
 
-    public IEnumerator MainWeaponCooldownTimer()
+    public IEnumerator MainWeaponCooldownTimer(float reloadingTime)
     {
+
         while (cooldownTimer > 0)
         {
             cooldownTimer -= Time.deltaTime;
@@ -172,9 +153,10 @@ public class ChangeWeaponBar : MonoBehaviour
             cooldownImageMainWeapon.fillAmount = cooldownTimer / reloadingTime;
         }
 
+            yield return null;
     }
 
-    public IEnumerator SecondWeaponCooldownTimer()
+    public IEnumerator SecondWeaponCooldownTimer(float reloadingTime)
     {
 
         while (cooldownTimer > 0)
@@ -185,6 +167,7 @@ public class ChangeWeaponBar : MonoBehaviour
             cooldownImageSecondWeapon.fillAmount = cooldownTimer / reloadingTime;
         }
 
+        yield return null;
     }
 
     public void ChangeWeapon()
@@ -198,7 +181,7 @@ public class ChangeWeaponBar : MonoBehaviour
 
             secondWeaponButton.interactable = false;
             secondWeaponImage.transform.position = new Vector2(secondWeaponImage.transform.position.x, secondWeaponImage.transform.position.y + yPosition);
-
+          //  if(!secondWeaponCooldown)
             secondWeaponCurrentBulletCountText.gameObject.SetActive(true);
             secondWeaponActive = true;
         }
@@ -211,18 +194,18 @@ public class ChangeWeaponBar : MonoBehaviour
 
             mainWeaponButton.interactable = false;
             mainWeaponImage.transform.position = new Vector2(mainWeaponImage.transform.position.x, mainWeaponImage.transform.position.y + yPosition);
+          //  if(!mainWeaponCooldown)
             mainWeaponCurrentBulletCountText.gameObject.SetActive(true);
             mainWeaponActive = true;
         }
     }
-
 
     public void ChangeMainWeaponBulletsCount(int mainWeaponBulletsInClip, int mainWeaponBulletsMaxCount)
     {
         mainWeaponCurrentBulletCountText.text = $"{mainWeaponBulletsInClip} / {mainWeaponBulletsMaxCount}";
     }
 
-    public void ChangeSecondWeaponBulletsCount(int secondWeaponBulletsInClip, int secondWeaponBulletsMaxCount)
+    public void ChangeSeconWeaponBulletsCount(int secondWeaponBulletsInClip, int secondWeaponBulletsMaxCount)
     {
         secondWeaponCurrentBulletCountText.text = $"{secondWeaponBulletsInClip} / {secondWeaponBulletsMaxCount}";
     }
@@ -388,3 +371,4 @@ public class ChangeWeaponBar : MonoBehaviour
         }
     }
 }
+

@@ -23,6 +23,7 @@ public abstract class JoystickController : MonoBehaviour,
     public virtual float Vertical => direction.y;
     public bool HasInput => direction != Vector2.zero;
 
+   // public bool inGame = false;
     protected virtual void Awake()
     {
         //used for singleton
@@ -43,19 +44,35 @@ public abstract class JoystickController : MonoBehaviour,
     //Вызывается когда нажимаем на стик
     public void OnPointerDown(PointerEventData eventData)
     {
-        joystickBackground.position = eventData.position - moveableJoytick.anchoredPosition;
-            InvokeJoytickRoutine(true);
 
+      //  if (inGame) return;
+
+        joystickBackground.position = eventData.position - moveableJoytick.anchoredPosition;
+       // joystickBackground.position = eventData.position;
+
+
+       // if (smoothEnabled)
+            InvokeJoytickRoutine(true);
+      //  else
+       //     canvasGroup.alpha = 1;
     }
 
     //Вызывается когда отпускаем стик
     public virtual void OnPointerUp(PointerEventData eventData)
     {
-
+        
         direction = Vector2.zero;
         moveableJoytick.anchoredPosition = direction;
 
+        //if (smoothEnabled)
+        //{
         InvokeJoytickRoutine(false);
+        //}
+        //else
+        //{
+        //    canvasGroup.alpha = 0;
+        //    joystickBackground.anchoredPosition = startPosition;
+        //}
     }
 
     //Вызывается когда перемещаем стик

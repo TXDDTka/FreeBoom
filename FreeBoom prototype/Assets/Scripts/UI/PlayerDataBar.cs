@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlayerDataBar : MonoBehaviour
 {
 
-	[Tooltip("Cмещение по осям от игрока")]
+	[Tooltip("Cмещение по y от игрока")]
 	[SerializeField]
 	private Vector3 screenOffset = new Vector3(0f, 30f, 0f);
 

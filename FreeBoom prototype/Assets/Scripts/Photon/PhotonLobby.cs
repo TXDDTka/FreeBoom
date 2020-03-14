@@ -8,7 +8,7 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 {
 	private bool exitGame = false;
 	[SerializeField]private InputField roomName = null;
-	[SerializeField] private InputField joinRoomName = null;
+
 
 	public  void CreateRoom()
 	{
@@ -19,16 +19,8 @@ public class PhotonLobby : MonoBehaviourPunCallbacks
 		}
 
 		PhotonLoading.Load(LoadingScene.Game);
-		PhotonNetwork.CreateRoom(roomName.text, new RoomOptions { MaxPlayers = 2 });
+		PhotonNetwork.CreateRoom(roomName.text, new RoomOptions { MaxPlayers = 1 });
 
-	}
-
-	public void JoinRoom()
-	{
-		if (!string.IsNullOrEmpty(joinRoomName.text))
-		{
-			PhotonNetwork.JoinRoom(joinRoomName.text);
-		}
 	}
 
 	public void JoinRandomRoom()

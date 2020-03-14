@@ -13,7 +13,7 @@ public class PhotonTeams : MonoBehaviourPunCallbacks
 {
 
 
-    public enum Team : byte { None, Red, Blue, Random , AutoChoose };
+    public enum Team : byte { None, Red, Blue };
     public static Dictionary<Team, List<Player>> PlayersPerTeam;
     public const string TeamPlayerProp = "Team";
 

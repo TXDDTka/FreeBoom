@@ -11,7 +11,7 @@ public class CharactersSettingsDatabase : ScriptableObject
 
     private int currentIndex = 0; //Что бы было удобней следить за номером текущего элемента
 
-    //Метод добавления в лист нового пустого элемента и удаление текущего.
+    //Метод добавления в лист нового пустого элемента и удаление текущего. 
     public void AddElement()
     {
         if (charactersList == null) // Необходимо будет проверить наличие листа в памяти что бы его инициализировать
@@ -78,7 +78,7 @@ public class CharactersSettingsDatabase : ScriptableObject
             if (charactersList != null && index >= 0 && index < charactersList.Count)
                 return charactersList[index];
             return null;
-        }
+        } 
 
         set
         {
@@ -96,23 +96,13 @@ public class CharactersSettingsDatabase : ScriptableObject
 [System.Serializable] //Отображает объекты этого класса в Editor
 public class CharacterData
 {
-    //[SerializeField] private string name = null;
-    //public string CharacterName
-    //{
-    //    get { return name; }
-    //    protected set { }
-    //}
-
-   // public enum _CharacterClass : byte { None, All, Demoman, Engineer, Soldier }
-    [Tooltip("Класс персонажа")]
-    [SerializeField] private PhotonCharacters.Character characterClass = PhotonCharacters.Character.None;
-    public PhotonCharacters.Character CharacterClass
+    [SerializeField] private string name = null;
+    public string CharacterName
     {
-        get { return characterClass; }
+        get { return name; }
         protected set { }
     }
 
-    [Tooltip("Cкорость персонажа")]
     [SerializeField] private float speed = 0f;
     public float Speed
     {
@@ -120,7 +110,6 @@ public class CharacterData
         protected set { }
     }
 
-    [Tooltip("Здоровье персонажа")]
     [SerializeField] private float health = 0f;
     public float Health
     {

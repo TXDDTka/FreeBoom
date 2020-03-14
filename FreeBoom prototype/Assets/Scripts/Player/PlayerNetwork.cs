@@ -8,10 +8,10 @@ using UnityEngine;
 public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 {
 	public static PlayerNetwork Instance { get; private set; }
-	[Tooltip("пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ,пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ = null")]
-	private PlayerManager playerManager = null;
+	[Tooltip("Наш созданный игрок,изначально = null")]
+	private PlayerManager playerInstantiate = null;
 
-	[Tooltip("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")]
+	[Tooltip("Добавлен ли игрок в в статистику")]
 	private bool addedPlayerToList = false;
 
 	private Player _player;
@@ -20,7 +20,6 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	private PhotonPlayerListingMenu _photonPlayerListingMenu = null;
 	private ChangeWeaponBar _changeWeaponBar = null;
 	private UIManager _uiManager = null;
-	private CameraFollow _cameraFollow = null;
 
 
 	private void Awake()
@@ -32,142 +31,96 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		_changeWeaponBar = ChangeWeaponBar.Instance;
 		_uiManager = UIManager.Instance;
 		_player = PhotonNetwork.LocalPlayer;
-		_cameraFollow = CameraFollow.Instance;
 	}
 
 	void Start()
 	{
 		if (!_PV.IsMine) return;
 		Instance = this;
-		OnButtonClick(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+		OnButtonClick(); //Вызываем метод проверки нажатия кнопок игроком
 
 	}
 
 
-		//public PhotonTeams.Team Team()
-		//{
-
-		//PhotonTeams.Team team = PhotonTeams.Team.None;
-
-		//switch(_teamValue)
-		//{
-		//	case 0:
-		//		team = PhotonTeams.Team.Red;
-		//		break;
-		//	case 1:
-		//		team = PhotonTeams.Team.Blue;
-		//		break;
-		//	case 2:
-		//		team = PhotonTeams.Team.Random;
-		//		break;
-		//}
-
-		//return team;
-		//}
-
-		//public PhotonCharacters.Character Character()
-		//{
-		//PhotonCharacters.Character character = PhotonCharacters.Character.None;
-
-		//switch (_characterValue)
-		//{
-		//	case 0:
-		//		character = PhotonCharacters.Character.Demoman;
-		//		break;
-		//	case 1:
-		//		character = PhotonCharacters.Character.Engineer;
-		//		break;
-		//	case 2:
-		//		character = PhotonCharacters.Character.Soldier;
-		//		break;
-		//	case 3:
-		//		character = PhotonCharacters.Character.Random;
-		//		break;
-		//}
-		//return character;
-		//}
-
-	//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	//Метод проверки нажатия кнопок игроком
 	private void OnButtonClick()
 	{
 
-		foreach (var panel in _uiManager.panelsLists) //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
+		foreach (var panel in _uiManager.panelsLists) //Ищем нужную панель среди всех панелей в скрипте UIManager
 		{
-			switch (panel.panelName) //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-			{
-				case UIManager.CurrentPanel.ChooseTeamPanel: //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-					for (int i = 0; i < panel.panelButtons.Length; i++) //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
-					{
-						int	index = i;
 
-						panel.panelButtons[index].onClick.AddListener(delegate //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+			switch (panel.panelName) //Название текущей панели
+			{
+				case "ChooseTeamPanel": //Если данная панель ChooseTeamPanel
+					for (int i = 0; i < panel.panelButtons.Length; i++) //Обращаемся ко всем кнопкам в данной панели
+					{
+						int index = i;
+						panel.panelButtons[index].onClick.AddListener(delegate //Если нажата кнопка выбора конкретной команды 
 						{
-							_photonGame.ChooseTeam((PhotonTeams.Team)index + 1, _player); //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PhotonGame, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-							ChooseTeam(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-							RemovePlayer(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-							_uiManager.currentPanel = UIManager.CurrentPanel.ChooseCharacterPanel; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-							_uiManager.ChangePanel(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
+							_photonGame.ChooseTeam(panel.buttonValue[index], _player); //Меняем игроку команду в скрипте PhotonGame, обновляем список команд для всех
+							ChooseTeam(); //Вызываем метод выбора команды в данном скрипте
+							RemovePlayer(); //Вызываем метод удаления игрока в данном скрипте
+							_uiManager.currentPanel = UIManager.CurrentPanel.ChooseCharacterPanel; // Меняем панель в скрипте UIManager
+							_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
 						});
 					}
 					break;
-				case UIManager.CurrentPanel.ChooseCharacterPanel: //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+				case "ChooseCharacterPanel":
 					for (int i = 0; i < panel.panelButtons.Length; i++)
 					{
 						int index = i;
-						panel.panelButtons[index].onClick.AddListener(delegate //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+						panel.panelButtons[index].onClick.AddListener(delegate //Если нажата кнопка выбора конкретного персоанажа
 						{
-							_photonGame.ChooseCharacter((PhotonCharacters.Character)index + 1, _player); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ChooseCharacter пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PhotonGame
-							_uiManager.currentPanel = UIManager.CurrentPanel.GamePanel; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-							_uiManager.ChangePanel(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-							CreatePlayer(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ cпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-
+							_photonGame.ChooseCharacter(panel.buttonValue[index], _player); //Выбираем нужного персонажа в методе ChooseCharacter скрипта PhotonGame
+							_uiManager.currentPanel = UIManager.CurrentPanel.GamePanel; // Меняем панель на панель игры в скрипте UIManager
+							_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
+							CreatePlayer(); //Вызываем метод cоздания игрока в этом скрипте
+							
 						});
 					}
 					break;
-				case UIManager.CurrentPanel.GamePanel: //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-					panel.panelButtons[0].onClick.AddListener(delegate //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+				case "GamePanel":
+					panel.panelButtons[0].onClick.AddListener(delegate //Если нажата кнопка меню
 					{
-						//playerManager.JoysticksPointerUp();
-					//	JoysticksPointerUp();
-						_uiManager.currentPanel = UIManager.CurrentPanel.MenuPanel; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-						_uiManager.ChangePanel(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
+						//playerInstantiate.JoysticksPointerUp();
+						JoysticksPointerUp();
+						_uiManager.currentPanel = UIManager.CurrentPanel.MenuPanel; // Меняем панель на панель меню в скрипте UIManager
+						_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
 					});
 					break;
-				case UIManager.CurrentPanel.MenuPanel: //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-					panel.panelButtons[0].onClick.AddListener(delegate //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+				case "MenuPanel":
+					panel.panelButtons[0].onClick.AddListener(delegate //Если нажата кнопка сменить команду
 					{
-						//_photonGame.ChooseTeam(panel.buttonValue[0], _player); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PhotonGame, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-						_photonGame.ChooseTeam(PhotonTeams.Team.AutoChoose, _player); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PhotonGame, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
-						ChooseTeam();//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-						RemovePlayer(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-						panel.panelObjects[2].SetActive(false); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-						_uiManager.currentPanel = UIManager.CurrentPanel.ChooseCharacterPanel;  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-						_uiManager.ChangePanel(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-					});
+						_photonGame.ChooseTeam(panel.buttonValue[0], _player); // Меняем игроку команду в скрипте PhotonGame, обновляем список команд для всех
+						ChooseTeam();//Вызываем метод смены команды в данном скрипте
+						RemovePlayer(); //Вызываем метод удаления игрока в данном скрипте
+						panel.panelObjects[2].SetActive(false); //Отключаем панель смены команды и персонажа
+						_uiManager.currentPanel = UIManager.CurrentPanel.ChooseCharacterPanel;  // Меняем панель на панель выбора персонажа в скрипте UIManager
+						_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
+					}); 
 
-					panel.panelButtons[1].onClick.AddListener(delegate //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+					panel.panelButtons[1].onClick.AddListener(delegate //Если нажата кнопка сменить персонажа
 					{
-						//	_photonGame.ChooseCharacter(panel.buttonValue[1], _player); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ChooseCharacter пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PhotonGame
-						_photonGame.ChooseCharacter(PhotonCharacters.Character.None, _player); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ChooseCharacter пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PhotonGame
-						ChooseCharacter(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-						RemovePlayer(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-						panel.panelObjects[2].SetActive(false); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-						_uiManager.currentPanel = UIManager.CurrentPanel.ChooseCharacterPanel; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-						_uiManager.ChangePanel(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-					}); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
+						_photonGame.ChooseCharacter(panel.buttonValue[1], _player); //Выбираем нужного персонажа в методе ChooseCharacter скрипта PhotonGame
+						ChooseCharacter(); //Вызываем метод выбора персонажа в данном скрипте
+						RemovePlayer(); //Вызываем метод удаления игрока в данном скрипте
+						panel.panelObjects[2].SetActive(false); //Отключаем панель смены команды и персонажа
+						_uiManager.currentPanel = UIManager.CurrentPanel.ChooseCharacterPanel; // Меняем панель на панель выбора персонажа в скрипте UIManager
+						_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
+					}); //Вызываем метод смены панели в скрипте UIManager
 
-					panel.panelButtons[2].onClick.AddListener(delegate //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
+					panel.panelButtons[2].onClick.AddListener(delegate //Если нажата кнопка вернуться в игру
 					{
-						_uiManager.currentPanel = UIManager.CurrentPanel.GamePanel; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-						_uiManager.ChangePanel(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-					});
+						_uiManager.currentPanel = UIManager.CurrentPanel.GamePanel; // Меняем панель на панель игры в скрипте UIManager
+						_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
+					}); 
 					break;
 			}
 		}
 
-		_uiManager.leaveGameBtn.onClick.AddListener(() => LeaveGame()); //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ LeaveGame пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ LeaveGame
-		_uiManager.exitGameBtn.onClick.AddListener(() => ExitGame()); //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ExitGame пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ ExitGame
-
+		_uiManager.leaveGameBtn.onClick.AddListener(() => LeaveGame()); //Вызов метода LeaveGame кнопкой из меню LeaveGame
+		_uiManager.exitGameBtn.onClick.AddListener(() => ExitGame()); //Вызов метода ExitGame кнопкой из меню ExitGame
+		
 	}
 
 
@@ -175,55 +128,44 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	{
 		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-			//playerManager.JoysticksPointerUp();
-			JoysticksPointerUp();
-			_uiManager.currentPanel = UIManager.CurrentPanel.MenuPanel; // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
-			_uiManager.ChangePanel(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ UIManager
+			//playerInstantiate.JoysticksPointerUp();
+			JoysticksPointerUp(); 
+			_uiManager.currentPanel = UIManager.CurrentPanel.MenuPanel; // Меняем панель на панель меню в скрипте UIManager
+			_uiManager.ChangePanel(); //Вызываем метод смены панели в скрипте UIManager
 		}
 
 		if(Input.GetKeyDown(KeyCode.K))
 		{
 			RemovePlayer();
-			_uiManager.team = _player.GetTeam();
+			_uiManager.team = _player.GetTeam().ToString();
 			_uiManager.RespawnPanelOn();
 			StartCoroutine(RespawnPlayer());
 		}
 
-		if (Input.GetKeyDown(KeyCode.Q))
-		{
-			playerManager.rb.constraints = RigidbodyConstraints2D.FreezeAll;
-		}
-
-		if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Alpha2))
-		{
-			playerManager.playerWeaponManager.ChangeWeapon();
-		}
 	}
 
 
-
+	public void JoysticksPointerUp()
+	{
+		playerInstantiate.moveJoystick.MoveJoystickPointerUp();
+		playerInstantiate.shootJoystick.ShootJoystickPointerUp();
+	}
 
 	private void ChooseTeam()
 	{
 
-		if (addedPlayerToList) //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-		{
-			_PV.RPC("RemovePlayerListing", RpcTarget.AllBuffered, _player); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-		}
+		if (addedPlayerToList) //Если игрок уже выбирал команду 
+			_PV.RPC("RemovePlayerListing", RpcTarget.AllBuffered, _player); //Удалеям игрока из статистики
 		else
-		{
-			addedPlayerToList = true; //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-		}
+		addedPlayerToList = true; //Игрок добавлен в статистику																  
 
-		_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, _player, 0);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+		_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, _player, 0);//Добавляем игрока в статистику	
 	}
 
 	private void ChooseCharacter()
 	{
 		if (addedPlayerToList)
-		{
 			_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, _player, 1);
-		}
 	}
 
 
@@ -233,30 +175,29 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		if (_player.GetTeam() == PhotonTeams.Team.Red)
 		{
 			int random = Random.Range(0, _photonGame.teamOneSpawnPoints.Length);
-
-			playerManager =
+			playerInstantiate =
 				PhotonNetwork.Instantiate(_photonGame.redTeamCharacters[(byte)_player.GetCharacter() - 1].name, _photonGame.teamOneSpawnPoints[random].position,
 				Quaternion.identity).GetComponent<PlayerManager>();
 			//Quaternion.identity, 0, null).GetComponent<PlayerManager>();
 
 			_uiManager.panelsLists[2].panelObjects[3].SetActive(true);
 
-			BoomJump.Instance.Activate(playerManager.playerMovement, 30);
+			BoomJump.Instance.Activate(playerInstantiate.playerMovement, 30);
 		}
 		else if (_player.GetTeam() == PhotonTeams.Team.Blue)
 		{
 
 			int random = Random.Range(0, _photonGame.teamTwoSpawnPoints.Length);
-			playerManager =
+			playerInstantiate =
 				PhotonNetwork.Instantiate(_photonGame.blueTeamCharacters[(byte)_player.GetCharacter() - 1].name, _photonGame.teamTwoSpawnPoints[random].position,
 				Quaternion.identity).GetComponent<PlayerManager>();
 
 			_uiManager.panelsLists[2].panelObjects[3].SetActive(true);
 
-			BoomJump.Instance.Activate(playerManager.playerMovement, -30);
+			BoomJump.Instance.Activate(playerInstantiate.playerMovement, -30);
 		}
 
-		_cameraFollow.SetTarget(playerManager.transform);
+		CameraFollow.Instance.SetTarget(playerInstantiate.transform);
 		_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, _player, 1);
 
 	}
@@ -268,56 +209,27 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 		killer.AddKills(1);
 		killer.AddScore(50);
 		_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, killer, 2);
-		_uiManager.team = _player.GetTeam();
+		_uiManager.team = _player.GetTeam().ToString();
 		_uiManager.RespawnPanelOn();
 		StartCoroutine(RespawnPlayer());
 	}
 
 	private void RemovePlayer()
 	{
-		if (playerManager != null)
+		if (playerInstantiate != null)
 		{
-
+			playerInstantiate.playerShooting.Disable();
+			JoysticksPointerUp();
 			_changeWeaponBar.HideBuff();
 			if (_changeWeaponBar.secondWeaponActive)
-			{
 				_changeWeaponBar.ChangeWeapon();
-			}
-			DisableEvents();
-			JoysticksPointerUp();
 			_player.AddDeaths(1);
 
 			_PV.RPC("AddPlayerListing", RpcTarget.AllBuffered, _player, 2);
-			PhotonNetwork.Destroy(playerManager.gameObject);
+			PhotonNetwork.Destroy(playerInstantiate.gameObject);
 
 		}
 
-	}
-
-	public void JoysticksPointerUp()
-	{
-		playerManager.moveJoystick.MoveJoystickPointerUp();
-		playerManager.shootJoystick.ShootJoystickPointerUp();
-	}
-
-	private void DisableEvents()
-	{
-		//playerManager.shootJoystick.OnBeginDragEvent -= playerManager.crosshairManager.EnableCrosshair;
-
-		if (playerManager.playerWeaponManager.currentWeapon == WeaponData._WeaponGroup.MainWeapon)
-		{
-			playerManager.mainWeaponShooting.DisableCurrentWeapon();
-			playerManager.changeWeaponBar.mainWeaponReloadingBarStatus = PlayerWeaponManager.ReloadingStatus.NoReloadNeeded;
-			playerManager.changeWeaponBar.MainWeaponBarReloadingStatus();
-
-		}
-		else if(playerManager.playerWeaponManager.currentWeapon == WeaponData._WeaponGroup.SecondWeapon)
-		{
-			playerManager.secondWeaponShooting.DisableCurrentWeapon();
-			playerManager.changeWeaponBar.secondWeaponReloadingBarStatus = PlayerWeaponManager.ReloadingStatus.NoReloadNeeded;
-			//playerManager.changeWeaponBar.secondWeaponCurrentBulletCountText.gameObject.SetActive(false);
-		    playerManager.changeWeaponBar.SecondWeaponBarReloadingStatus();
-		}
 	}
 
 	private IEnumerator RespawnPlayer()
@@ -328,7 +240,7 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 			CreatePlayer();
 			_uiManager.respawn = false;
 		}
-
+			
 	}
 
 
@@ -372,10 +284,10 @@ public class PlayerNetwork : MonoBehaviourPun//MonoBehaviourPunCallbacks
 	}
 
 
-	//public void ClearProperties(Player playerSend)
-	//{
-	//	playerSend.CustomProperties.Clear();
-	//}
+	public void ClearProperties(Player playerSend)
+	{
+		playerSend.CustomProperties.Clear();
+	}
 
 	private void LeaveGame()
 	{

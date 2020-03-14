@@ -97,14 +97,14 @@ public class PlayerBuffs : MonoBehaviour
         }
     }
 
-   private void OnCollisionEnter2D(Collision2D other)
+   private void OnTriggerEnter(Collider other)
     {
-            if (other.gameObject.GetComponent<BuffObject>())
+            if (other.GetComponent<BuffObject>() != null)
             {
 
             if (playerManager.PV.IsMine)
             {
-                playerManager.PV.RPC("GetBuffs", RpcTarget.AllBufferedViaServer, (byte)other.gameObject.GetComponent<BuffObject>().buffType);
+                playerManager.PV.RPC("GetBuffs", RpcTarget.AllBufferedViaServer, (byte)other.GetComponent<BuffObject>().buffType);
             }
 
             if (PhotonNetwork.IsMasterClient)

@@ -51,22 +51,19 @@ public class Jumper : MonoBehaviour
 
 
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<PlayerManager>())
+        if (other.GetComponent<PlayerMovement>() != null)
         {
-            PlayerManager playerManager = other.gameObject.GetComponent<PlayerManager>();
-            if (playerManager.playerMovement.IsJumperGrounded())
+            if(other.GetComponent<PlayerMovement>().isJumpedGounded)
             {
-                // angle = other.GetComponent<PlayerMovement>().isFacingRight ? 30 : -30;
-                angle = !playerManager.spriteRenderer.flipX ? 30 : -30;
+                angle = other.GetComponent<PlayerMovement>().isFacingRight ? 30 : -30;
                 amount += 1 / duration * Time.deltaTime;
                 amount %= 1;
                 Calculate();
 
-                playerManager.rb.velocity = finalVelocity;
-            }
+                other.GetComponent<PlayerManager>().rb.velocity = finalVelocity;
             }
         }
-    
+    }
 }

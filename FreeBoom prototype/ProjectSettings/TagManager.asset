@@ -6,40 +6,39 @@ TagManager:
   tags:
   - Ground
   - Buff
-  - BankDoor
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  -
+  - 
   - Water
   - UI
-  -
-  -
+  - 
+  - 
   - RedTeam
   - BlueTeam
   - Ground
   - Wall
   - Buff
-  - Bullet
-  - Jumper
-  - BankDoor
-  - Roof
+  - JumperGround
   - 
-  -
-  -
-  -
-  -
-  -
-  -
-  -
-  -
-  -
-  -
-  -
-  -
-  -
-  -
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   m_SortingLayers:
   - name: Default
     uniqueID: 0

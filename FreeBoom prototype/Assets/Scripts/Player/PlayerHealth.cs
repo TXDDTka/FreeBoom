@@ -44,7 +44,7 @@ public class PlayerHealth : MonoBehaviour
         for (int i = 0; i < charactersSettings.charactersList.Count; i++)
         {
             var character = charactersSettings.charactersList[i];
-            if (character.CharacterClass == playerManager.player.GetCharacter())
+            if (character.CharacterName == playerManager.player.GetCharacter().ToString())
             {
                 playerManager.PV.RPC("SetPlayerHealth", RpcTarget.AllBuffered, character.Health);
                 return;

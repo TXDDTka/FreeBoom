@@ -42,8 +42,7 @@ public class PhotonPlayerListingMenu : MonoBehaviourPunCallbacks
 		{
 			_listings[index].SetPlayerInfo(player);
 		}
-		//if ((byte)player.CustomProperties["Team"] == 1)
-		if(player.GetTeam() == PhotonTeams.Team.Red)
+		if ((byte)player.CustomProperties["Team"] == 1)
 		{
 			PlayerListing playerListing = Instantiate(_playerListingRedTeam, _contentTeamRed);
 			if (playerListing != null)
@@ -52,7 +51,7 @@ public class PhotonPlayerListingMenu : MonoBehaviourPunCallbacks
 				_listings.Add(playerListing);
 			}
 		}
-		else if (player.GetTeam() == PhotonTeams.Team.Blue)
+		else
 		{
 			PlayerListing playerListing = Instantiate(_playerListingBlueTeam, _contentTeamBlue);
 			if (playerListing != null)
