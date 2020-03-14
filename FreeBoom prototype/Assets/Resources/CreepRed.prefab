@@ -145,5 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6eeebebcc97542645a76bdbb007122bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  creepBulletPrefab: {fileID: 0}
+  creepBulletPrefab: {fileID: 4167447259030574198, guid: 8c4e2afc69c001c4982adfac137d4fc5,
+    type: 3}
   botTeam: 1
+  lengthBeam: 5

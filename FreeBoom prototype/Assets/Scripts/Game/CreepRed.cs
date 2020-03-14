@@ -9,6 +9,8 @@ public class CreepRed : MonoBehaviour
     public GameObject creepBulletPrefab = null;
     private bool haveTarget;
     public PhotonTeams.Team botTeam = PhotonTeams.Team.Red;
+    [SerializeField] private float lengthBeam;
+    RaycastHit info;
 
     void Start()
     {
@@ -19,28 +21,18 @@ public class CreepRed : MonoBehaviour
     void Update()
     {
         transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y);
+        if (Physics.Raycast(transform.position, transform.right, out info, lengthBeam))
+        {
+            if (info.collider.gameObject.tag == "Player")
+            {
+                speed = 0;
+            }
+            else
+            {
+                speed = 5f;
+            }
+        }
     }
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.layer == 8 && other.tag == "Player")
-    //    {
-    //        speed = 0;
-    //        Bullet bulletGameobject = PhotonNetwork.Instantiate(creepBulletPrefab.name, transform.position, transform.rotation).GetComponent<Bullet>();
-    //        haveTarget = true;
-    //        Invoke("Shoot", 1f);
-            
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.layer == 8 && other.tag == "Player")
-    //    {
-    //        speed = 5;
-    //        haveTarget = false;
-    //    }
-    //}
 
     private void Shoot()
     {

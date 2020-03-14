@@ -8,6 +8,11 @@ public class CreepsSpawnerRed : MonoBehaviourPunCallbacks
 {
     public GameObject creepRed;
     public PhotonTeams.Team botTeam = PhotonTeams.Team.Red;
+    [SerializeField, Range (1f, 5f)] private float firstWave;
+    [SerializeField, Range(1f, 20f)] private float regularWave;
+    [SerializeField, Range(0.4f, 5f)] private float timeBetweenCreep;
+    float timeFirstCreep = 1f;
+
 
     public override void OnEnable()
     {
@@ -16,14 +21,15 @@ public class CreepsSpawnerRed : MonoBehaviourPunCallbacks
 
     public override void OnCreatedRoom()
     {
-        Invoke("Wave", 2f);
+        Invoke("Wave", firstWave);
+        timeBetweenCreep += timeFirstCreep;
     }
 
     private void Wave()
     {
-        Invoke("SpawnCreep", 1f);
-        Invoke("SpawnCreep", 2f);
-        Invoke("Wave", 5f);
+        Invoke("SpawnCreep", timeFirstCreep);
+        Invoke("SpawnCreep", timeBetweenCreep);
+        Invoke("Wave", regularWave);
     }
 
     private void SpawnCreep()

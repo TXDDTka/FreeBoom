@@ -5,10 +5,15 @@ using UnityEngine;
 public class CreepBullet : MonoBehaviour
 {
     private float speed = 7.5f;
+    public bool blueTeam;
 
     void Start()
     {
         Destroy(gameObject, 5f);
+        if(blueTeam)
+        {
+            speed *= -1f;
+        }
     }
 
     void Update()

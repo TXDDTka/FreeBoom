@@ -5923,6 +5923,9 @@ MonoBehaviour:
   creepBlue: {fileID: 1331876574615422281, guid: bfb8c5944f13eb849bdf1cd647ab3abc,
     type: 3}
   botTeam: 2
+  firstWave: 1
+  regularWave: 20
+  timeBetweenCreep: 5
 --- !u!4 &795856592
 Transform:
   m_ObjectHideFlags: 0
@@ -7585,6 +7588,9 @@ MonoBehaviour:
   creepRed: {fileID: 1331876574615422281, guid: e7d61761dd7e92a40b60715b37fdfe8f,
     type: 3}
   botTeam: 1
+  firstWave: 1
+  regularWave: 20
+  timeBetweenCreep: 5
 --- !u!1 &1053962767
 GameObject:
   m_ObjectHideFlags: 0
